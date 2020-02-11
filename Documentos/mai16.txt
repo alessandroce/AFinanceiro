@@ -1,0 +1,6 @@
+30,00 	salão regina
+60,00	combustivel
+30,00	avon
+35,00	3x farmacia (protetor/desodorante/rolon)
+13,00	açougue	
+168,00 	total

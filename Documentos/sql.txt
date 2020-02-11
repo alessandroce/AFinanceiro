@@ -1,0 +1,54 @@
+/*inserir movimento de parcelas pagas dez16*/
+INSERT INTO MOVIMENTO_FINANCEIRO (MOF_PARC_ID, MOF_PESSOA_ID, MOF_USU_ID, MOF_DATAMOV, MOF_DATAVENCTO, MOF_DATAPGTO, MOF_DESCRICAO, MOF_PARCELA, MOF_NUMDOCUMENTO, MOF_VALOR, MOF_DEBCRED, MOF_OBSERVACAO, MOF_DH_CA)
+select parcelas.par_id,
+       null pessoa_id,
+       financeiro.fin_usu_id,
+       current_timestamp,
+       parcelas.par_vencto,
+       current_timestamp,
+       parcelas.par_observacao,
+       parcelas.par_numero||'/'||parcelas.par_quantidade parcela,
+       null numdocumento,
+       case when(parcelas.par_valor_pago>0) then
+         parcelas.par_valor_pago
+       else
+         parcelas.par_valor
+       end valor_pago,
+       financeiro.fin_debcred,
+       null observacao,
+       current_timestamp
+  from parcelas
+ join financeiro on (financeiro.fin_id=parcelas.par_fin_id)
+ where parcelas.par_id>-1
+  and extract(month from parcelas.par_vencto)=12
+  and extract(year from parcelas.par_vencto)=2016
+  and parcelas.par_pago=1
+order by financeiro.fin_debcred, parcelas.par_vencto
+--------------------------------------------------------------------------------
+select credito,debito,credito-debito saldo
+  from (
+select sum(case when(movimento_financeiro.mof_debcred='C') then movimento_financeiro.mof_valor end) credito,
+       sum(case when(movimento_financeiro.mof_debcred='D') then movimento_financeiro.mof_valor end) debito
+  from movimento_financeiro
+ where extract(month from movimento_financeiro.mof_datavencto)=12
+   and extract(year from movimento_financeiro.mof_datavencto)=2016
+       )
+
+create table movimento_financeiro (
+mof_id           integer not null,
+mof_parc_id      integer,
+mof_pessoa_id    integer,
+mof_usu_id       integer,
+mof_datamov      timestamp,
+mof_datavencto   timestamp,
+mof_datapgto     timestamp,
+mof_descricao    varchar(100),
+mof_parcela      varchar(6),
+mof_numdocumento varchar(30),
+mof_valor        numeric(12,2),
+mof_debcred      char(1),
+mof_observacao   varchar(100),
+mof_dh_ca        timestamp )
+
+
+

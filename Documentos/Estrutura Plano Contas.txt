@@ -1,0 +1,152 @@
+RECEITAS
+	Salário
+	Aluguel
+	Pensão
+	Férias 
+		Total 30 dias
+		Abono Pecuniário 10 dias
+	Outras 
+  
+DESPESAS
+ VALORES 
+FIXOS
+	Investimento
+		Aplicações Financeiras
+	Habitação
+		Aluguel
+		Condominio
+		Prestação imóvel
+		Seguro Imóvel
+		Diarista
+		Mensalista
+	Transporte
+		Prestação carro
+		Seguro Carro
+		Estacionamento	
+	Saúde
+		Plano de Saúde
+		Plano Odontológico
+		Seguro de Vida
+		Atend. Multiprofissional
+	Educação
+		Colégio
+		Faculdade		
+		Especialização
+		Cursos
+	Impostos
+		IPTU
+		IPVA
+		IRRF
+
+DESPESAS 
+VALORES 
+VARIÁVEIS
+	Habitação
+		Luz
+		Água
+		Telefone
+		Telefone Celular
+		Gás
+		Serviço TV
+		Serviço Internet
+
+	Transporte
+		Metrô
+		Combustível
+		Ônibus
+		Táxi
+	Alimentação
+		Supermercado
+		Feira
+		Açougue
+		Padaria
+	Saúde
+		Farmácia
+	Cuidados
+Pessoais
+		Manicure
+		Cabelereiro
+		Academia
+		Clube
+	Animal 
+Estimação
+		Veterinário
+		Banho
+		Tosa
+		Ração
+	Linhas de Crédito
+		Juros cheque especial
+		Juros cartão de crédito
+		Empréstimo pessoal
+DESPESAS
+ EXTRAS
+	Manuteção/Prevenção
+		Carro
+		Casa
+	Educação
+		Material Escolar
+		Uniforme
+		Atividades Escolares
+	Lazer
+		Viagens
+		Cinema
+		Restaurantes
+		Livraria
+		Shows
+		Revistas e Jornais
+	Vestuário
+		Roupas
+		Calçados
+		Acessórios
+	Outros
+		Presentes
+
+
+---------------
+totalizadores
+---------------
+DESPESAS
+VISÃO GERAL
+	Investimento
+	Habitação
+	Transporte
+	Saúde
+	Educação
+	Imposto
+	Alimentação
+	Cuidados Pessoais
+	Animal Estimação
+	Linhas de Crédito
+	Manutenção/Prevenção
+	Lazer
+	Vestuário
+	Outros
+
+---------------
+
+RECEITAS
+DESPESAS
+	Despesas Valores Fixos
+	Despesas Valores Variáveis
+	Despesas Extras
+	Total  de Despesas
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

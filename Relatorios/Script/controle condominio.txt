@@ -1,0 +1,39 @@
+--------------------------------------------------------------------------------
+CREATE TABLE CONDOMINIO(
+CON_ID DINTEIRO NOT NULL,
+VOM_USU_ID DINTEIRO NOT NULL,
+CON_ANO DINTEIRO,
+CON_MESREF DINTEIRO,
+CON_DESCRICAO DTEXTO100,
+CON_VALOR DVALOR,
+CON_DH_CA DDATAHORA
+)
+--------------------------------------------------------------------------------
+execute block
+as
+declare variable v_mes integer;
+begin
+  v_mes = 0;
+  while (:v_mes < 12) do
+  begin
+    v_mes = :v_mes + 1;
+    INSERT INTO CONDOMINIO (CON_ID, VOM_USU_ID, CON_ANO, CON_MESREF, CON_DESCRICAO, CON_VALOR, CON_DH_CA)
+    VALUES (gen_id(gen_condominio,1), 1, 2016, :v_mes, 'TAXA DE CONDOMINIO', 150, NULL);
+  end
+end
+--------------------------------------------------------------------------------
+execute block
+as
+declare variable v_mes integer;
+begin
+  v_mes = 0;
+  while (:v_mes < 12) do
+  begin
+    v_mes = :v_mes + 1;
+    INSERT INTO CONDOMINIO (CON_ID, VOM_USU_ID, CON_ANO, CON_MESREF, CON_DESCRICAO, CON_VALOR, CON_DH_CA)
+    VALUES (gen_id(gen_condominio,1), 1, 2017, :v_mes, 'GAS', NULL, NULL);
+  end
+end
+--------------------------------------------------------------------------------
+select * from condominio where condominio.con_id=:con_id
+--------------------------------------------------------------------------------

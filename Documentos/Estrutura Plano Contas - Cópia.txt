@@ -1,0 +1,153 @@
+1 RECEITAS
+	1.1 Salário
+	1.2 Aluguel
+	1.3 Pensão
+	1.4 Férias 
+		1.4.1 Total 30 dias
+		1.4.2 Abono Pecuniário 10 dias
+	1.5 Outras 
+  
+2 DESPESAS
+ VALORES 
+FIXOS
+	2.1 Investimento
+		2.1.1 Aplicações Financeiras
+	2.2 Habitação
+		2.2.1 Aluguel
+		2.2.2 Condominio
+		2.2.3 Prestação imóvel
+		2.2.4 Seguro Imóvel
+		2.2.5 Diarista
+		2.2.6 Mensalista
+	2.3 Transporte
+		2.3.1 Prestação carro
+		2.3.2 Seguro Carro
+		2.3.3 Estacionamento	
+	2.4 Saúde
+		2.4.1 Plano de Saúde
+		2.4.2 Plano Odontológico
+		2.4.3 Seguro de Vida
+		2.4.4 Atend. Multiprofissional
+	2.5 Educação
+		2.5.1 Colégio
+		2.5.2 Faculdade		
+		2.5.3 Especialização
+		2.5.3 Cursos
+	2.6 Impostos
+		2.6.1 IPTU
+		2.6.2 IPVA
+		2.6.3 IRRF
+
+3 DESPESAS 
+VALORES 
+VARIÁVEIS
+	3.1 Habitação
+		3.1.1 Luz
+		3.1.2 Água
+		3.1.3 Telefone
+		3.1.4 Telefone Celular
+		3.1.5 Gás
+		3.1.6 Serviço TV
+		3.1.7 Serviço Internet
+
+	3.2 Transporte
+		3.2.1 Metrô
+		3.2.2 Combustível
+		3.2.3 Ônibus
+		3.2.4 Táxi
+	3.3 Alimentação
+		3.3.1 Supermercado
+		3.3.2 Feira
+		3.3.3 Açougue
+		3.3.4 Padaria
+	3.4 Saúde
+		3.4.1 Farmácia
+	3.5 Cuidados 
+Pessoais
+		3.5.1 Manicure
+		3.5.2 Cabelereiro
+		3.5.3 Cosméticos
+		3.5.4 Academia
+		3.5.5 Clube
+	3.6 Animal 
+Estimação
+		3.6.1 Veterinário
+		3.6.2 Banho
+		3.6.3 Tosa
+		3.6.4 Ração
+	3.7 Linhas de Crédito
+		3.7.1 Juros cheque especial
+		3.7.2 Juros cartão de crédito
+		3.7.3 Empréstimo pessoal
+4 DESPESAS
+ EXTRAS
+	4.1 Manuteção/Prevenção
+		4.1.1 Carro
+		4.1.2 Casa
+	4.2 Educação
+		4.2.1 Material Escolar
+		4.2.2 Uniforme
+		4.2.3 Atividades Escolares
+	4.3 Lazer
+		4.3.1 Viagens
+		4.3.2 Cinema
+		4.3.3 Restaurantes
+		4.3.4 Livraria
+		4.3.5 Shows
+		4.3.6 Revistas e Jornais
+	4.4 Vestuário
+		4.4.1 Roupas
+		4.4.2 Calçados
+		4.4.3 Acessórios
+	4.5 Outros
+		4.5.1 Presentes
+
+
+---------------
+totalizadores
+---------------
+DESPESAS
+VISÃO GERAL
+	Investimento
+	Habitação
+	Transporte
+	Saúde
+	Educação
+	Imposto
+	Alimentação
+	Cuidados Pessoais
+	Animal Estimação
+	Linhas de Crédito
+	Manutenção/Prevenção
+	Lazer
+	Vestuário
+	Outros
+
+---------------
+
+RECEITAS
+DESPESAS
+	Despesas Valores Fixos
+	Despesas Valores Variáveis
+	Despesas Extras
+	Total  de Despesas
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

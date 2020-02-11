@@ -1,0 +1,19 @@
+select
+       condominio.con_ano,
+       condominio.con_descricao,
+       sum(case when(con_mesref=1)  then con_valor end) mes_01,
+       sum(case when(con_mesref=2)  then con_valor end) mes_02,
+       sum(case when(con_mesref=3)  then con_valor end) mes_03,
+       sum(case when(con_mesref=4)  then con_valor end) mes_04,
+       sum(case when(con_mesref=5)  then con_valor end) mes_05,
+       sum(case when(con_mesref=6)  then con_valor end) mes_06,
+       sum(case when(con_mesref=7)  then con_valor end) mes_07,
+       sum(case when(con_mesref=8)  then con_valor end) mes_08,
+       sum(case when(con_mesref=9)  then con_valor end) mes_09,
+       sum(case when(con_mesref=10) then con_valor end) mes_10,
+       sum(case when(con_mesref=11) then con_valor end) mes_11,
+       sum(case when(con_mesref=12) then con_valor end) mes_12
+  from condominio
+-- where condominio.con_ano = :ano
+ group by condominio.con_ano, condominio.con_descricao
+

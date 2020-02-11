@@ -1,0 +1,5 @@
+inherited FFormPadrao1: TFFormPadrao1
+  Caption = 'FFormPadrao1'
+  PixelsPerInch = 96
+  TextHeight = 13
+end
