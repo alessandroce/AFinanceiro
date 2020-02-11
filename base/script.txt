@@ -1,0 +1,31 @@
+---------------------------------------------------------------------------
+select nome,entradas,saidas,null total
+  from sp_relgagrec_pormes(:mes,:ano,:usuario)
+union all
+select nome,entradas,saidas,entradas - saidas total
+  from (select 'TOTAL' nome,sum(entradas) entradas,sum(saidas) saidas
+          from sp_relgagrec_pormes(:mes,:ano,:usuario) group by nome)
+
+---------------------------------------------------------------------------
+select resultado from get_mes_00(100);
+---------------------------------------------------------------------------
+select nome,ano,
+       case when(tipo='C')then mes_08 end entradas,
+       case when(tipo='D')then mes_08 end saidas
+  from (
+select 'C' tipo,
+       sp_rel_tituloanual.nome,
+       sp_rel_tituloanual.ano,
+       sp_rel_tituloanual.mes_08
+  from SP_REL_TITULOANUAL ('N','C',:ano,:usuario)
+ where coalesce(sp_rel_tituloanual.mes_08,0)>0
+union
+select 'D' tipo,
+       sp_rel_tituloanual.nome,
+       sp_rel_tituloanual.ano,
+       sp_rel_tituloanual.mes_08
+  from SP_REL_TITULOANUAL ('N','D',:ano,:usuario)
+ where coalesce(sp_rel_tituloanual.mes_08,0)>0
+       )
+---------------------------------------------------------------------------
+
