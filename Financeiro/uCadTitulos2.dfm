@@ -1,6 +1,6 @@
 inherited FCadTitulos2: TFCadTitulos2
-  Left = 193
-  Top = 87
+  Left = 194
+  Top = 91
   Caption = 'Cadastro Titulos'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -486,7 +486,7 @@ inherited FCadTitulos2: TFCadTitulos2
         Top = 258
         Width = 722
         Height = 195
-        ActivePage = tsDetParcelas
+        ActivePage = tsParcelas
         TabOrder = 13
         object tsParcelas: TTabSheet
           Caption = 'Parcelas'
@@ -1655,7 +1655,7 @@ inherited FCadTitulos2: TFCadTitulos2
     BufferChunks = 1000
     CachedUpdates = False
     SQL.Strings = (
-      'select parcelas.par_id'
+      'select parcelas.par_id, parcelas.par_valor'
       '  from parcelas'
       ' where parcelas.par_fin_id = :par_fin_id'
       '   and parcelas.par_vencto = :par_vencto'
@@ -1678,6 +1678,12 @@ inherited FCadTitulos2: TFCadTitulos2
       FieldName = 'PAR_ID'
       Origin = 'PARCELAS.PAR_ID'
       Required = True
+    end
+    object qExisteParcelaPAR_VALOR: TIBBCDField
+      FieldName = 'PAR_VALOR'
+      Origin = 'PARCELAS.PAR_VALOR'
+      Precision = 18
+      Size = 2
     end
   end
   object dsExisteParcela: TDataSource
@@ -1880,6 +1886,211 @@ inherited FCadTitulos2: TFCadTitulos2
       Caption = 'bExcluir'
       Hint = 'Excluir'
       ShortCut = 117
+    end
+  end
+  object qEditarParcela: TIBDataSet
+    Database = DMConexao.IBConexao
+    Transaction = DMConexao.IBTransacao
+    BufferChunks = 1000
+    CachedUpdates = False
+    DeleteSQL.Strings = (
+      'delete from parcelas'
+      'where'
+      '  PAR_ID = :OLD_PAR_ID')
+    InsertSQL.Strings = (
+      'insert into parcelas'
+      
+        '  (DESCRICAO, FLAG, PAR_DATA, PAR_DATAPGTO, PAR_DESCONTOSABAT, P' +
+        'AR_DH_CA, '
+      
+        '   PAR_EMPRESTIMO_ID, PAR_FIN_ID, PAR_FLAG, PAR_ID, PAR_JUROSMUL' +
+        'TA, PAR_NUMERO, '
+      
+        '   PAR_OBSERVACAO, PAR_OUTACRESCIMOS, PAR_OUTDEDUCOES, PAR_PAGO,' +
+        ' PAR_PROVISIONAR, '
+      '   PAR_QUANTIDADE, PAR_VALOR, PAR_VALOR_PAGO, PAR_VENCTO)'
+      'values'
+      
+        '  (:DESCRICAO, :FLAG, :PAR_DATA, :PAR_DATAPGTO, :PAR_DESCONTOSAB' +
+        'AT, :PAR_DH_CA, '
+      
+        '   :PAR_EMPRESTIMO_ID, :PAR_FIN_ID, :PAR_FLAG, :PAR_ID, :PAR_JUR' +
+        'OSMULTA, '
+      
+        '   :PAR_NUMERO, :PAR_OBSERVACAO, :PAR_OUTACRESCIMOS, :PAR_OUTDED' +
+        'UCOES, '
+      
+        '   :PAR_PAGO, :PAR_PROVISIONAR, :PAR_QUANTIDADE, :PAR_VALOR, :PA' +
+        'R_VALOR_PAGO, '
+      '   :PAR_VENCTO)')
+    RefreshSQL.Strings = (
+      'Select '
+      '  PAR_ID,'
+      '  PAR_FIN_ID,'
+      '  PAR_NUMERO,'
+      '  PAR_QUANTIDADE,'
+      '  PAR_VENCTO,'
+      '  PAR_VALOR,'
+      '  PAR_VALOR_PAGO,'
+      '  PAR_PAGO,'
+      '  PAR_OBSERVACAO,'
+      '  PAR_DATA,'
+      '  PAR_DESCONTOSABAT,'
+      '  PAR_OUTDEDUCOES,'
+      '  PAR_JUROSMULTA,'
+      '  PAR_OUTACRESCIMOS,'
+      '  PAR_DH_CA,'
+      '  PAR_DATAPGTO,'
+      '  PAR_FLAG,'
+      '  DESCRICAO,'
+      '  FLAG,'
+      '  PAR_EMPRESTIMO_ID,'
+      '  PAR_PROVISIONAR'
+      'from parcelas '
+      'where'
+      '  PAR_ID = :PAR_ID')
+    SelectSQL.Strings = (
+      'select parcelas.*'
+      '  from parcelas'
+      ' where parcelas.par_id = :PAR_ID')
+    ModifySQL.Strings = (
+      'update parcelas'
+      'set'
+      '  DESCRICAO = :DESCRICAO,'
+      '  FLAG = :FLAG,'
+      '  PAR_DATA = :PAR_DATA,'
+      '  PAR_DATAPGTO = :PAR_DATAPGTO,'
+      '  PAR_DESCONTOSABAT = :PAR_DESCONTOSABAT,'
+      '  PAR_DH_CA = :PAR_DH_CA,'
+      '  PAR_EMPRESTIMO_ID = :PAR_EMPRESTIMO_ID,'
+      '  PAR_FIN_ID = :PAR_FIN_ID,'
+      '  PAR_FLAG = :PAR_FLAG,'
+      '  PAR_ID = :PAR_ID,'
+      '  PAR_JUROSMULTA = :PAR_JUROSMULTA,'
+      '  PAR_NUMERO = :PAR_NUMERO,'
+      '  PAR_OBSERVACAO = :PAR_OBSERVACAO,'
+      '  PAR_OUTACRESCIMOS = :PAR_OUTACRESCIMOS,'
+      '  PAR_OUTDEDUCOES = :PAR_OUTDEDUCOES,'
+      '  PAR_PAGO = :PAR_PAGO,'
+      '  PAR_PROVISIONAR = :PAR_PROVISIONAR,'
+      '  PAR_QUANTIDADE = :PAR_QUANTIDADE,'
+      '  PAR_VALOR = :PAR_VALOR,'
+      '  PAR_VALOR_PAGO = :PAR_VALOR_PAGO,'
+      '  PAR_VENCTO = :PAR_VENCTO'
+      'where'
+      '  PAR_ID = :OLD_PAR_ID')
+    Filtered = True
+    GeneratorField.Field = 'PAR_ID'
+    GeneratorField.Generator = 'GEN_PARCELAS'
+    DataSource = dsCadastro
+    Left = 504
+    Top = 344
+    object qEditarParcelaPAR_ID: TIntegerField
+      FieldName = 'PAR_ID'
+      Origin = 'PARCELAS.PAR_ID'
+      Required = True
+    end
+    object qEditarParcelaPAR_FIN_ID: TIntegerField
+      FieldName = 'PAR_FIN_ID'
+      Origin = 'PARCELAS.PAR_FIN_ID'
+      Required = True
+    end
+    object qEditarParcelaPAR_NUMERO: TIntegerField
+      FieldName = 'PAR_NUMERO'
+      Origin = 'PARCELAS.PAR_NUMERO'
+    end
+    object qEditarParcelaPAR_QUANTIDADE: TIntegerField
+      FieldName = 'PAR_QUANTIDADE'
+      Origin = 'PARCELAS.PAR_QUANTIDADE'
+    end
+    object qEditarParcelaPAR_VENCTO: TDateField
+      FieldName = 'PAR_VENCTO'
+      Origin = 'PARCELAS.PAR_VENCTO'
+    end
+    object qEditarParcelaPAR_VALOR: TIBBCDField
+      FieldName = 'PAR_VALOR'
+      Origin = 'PARCELAS.PAR_VALOR'
+      DisplayFormat = '0.00'
+      EditFormat = '0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qEditarParcelaPAR_VALOR_PAGO: TIBBCDField
+      FieldName = 'PAR_VALOR_PAGO'
+      Origin = 'PARCELAS.PAR_VALOR_PAGO'
+      DisplayFormat = '0.00'
+      EditFormat = '0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qEditarParcelaPAR_PAGO: TIntegerField
+      FieldName = 'PAR_PAGO'
+      Origin = 'PARCELAS.PAR_PAGO'
+    end
+    object qEditarParcelaPAR_OBSERVACAO: TIBStringField
+      FieldName = 'PAR_OBSERVACAO'
+      Origin = 'PARCELAS.PAR_OBSERVACAO'
+      Size = 100
+    end
+    object qEditarParcelaPAR_DATA: TDateField
+      FieldName = 'PAR_DATA'
+      Origin = 'PARCELAS.PAR_DATA'
+    end
+    object qEditarParcelaPAR_DESCONTOSABAT: TIBBCDField
+      FieldName = 'PAR_DESCONTOSABAT'
+      Origin = 'PARCELAS.PAR_DESCONTOSABAT'
+      Precision = 18
+      Size = 2
+    end
+    object qEditarParcelaPAR_OUTDEDUCOES: TIBBCDField
+      FieldName = 'PAR_OUTDEDUCOES'
+      Origin = 'PARCELAS.PAR_OUTDEDUCOES'
+      Precision = 18
+      Size = 2
+    end
+    object qEditarParcelaPAR_JUROSMULTA: TIBBCDField
+      FieldName = 'PAR_JUROSMULTA'
+      Origin = 'PARCELAS.PAR_JUROSMULTA'
+      Precision = 18
+      Size = 2
+    end
+    object qEditarParcelaPAR_OUTACRESCIMOS: TIBBCDField
+      FieldName = 'PAR_OUTACRESCIMOS'
+      Origin = 'PARCELAS.PAR_OUTACRESCIMOS'
+      Precision = 18
+      Size = 2
+    end
+    object qEditarParcelaPAR_DH_CA: TDateTimeField
+      FieldName = 'PAR_DH_CA'
+      Origin = 'PARCELAS.PAR_DH_CA'
+    end
+    object qEditarParcelaPAR_DATAPGTO: TDateTimeField
+      FieldName = 'PAR_DATAPGTO'
+      Origin = 'PARCELAS.PAR_DATAPGTO'
+    end
+    object qEditarParcelaPAR_FLAG: TIntegerField
+      FieldName = 'PAR_FLAG'
+      Origin = 'PARCELAS.PAR_FLAG'
+      Required = True
+    end
+    object qEditarParcelaDESCRICAO: TIBStringField
+      FieldName = 'DESCRICAO'
+      Origin = 'PARCELAS.DESCRICAO'
+      Size = 100
+    end
+    object qEditarParcelaFLAG: TIntegerField
+      FieldName = 'FLAG'
+      Origin = 'PARCELAS.FLAG'
+    end
+    object qEditarParcelaPAR_EMPRESTIMO_ID: TIntegerField
+      FieldName = 'PAR_EMPRESTIMO_ID'
+      Origin = 'PARCELAS.PAR_EMPRESTIMO_ID'
+    end
+    object qEditarParcelaPAR_PROVISIONAR: TIBStringField
+      FieldName = 'PAR_PROVISIONAR'
+      Origin = 'PARCELAS.PAR_PROVISIONAR'
+      FixedChar = True
+      Size = 1
     end
   end
 end

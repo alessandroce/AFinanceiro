@@ -107,6 +107,7 @@ type
     bExcluir: TAction;
     cxButton1: TcxButton;
     OpenDialog1: TOpenDialog;
+    cxButton2: TcxButton;
     procedure FormShow(Sender: TObject);
     procedure btbar1SairClick(Sender: TObject);
     procedure ibDetalheParcelasNewRecord(DataSet: TDataSet);
@@ -118,14 +119,18 @@ type
     procedure bExcluirExecute(Sender: TObject);
     procedure dsDetalheParcelasStateChange(Sender: TObject);
     procedure cxButton1Click(Sender: TObject);
+    procedure ibDetalheParcelasAfterPost(DataSet: TDataSet);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     procedure botao(tabela:TIBDataset);
     procedure ImportarExcel;
     procedure ImportarTxt;
+    procedure ImportarCSV;
   public
     { Public declarations }
     FIdParcela : Integer;
+    FTotalValorParcelas : Double;
   end;
 
 var
@@ -349,6 +354,8 @@ begin
        else
        begin
 *)
+         if uppercase(trim(sheet.cells[i, 5].Text)) <> 'X' then
+         begin
          ibDetalheParcelas.Close;
          ibDetalheParcelas.ParamByName('par_id').asInteger :=0;
          ibDetalheParcelas.Open;
@@ -362,6 +369,7 @@ begin
          ibDetalheParcelasDET_QUANTIDADE.AsInteger := 1;
          ibDetalheParcelasDET_VALOR.AsFloat        := StrToFloat(trim(sheet.cells[i, 4].Text));
          ibDetalheParcelas.Post;
+         end;
 
 
 
@@ -379,6 +387,72 @@ begin
      ShowMessage('Importação finalizado com sucesso.');
 
   end;
+end;
+
+procedure TFDetalheParcelas.ImportarCSV;
+var
+  ArquivoCSV: TextFile;
+  Contador, I: Integer;
+  Linha: String;
+  iMes : Integer;
+
+  function MontaValor: String;
+  var
+    ValorMontado: String;
+  begin
+    ValorMontado := '';
+    inc(I);
+    While Linha[I] >= ' ' do
+    begin
+      If Linha[I] = ';' then
+        break;
+      ValorMontado := ValorMontado + Linha[I];
+      inc(I);
+    end;
+    result := ValorMontado;
+  end;
+
+begin
+  AssignFile(ArquivoCSV, 'c:\Nome_do_Arquivo');
+  try
+    Reset(ArquivoCSV);
+    Readln(ArquivoCSV, Linha);
+    while not Eoln(ArquivoCSV) do
+    begin
+        I := 0;
+
+        //cdsItensDoPedido.Append;
+        //cdsItensDoPedidoCodigoProduto.AsString := MontaValor;
+        //cdsItensDoPedidoNomeDoProduto.AsString := AnsiUpperCase(MontaValor);
+        //cdsItensDoPedidoQuantidade.AsFloat := StrToFloat(MontaValor);
+        //cdsItensDoPedidoPreco.AsCurrency := StrToCurr(MontaValor);
+        //cdsItensDoPedido.Post;
+
+      Readln(ArquivoCSV, Linha);
+    end;
+
+  finally
+    CloseFile(ArquivoCSV);
+  end;
+end;
+
+procedure TFDetalheParcelas.ibDetalheParcelasAfterPost(DataSet: TDataSet);
+begin
+  //DMConexao.IBTransacao.Commit;
+end;
+
+procedure TFDetalheParcelas.FormClose(Sender: TObject;var Action: TCloseAction);
+var
+  AIndex, AGroupIndex: integer;
+  AValue: variant;
+begin
+  //with cxGrid1DBTableView1.DataController do
+  //begin
+  //  AGroupIndex := Groups.DataGroupIndexByRowIndex[cxGrid1DBTableView1DET_VALOR.Index];
+  //  AIndex := Summary.DefaultGroupSummaryItems.IndexOfItemLink(cxGrid1DBTableView1DET_VALOR);
+  //  AValue := Summary.GroupSummaryValues[AGroupIndex, AIndex];
+  //end;
+  //FTotalValorParcelas := AValue;
 end;
 
 end.

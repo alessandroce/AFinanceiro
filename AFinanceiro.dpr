@@ -37,13 +37,15 @@ uses
   uCadCentroCusto in 'Financeiro\uCadCentroCusto.pas' {FCadCentroCusto},
   uCadCategoriaGrupo in 'Cadastro\uCadCategoriaGrupo.pas' {FCadCategoriaGrupo},
   uCadCategoria in 'Cadastro\uCadCategoria.pas' {FCadCategoria},
-  uTitulosAPagar in 'Financeiro\uTitulosAPagar.pas' {FTitulosAPagar},
+  uTitulosAPagar_AnoSeguinte in 'Financeiro\uTitulosAPagar_AnoSeguinte.pas' {FTitulosAPagar_AnoSeguinte},
   uRelatorio in 'Biblioteca\uRelatorio.pas' {FRelatorio},
   uCadControleCondominio in 'Cadastro\uCadControleCondominio.pas' {FCadControleCondominio},
   uCadOrcamentos in 'Financeiro\uCadOrcamentos.pas' {FCadOrcamentos},
   uCadConsultaMedica in 'Cadastro\uCadConsultaMedica.pas' {FCadConsultaMedica},
   uFormPadrao in 'Biblioteca\uFormPadrao.pas' {FFormPadrao},
-  uCadLimiteCreditoTitulos in 'Financeiro\uCadLimiteCreditoTitulos.pas' {FCadLimiteCreditoTitulos};
+  uCadLimiteCreditoTitulos in 'Financeiro\uCadLimiteCreditoTitulos.pas' {FCadLimiteCreditoTitulos},
+  uTitulosAPagar in 'Financeiro\uTitulosAPagar.pas' {FTitulosAPagar},
+  uCadUsuarioVisao in 'Cadastro\uCadUsuarioVisao.pas' {FCadUsuarioVisao};
 
 {$R *.res}
 
@@ -56,5 +58,7 @@ begin
   Application.CreateForm(TFdesign, Fdesign);
   Application.CreateForm(TFimprel, Fimprel);
   Application.CreateForm(TFRelatorio, FRelatorio);
+  Application.CreateForm(TFTitulosAPagar, FTitulosAPagar);
+  Application.CreateForm(TFCadUsuarioVisao, FCadUsuarioVisao);
   Application.Run;
 end.

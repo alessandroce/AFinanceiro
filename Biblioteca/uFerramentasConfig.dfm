@@ -1,8 +1,8 @@
 object FFerramentasConfig: TFFerramentasConfig
-  Left = 230
-  Top = 178
+  Left = 159
+  Top = 80
   Width = 800
-  Height = 600
+  Height = 592
   Caption = 'Ferramentas'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,15 +18,15 @@ object FFerramentasConfig: TFFerramentasConfig
   TextHeight = 13
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 550
-    Width = 792
+    Top = 535
+    Width = 784
     Height = 19
     Panels = <>
   end
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 792
+    Width = 784
     Height = 50
     Align = alTop
     TabOrder = 1
@@ -132,8 +132,8 @@ object FFerramentasConfig: TFFerramentasConfig
   object Panel2: TPanel
     Left = 0
     Top = 50
-    Width = 792
-    Height = 500
+    Width = 784
+    Height = 485
     Align = alClient
     TabOrder = 2
     object GroupBox1: TGroupBox
@@ -202,7 +202,7 @@ object FFerramentasConfig: TFFerramentasConfig
     end
     object GroupBox2: TGroupBox
       Left = 336
-      Top = 18
+      Top = 16
       Width = 417
       Height = 164
       Caption = '  Calcular vale transporte  '
@@ -307,6 +307,98 @@ object FFerramentasConfig: TFFerramentasConfig
         Caption = 'Usar resultado do c'#225'lculo de dias '#250'teis'
         TabOrder = 6
         OnClick = CheckBox1Click
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 8
+      Top = 192
+      Width = 321
+      Height = 193
+      Caption = '  Calcular Kilometragem / Litro  '
+      TabOrder = 2
+      object Label8: TLabel
+        Left = 24
+        Top = 34
+        Width = 60
+        Height = 13
+        Caption = 'km Rodados'
+      end
+      object Label9: TLabel
+        Left = 24
+        Top = 62
+        Width = 56
+        Height = 13
+        Caption = 'Dias de uso'
+      end
+      object Label10: TLabel
+        Left = 24
+        Top = 90
+        Width = 52
+        Height = 13
+        Caption = 'Km por litro'
+      end
+      object Label11: TLabel
+        Left = 24
+        Top = 118
+        Width = 100
+        Height = 13
+        Caption = 'Valor combustivel R$'
+      end
+      object Label12: TLabel
+        Left = 24
+        Top = 146
+        Width = 98
+        Height = 13
+        Caption = 'Total                    R$'
+      end
+      object Edit7: TEdit
+        Left = 128
+        Top = 32
+        Width = 79
+        Height = 21
+        TabOrder = 0
+        Text = '18'
+      end
+      object Edit8: TEdit
+        Left = 128
+        Top = 60
+        Width = 79
+        Height = 21
+        TabOrder = 1
+        Text = '44'
+      end
+      object Edit9: TEdit
+        Left = 128
+        Top = 88
+        Width = 79
+        Height = 21
+        TabOrder = 2
+        Text = '8'
+      end
+      object Edit10: TEdit
+        Left = 128
+        Top = 116
+        Width = 79
+        Height = 21
+        TabOrder = 3
+        Text = '4,27'
+      end
+      object Edit11: TEdit
+        Left = 128
+        Top = 144
+        Width = 79
+        Height = 21
+        ReadOnly = True
+        TabOrder = 4
+      end
+      object BitBtn3: TBitBtn
+        Left = 224
+        Top = 142
+        Width = 75
+        Height = 25
+        Caption = 'OK'
+        TabOrder = 5
+        OnClick = BitBtn3Click
       end
     end
   end

@@ -1,5 +1,5 @@
 object FTitulosAPagar: TFTitulosAPagar
-  Left = 219
+  Left = 224
   Top = 128
   Width = 800
   Height = 600

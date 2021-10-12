@@ -13,6 +13,7 @@ object FDetalheParcelas: TFDetalheParcelas
   KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
+  OnClose = FormClose
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -1071,10 +1072,10 @@ object FDetalheParcelas: TFDetalheParcelas
     object cxButton1: TcxButton
       Left = 202
       Top = 1
-      Width = 63
+      Width = 91
       Height = 40
       Hint = 'Importar'
-      Caption = 'Importar'
+      Caption = 'Importar XLSX'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -1085,6 +1086,25 @@ object FDetalheParcelas: TFDetalheParcelas
       ShowHint = True
       TabOrder = 6
       OnClick = cxButton1Click
+      LookAndFeel.Kind = lfStandard
+      LookAndFeel.NativeStyle = False
+    end
+    object cxButton2: TcxButton
+      Left = 298
+      Top = 1
+      Width = 91
+      Height = 40
+      Hint = 'Importar'
+      Caption = 'Importar CSV'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 7
       LookAndFeel.Kind = lfStandard
       LookAndFeel.NativeStyle = False
     end
@@ -1164,6 +1184,7 @@ object FDetalheParcelas: TFDetalheParcelas
   object ibDetalheParcelas: TIBDataSet
     Database = DMConexao.IBConexao
     Transaction = DMConexao.IBTransacao
+    AfterPost = ibDetalheParcelasAfterPost
     OnNewRecord = ibDetalheParcelasNewRecord
     BufferChunks = 1000
     CachedUpdates = False

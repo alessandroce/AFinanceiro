@@ -169,6 +169,12 @@ type
     LimiteParcelado1: TMenuItem;
     RelLimiteCreditos: TAction;
     tuloscomLimitedeCrditos1: TMenuItem;
+    CartodeCredito1: TMenuItem;
+    RelCartaoCreditoDetalhado: TAction;
+    N9: TMenuItem;
+    N10: TMenuItem;
+    RelCartaoCreditoMensal: TAction;
+    CartoCreditoMensal1: TMenuItem;
     procedure btSairClick(Sender: TObject);
     procedure cad_FornecedoresExecute(Sender: TObject);
     procedure aTitulosExecute(Sender: TObject);
@@ -217,6 +223,8 @@ type
     procedure con_ConsultaMedicaExecute(Sender: TObject);
     procedure con_LimiteParceladoExecute(Sender: TObject);
     procedure RelLimiteCreditosExecute(Sender: TObject);
+    procedure RelCartaoCreditoDetalhadoExecute(Sender: TObject);
+    procedure RelCartaoCreditoMensalExecute(Sender: TObject);
   private
     { Private declarations }
     function Continua(pContinua:Boolean;pTexto:String=''):Boolean;
@@ -608,7 +616,7 @@ end;
 
 procedure TFFinanceiro.ApplicationEvents1Activate(Sender: TObject);
 begin
-  //Application.OnMessage := ProcessaMsg;
+  Application.OnMessage := ProcessaMsg;
 end;
 
 procedure TFFinanceiro.ProcessaMsg(var Msg: TMsg; var Handler: Boolean);
@@ -674,6 +682,21 @@ begin
     getVariavelDesign('NOMEUSUARIO',QuotedStr(DadosLogin.Nome));
     ImprimirAlterarRelatorio(0,'LimiteCreditos','Relatório de Limite Creditos');
   end;
+end;
+
+procedure TFFinanceiro.RelCartaoCreditoDetalhadoExecute(Sender: TObject);
+begin
+  if ChamaRelatorioDesign(frxReport1,'AFINANCEIRO','CartaoCreditoDetalhado') then
+  begin
+    getVariavelDesign('USUARIO',IntToStr(DadosLogin.Id));
+    getVariavelDesign('NOMEUSUARIO',QuotedStr(DadosLogin.Nome));
+    ImprimirAlterarRelatorio(0,'CartaoCreditoDetalhado','Relatório de Cartão de Credito Detalhado');
+  end;
+end;
+
+procedure TFFinanceiro.RelCartaoCreditoMensalExecute(Sender: TObject);
+begin
+  getRelatorio('PagamentoMensalCartao','Pagamentos a relaizar Cartao - Mensal');
 end;
 
 end.

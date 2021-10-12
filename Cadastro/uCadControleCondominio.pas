@@ -134,7 +134,7 @@ begin
        qCadastroCON_MESREF.AsInteger   := getMesSigla(trim(sheet.cells[i, 2].Text));
        qCadastroCON_DESCRICAO.AsString := trim(sheet.cells[i, 3].Text);
        qCadastroCON_VALOR.AsFloat      := StrToFloat(trim(sheet.cells[i, 4].Text));
-       qCadastroCON_DH_CA.AsDateTime   := 1;
+       qCadastroCON_DH_CA.AsDateTime   := Now;
        qCadastroCON_USU_ID.AsInteger   := 1;
        qCadastro.Post;
        inc(i);

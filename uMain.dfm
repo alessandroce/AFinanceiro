@@ -418,6 +418,16 @@ object FFinanceiro: TFFinanceiro
       Caption = 'T'#237'tulos com Limite de Cr'#233'ditos'
       OnExecute = RelLimiteCreditosExecute
     end
+    object RelCartaoCreditoDetalhado: TAction
+      Category = 'Relatorio'
+      Caption = 'Cart'#227'o de Cr'#233'dito Detalhado'
+      OnExecute = RelCartaoCreditoDetalhadoExecute
+    end
+    object RelCartaoCreditoMensal: TAction
+      Category = 'Relatorio'
+      Caption = 'Cart'#227'o Credito Mensal'
+      OnExecute = RelCartaoCreditoMensalExecute
+    end
   end
   object SkinStore1: TSkinStore
     Store = <>
@@ -706,7 +716,7 @@ object FFinanceiro: TFFinanceiro
     PrintOptions.Printer = 'Padr'#227'o'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 42503.689077060200000000
-    ReportOptions.LastChange = 43617.681831296290000000
+    ReportOptions.LastChange = 44464.975586238430000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'var FDebito, FCredito : Extended;'
@@ -715,85 +725,30 @@ object FFinanceiro: TFFinanceiro
         '    MesCorrente : String;                                       ' +
         '           '
       'const'
-      '  SQL_RELATORIO ='
       
-        #39' SELECT FIN_DESCRICAO,FIN_VALORLIMITE,VALOR_PARCELAS,          ' +
-        '              '#39'#13+'
+        '  SQL_RELATORIO =                                               ' +
+        '                 '
       
-        #39'        (FIN_VALORLIMITE - VALOR_PARCELAS) SALDO_LIMITE        ' +
-        '              '#39'#13+'
+        #39'select case when(VALOR_PAGO>0) then VALOR_PAGO else VALOR end v' +
+        'alor,'#39'#13+          '
       
-        #39'   FROM (select coalesce(                                      ' +
-        '              '#39'#13+'
+        #39'       DESCRICAO,VENCTO,DEBCRED,IDCENTROCUSTO,CENTROCUSTO '#39'#13+' +
+        '  '
       
-        #39'                (select sum(case when(coalesce(parcelas.par_val' +
-        'or,0)=0) then '#39'#13+'
+        #39'  from sp_relpagar_centrocusto_det_crt ('#39#39'N'#39#39','#39#39'%s'#39#39',%s) '#39'#13+ ' +
+        ' '
       
-        #39'                               parcelas.par_valor_pago         ' +
-        '              '#39'#13+'
+        #39' where extract(month from sp_relpagar_centrocusto_det_crt.venct' +
+        'o) = %s '#39'#13+  '
       
-        #39'                             else                              ' +
-        '              '#39'#13+'
+        #39'   and extract(year from sp_relpagar_centrocusto_det_crt.vencto' +
+        ') = %s '#39'#13+  '
       
-        #39'                               parcelas.par_valor              ' +
-        '              '#39'#13+'
+        #39'   and ((sp_relpagar_centrocusto_det_crt.idcentrocusto = %s) or' +
+        ' (0 = %s)) '#39'#13+  '
       
-        #39'                             end)                              ' +
-        '              '#39'#13+'
-      
-        #39'                    from parcelas                              ' +
-        '              '#39'#13+'
-      
-        #39'                   where parcelas.par_fin_id=financeiro.fin_id ' +
-        '              '#39'#13+'
-      
-        #39'                     and extract(month from parcelas.par_vencto' +
-        ') >= %s       '#39'#13+'
-      
-        #39'                     and extract(year from parcelas.par_vencto)' +
-        ' >= %s        '#39'#13+'
-      
-        #39'                  ) ,0) valor_parcelas,                        ' +
-        '              '#39'#13+'
-      
-        #39'                financeiro.FIN_DESCRICAO,                      ' +
-        '              '#39'#13+'
-      
-        #39'                financeiro.FIN_VALORLIMITE                     ' +
-        '              '#39'#13+'
-      
-        #39'           from financeiro                                     ' +
-        '              '#39'#13+'
-      
-        #39'          where 1=1                                            ' +
-        '              '#39'#13+'
-      
-        #39'            and financeiro.fin_inativo = '#39#39'N'#39#39'                 ' +
-        '              '#39'#13+'
-      
-        #39'            and financeiro.fin_debcred = '#39#39'D'#39#39'                 ' +
-        '              '#39'#13+'
-      
-        #39'            and exists (select usuario_visao.UVIS_USU_FILHO    ' +
-        '              '#39'#13+'
-      
-        #39'                          from usuario_visao                   ' +
-        '              '#39'#13+'
-      
-        #39'                         where usuario_visao.UVIS_USU_PAI = %s ' +
-        '              '#39'#13+'
-      
-        #39'                           and usuario_visao.UVIS_USU_FILHO =  ' +
-        '              '#39'#13+'
-      
-        #39'                           financeiro.fin_usu_id )             ' +
-        '              '#39'#13+'
-      
-        #39'          order by financeiro.fin_descricao)                   ' +
-        '              '#39'#13+'
-      
-        #39'  where FIN_VALORLIMITE>0                                      ' +
-        '              '#39';'
+        #39' order by sp_relpagar_centrocusto_det_crt.centrocusto '#39';       ' +
+        ' '
       ''
       ''
       '   '
@@ -822,8 +777,8 @@ object FFinanceiro: TFFinanceiro
       '  IBXQuery1.Close;'
       '  IBXQuery1.SQL.Clear;                                    '
       
-        '  IBXQuery1.SQL.Text := Format(SQL_RELATORIO,[IntToStr(cbMes.Ite' +
-        'mIndex+1),edAno.Text,IntToStr(i_usu)]);'
+        '  IBXQuery1.SQL.Text := Format(SQL_RELATORIO,[s_debcred,IntToStr' +
+        '(i_usu),IntToStr(cbMes.ItemIndex+1),edAno.Text,'#39'0'#39','#39'0'#39']);'
       '  //ShowMessage(IBXQuery1.SQL.Text);    '
       '  IBXQuery1.open;'
       
@@ -882,13 +837,14 @@ object FFinanceiro: TFFinanceiro
         IgnoreDupParams = False
         Params = <>
         SQL.Strings = (
-          'SELECT cast('#39#39' as varchar(100)) FIN_DESCRICAO,'
-          '       cast(0 as numeric(12,2)) FIN_VALORLIMITE,'
-          '       cast(0 as numeric(12,2)) VALOR_PARCELAS,'
-          '       cast(0 as numeric(12,2)) SALDO_LIMITE'
           
-            '  FROM RDB$DATABASE                                             ' +
-            '                          ')
+            'select case when(VALOR_PAGO>0) then VALOR_PAGO else VALOR end va' +
+            'lor,'
+          '       DESCRICAO,VENCTO,DEBCRED,IDCENTROCUSTO,CENTROCUSTO'
+          '  from sp_relpagar_centrocusto_det_crt ('#39'N'#39','#39'N'#39',0)'
+          
+            ' where 1=0                                                      ' +
+            '                 ')
         pLeft = 32
         pTop = 16
         Parameters = <>
@@ -1048,7 +1004,7 @@ object FFinanceiro: TFFinanceiro
           Font.Name = 'Arial'
           Font.Style = [fsBold]
           Memo.UTF8 = (
-            'RELAT'#195#8220'RIO DE LIMITE DE CR'#195#8240'DITOS')
+            'RELAT'#195#8220'RIO DE T'#195#141'TULOS POR CENTRO CUSTO MENSAL')
           ParentFont = False
         end
         object Memo30: TfrxMemoView
@@ -1096,21 +1052,67 @@ object FFinanceiro: TFFinanceiro
         end
       end
       object PageFooter1: TfrxPageFooter
-        Top = 306.141930000000000000
+        Top = 268.346630000000000000
         Width = 755.906000000000000000
         OnBeforePrint = 'PageFooter1OnBeforePrint'
       end
       object MasterData1: TfrxMasterData
-        Height = 18.897637800000000000
-        Top = 181.417440000000000000
+        Height = 15.118110240000000000
+        Top = 154.960730000000000000
         Width = 755.906000000000000000
         DataSet = frxReport1.IBXQuery1
         DataSetName = 'IBXQuery1'
         RowCount = 0
         object IBXQuery1DESCRICAO: TfrxMemoView
-          Width = 461.102660000000000000
-          Height = 18.897637800000000000
+          Width = 638.740570000000000000
+          Height = 15.118110240000000000
           ShowHint = False
+          DataField = 'DESCRICAO'
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = [fsItalic]
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          Memo.UTF8 = (
+            '[IBXQuery1."DESCRICAO"]')
+          ParentFont = False
+        end
+        object IBXQuery1VALOR: TfrxMemoView
+          Left = 638.740570000000000000
+          Width = 117.165430000000000000
+          Height = 15.118110240000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = [fsItalic]
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          Memo.UTF8 = (
+            '[IBXQuery1."VALOR"]')
+          ParentFont = False
+        end
+      end
+      object GroupHeader1: TfrxGroupHeader
+        Height = 15.118110240000000000
+        Top = 117.165430000000000000
+        Width = 755.906000000000000000
+        Condition = 'IBXQuery1."IDCENTROCUSTO"'
+        object IBXQuery1CENTROCUSTO: TfrxMemoView
+          Width = 755.906000000000000000
+          Height = 15.118110240000000000
+          ShowHint = False
+          Color = 14211288
+          DataField = 'CENTROCUSTO'
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
           Font.Charset = DEFAULT_CHARSET
@@ -1118,161 +1120,108 @@ object FFinanceiro: TFFinanceiro
           Font.Height = -11
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           Memo.UTF8 = (
-            '[IBXQuery1."FIN_DESCRICAO"]')
-          ParentFont = False
-        end
-        object IBXQuery1FIN_VALORLIMITE: TfrxMemoView
-          Left = 461.102660000000000000
-          Width = 98.267780000000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery1."FIN_VALORLIMITE"]')
-          ParentFont = False
-        end
-        object IBXQuery1VALOR_PARCELAS: TfrxMemoView
-          Left = 559.370440000000000000
-          Width = 98.267780000000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery1."VALOR_PARCELAS"]')
-          ParentFont = False
-        end
-        object IBXQuery1VALOR_PARCELAS1: TfrxMemoView
-          Left = 657.638220000000000000
-          Width = 98.267780000000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery1."SALDO_LIMITE"]')
+            '[IBXQuery1."CENTROCUSTO"]')
           ParentFont = False
         end
       end
-      object Header1: TfrxHeader
-        Height = 41.574803149606300000
-        Top = 117.165430000000000000
+      object GroupFooter1: TfrxGroupFooter
+        Height = 13.228346456692900000
+        Top = 192.756030000000000000
         Width = 755.906000000000000000
-        object Memo1: TfrxMemoView
-          Width = 461.102660000000000000
-          Height = 37.795275590551200000
+        object Memo5: TfrxMemoView
+          Width = 60.472480000000000000
+          Height = 13.228346456692900000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -13
+          Font.Height = -11
           Font.Name = 'Arial'
-          Font.Style = [fsBold]
+          Font.Style = [fsBold, fsItalic]
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           Memo.UTF8 = (
-            'Descri'#195#167#195#163'o')
+            'Total')
+          ParentFont = False
+        end
+        object Memo1: TfrxMemoView
+          Left = 638.740570000000000000
+          Width = 117.165430000000000000
+          Height = 13.228346456692900000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = [fsBold, fsItalic]
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."VALOR">,MasterData1)]')
           ParentFont = False
         end
         object Memo2: TfrxMemoView
-          Left = 461.102660000000000000
-          Width = 98.267780000000000000
-          Height = 37.795275590000000000
+          Left = 351.496290000000000000
+          Width = 37.795300000000000000
+          Height = 13.228346456692900000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -13
+          Font.Height = -11
           Font.Name = 'Arial'
-          Font.Style = [fsBold]
+          Font.Style = [fsBold, fsItalic]
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haRight
           Memo.UTF8 = (
-            'Limite de'
-            'Cr'#195#169'dito')
-          ParentFont = False
-        end
-        object Memo5: TfrxMemoView
-          Left = 559.370440000000000000
-          Width = 98.267780000000000000
-          Height = 37.795275590000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            'Total em '
-            'Parcelas')
+            '[COUNT(MasterData1)]')
           ParentFont = False
         end
         object Memo6: TfrxMemoView
-          Left = 657.638220000000000000
-          Width = 98.267780000000000000
-          Height = 37.795275590000000000
+          Left = 291.023810000000000000
+          Width = 60.472480000000000000
+          Height = 13.228346456692900000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -13
+          Font.Height = -11
           Font.Name = 'Arial'
-          Font.Style = [fsBold]
+          Font.Style = [fsItalic]
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
           Memo.UTF8 = (
-            'Saldo')
+            'Itens')
           ParentFont = False
         end
-      end
-      object Footer1: TfrxFooter
-        Height = 22.677180000000000000
-        Top = 222.992270000000000000
-        Width = 755.906000000000000000
+        object Memo7: TfrxMemoView
+          Left = 578.268090000000000000
+          Width = 60.472480000000000000
+          Height = 13.228346456692900000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = [fsItalic]
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          Memo.UTF8 = (
+            'Valor')
+          ParentFont = False
+        end
       end
     end
   end
@@ -1424,15 +1373,27 @@ object FFinanceiro: TFFinanceiro
       object Pagamentodetalhadomensal1: TMenuItem
         Action = PagamentoDetalhadoMes
       end
+      object N9: TMenuItem
+        Caption = '-'
+      end
+      object CartoCreditoMensal1: TMenuItem
+        Action = RelCartaoCreditoMensal
+      end
+      object CartodeCredito1: TMenuItem
+        Action = RelCartaoCreditoDetalhado
+      end
+      object N10: TMenuItem
+        Caption = '-'
+      end
+      object tuloscomLimitedeCrditos1: TMenuItem
+        Action = RelLimiteCreditos
+      end
       object N4: TMenuItem
         Caption = '-'
       end
       object DespesascomFarmcia1: TMenuItem
         Caption = 'Despesas com Farm'#225'cia'
         OnClick = DespesascomFarmcia1Click
-      end
-      object tuloscomLimitedeCrditos1: TMenuItem
-        Action = RelLimiteCreditos
       end
     end
     object Sistema1: TMenuItem

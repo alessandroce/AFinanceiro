@@ -32,13 +32,27 @@ type
     Edit6: TEdit;
     Label7: TLabel;
     CheckBox1: TCheckBox;
+    GroupBox3: TGroupBox;
+    Edit7: TEdit;
+    Edit8: TEdit;
+    Edit9: TEdit;
+    Edit10: TEdit;
+    Edit11: TEdit;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    BitBtn3: TBitBtn;
     procedure btSairClick(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
   private
     { Private declarations }
+    procedure calcular_kilometragem(p_km,p_dias,p_kmporlitro,p_valorcomb:String;var p_total:String);
   public
     { Public declarations }
   end;
@@ -109,6 +123,23 @@ procedure TFFerramentasConfig.FormShow(Sender: TObject);
 begin
   DateTimePicker1.Date := Date;
   DateTimePicker2.Date := Date;
+end;
+
+procedure TFFerramentasConfig.calcular_kilometragem(p_km,p_dias,p_kmporlitro,p_valorcomb:String;var p_total:String);
+begin
+  if ((p_km='') or (p_dias='') or (p_kmporlitro='') or (p_valorcomb='')) then
+  begin
+    ShowMessage('Preencher todos os campos.');
+    Exit;
+  end;
+  p_total := FormatFloat('0.00',((StrToInt(p_km) * StrToInt(p_dias)) / StrToFloat(p_kmporlitro)) * StrToFloat(p_valorcomb));
+end;
+
+procedure TFFerramentasConfig.BitBtn3Click(Sender: TObject);
+var total : String;
+begin
+  calcular_kilometragem(Edit7.Text,Edit8.Text,Edit9.Text,Edit10.Text,total);
+  Edit11.Text := total;
 end;
 
 end.

@@ -242,6 +242,29 @@ type
     bCancelar: TAction;
     bGravar: TAction;
     bExcluir: TAction;
+    qExisteParcelaPAR_VALOR: TIBBCDField;
+    qEditarParcela: TIBDataSet;
+    qEditarParcelaPAR_ID: TIntegerField;
+    qEditarParcelaPAR_FIN_ID: TIntegerField;
+    qEditarParcelaPAR_NUMERO: TIntegerField;
+    qEditarParcelaPAR_QUANTIDADE: TIntegerField;
+    qEditarParcelaPAR_VENCTO: TDateField;
+    qEditarParcelaPAR_VALOR: TIBBCDField;
+    qEditarParcelaPAR_VALOR_PAGO: TIBBCDField;
+    qEditarParcelaPAR_PAGO: TIntegerField;
+    qEditarParcelaPAR_OBSERVACAO: TIBStringField;
+    qEditarParcelaPAR_DATA: TDateField;
+    qEditarParcelaPAR_DESCONTOSABAT: TIBBCDField;
+    qEditarParcelaPAR_OUTDEDUCOES: TIBBCDField;
+    qEditarParcelaPAR_JUROSMULTA: TIBBCDField;
+    qEditarParcelaPAR_OUTACRESCIMOS: TIBBCDField;
+    qEditarParcelaPAR_DH_CA: TDateTimeField;
+    qEditarParcelaPAR_DATAPGTO: TDateTimeField;
+    qEditarParcelaPAR_FLAG: TIntegerField;
+    qEditarParcelaDESCRICAO: TIBStringField;
+    qEditarParcelaFLAG: TIntegerField;
+    qEditarParcelaPAR_EMPRESTIMO_ID: TIntegerField;
+    qEditarParcelaPAR_PROVISIONAR: TIBStringField;
     procedure FormShow(Sender: TObject);
     procedure qCadastroAfterOpen(DataSet: TDataSet);
     procedure qParcelasAfterInsert(DataSet: TDataSet);
@@ -407,6 +430,7 @@ var i : Integer;
     vPAR_ID : Integer;
     vPAR_VENCTO : TDate;
     vDataDoc, vDescricao : String;
+    vValorAcum : Double;
 
   function getInformeDadosParcelasDet:Boolean;
   begin
@@ -432,6 +456,7 @@ begin
   if not(Continua(wwDBLookupCombo4.Text<>'','Informe o Centro Custo')) then
     Exit;
 
+  vValorAcum := 0;
   if StrToInt(edQuant.Text)>0 then
   begin
     vdata := edDataVencimento.Date;
@@ -458,7 +483,7 @@ begin
     {}  {}  //se existe parcela, acrescenta parcela_detalhe
     {}  {}  qExisteParcela.Close;
     {}  {}  qExisteParcela.SQL.Clear;
-    {}  {}  qExisteParcela.SQL.Text := Format('select parcelas.par_id '+#13+
+    {}  {}  qExisteParcela.SQL.Text := Format('select parcelas.par_id, parcelas.par_valor '+#13+
     {}  {}                                    '  from parcelas '+#13+
     {}  {}                                    ' where parcelas.par_fin_id = %s '+#13+
     {}  {}                                    '   and extract(month from parcelas.par_vencto) = %s '+#13+
@@ -474,7 +499,8 @@ begin
     {}  {}  {}      ibDetalheParcelas.Insert;
     {}  {}  {}    //ibDetalheParcelasDET_ID.asInteger        :=
     {}  {}  {}    //ibDetalheParcelasDET_PAR_ID.asInteger    := vPAR_ID;
-    {}  {}  {}    ibDetalheParcelasDET_PAR_ID.asInteger    := qExisteParcelaPAR_ID.Value;
+    {}  {}  {}    vPAR_ID := qExisteParcelaPAR_ID.Value;
+    {}  {}  {}    ibDetalheParcelasDET_PAR_ID.asInteger    := vPAR_ID;
     {}  {}  {}    ibDetalheParcelasDET_DATA.asDateTime     := Now;
     {}  {}  {}
     {}  {}  {}
@@ -486,6 +512,8 @@ begin
     {}  {}  {}    ibDetalheParcelasDET_DATA_DOC.asDateTime := StrToDateTime(vDataDoc);
     {}  {}  {}    ibDetalheParcelasDET_DESCRICAO.asString  := vDescricao+' '+IntToStr(i)+'/'+edQuant.Text;;
     {}  {}  {}    ibDetalheParcelasDET_VALOR.asFloat       := StrToFloat(edValor.Text);
+    {}  {}  {}    vValorAcum := qExisteParcelaPAR_VALOR.AsFloat + ibDetalheParcelasDET_VALOR.asFloat;
+    {}  {}  {}
     {}  {}  {}    //ibDetalheParcelasDET_DH_CA.asDateTime    :=
     {}  {}  {}    //ibDetalheParcelasDESC_PARCELA.asString   :=
     {}  {}  {}    //ibDetalheParcelasPAR_OBSERVACAO.asString :=
@@ -496,6 +524,19 @@ begin
     {}  {}  {}    ibDetalheParcelasDET_NUMERO.asInteger      := i;
     {}  {}  {}    ibDetalheParcelasDET_QUANTIDADE.asInteger  := StrToInt(edQuant.Text);
     {}  {}  {}    ibDetalheParcelas.Post;
+    {}  {}  {}
+    {}  {}  {}    //editar parcela
+    {}  {}  {}    qEditarParcela.Close;
+    {}  {}  {}    qEditarParcela.ParamByName('PAR_ID').AsInteger := vPAR_ID;
+    {}  {}  {}    qEditarParcela.Open;
+    {}  {}  {}    qEditarParcela.Edit;
+    {}  {}  {}    qEditarParcelaPAR_VALOR.AsFloat := vValorAcum;
+    {}  {}  {}    qEditarParcela.Post;
+    {}  {}  {}
+    {}  {}  {}    qParcelas.Refresh;
+    {}  {}  {}
+    {}  {}  {}
+    {}  {}  {}
     {}  {}  end
     {}  {}  else
     {}  {}  begin
@@ -676,13 +717,23 @@ begin
 end;
 
 procedure TFCadTitulos2.sbDetalhesClick(Sender: TObject);
+var vPAR_ID : Integer;
 begin
   inherited;
+  vPAR_ID := qParcelasPAR_ID.asinteger;
   FDetalheParcelas := TFDetalheParcelas.Create(nil);
-  FDetalheParcelas.FIdParcela := qParcelasPAR_ID.asinteger;
+  FDetalheParcelas.FIdParcela := vPAR_ID;
   FDetalheParcelas.ShowModal;
+
+  //qEditarParcela.Close;
+  //qEditarParcela.ParamByName('PAR_ID').AsInteger := vPAR_ID;
+  //qEditarParcela.Open;
+  //qEditarParcela.Edit;
+  //qEditarParcelaPAR_VALOR.AsFloat := FDetalheParcelas.FTotalValorParcelas;
+  //qEditarParcela.Post;
+
   FDetalheParcelas.Free;
-  qParcelas.Refresh;
+
 end;
 
 procedure TFCadTitulos2.btCancelarClick(Sender: TObject);
