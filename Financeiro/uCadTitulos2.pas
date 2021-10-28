@@ -655,8 +655,8 @@ begin
     qConsulta.SQL.Text := Format(vSQL_TITULO,['']);
   qConsulta.ParamByName('ativo1').asstring     := v_ativo[rgAtivo.itemindex];
   qConsulta.ParamByName('ativo2').asstring     := v_ativo[rgAtivo.itemindex];
-  qConsulta.ParamByName('debcred').asstring   := v_debitocredito[rgDebitoCredito.itemindex];
-  qConsulta.ParamByName('usuario').asinteger  := DadosLogin.Id;
+  qConsulta.ParamByName('debcred').asstring    := v_debitocredito[rgDebitoCredito.itemindex];
+  qConsulta.ParamByName('usuario').asinteger   := DadosLogin.Id;
   qConsulta.ParamByName('situacao1').asinteger := v_situacao[rgSituacao.ItemIndex];
   qConsulta.ParamByName('situacao2').asinteger := v_situacao[rgSituacao.ItemIndex];
   qConsulta.Open;
@@ -687,23 +687,23 @@ begin
 end;
 
 procedure TFCadTitulos2.rgSituacaoParcelasClick(Sender: TObject);
+const
+  v_sql = 'select parcelas.*,' +
+          '       parcelas.par_pago as situacao' +
+          '  from parcelas' +
+          ' where parcelas.par_id>-1' +
+          '   and par_fin_id = :FIN_ID' +
+          '   %s' +
+          ' order by parcelas.par_vencto, parcelas.par_id';
 begin
   inherited;
+  qParcelas.Close;
   case rgSituacaoParcelas.ItemIndex of
-  0 : begin
-        qParcelas.Filtered := false;
-        qParcelas.Filter := 'par_pago = 0';
-        qParcelas.Filtered := true;
-      end;
-  1 : begin
-        qParcelas.Filtered := false;
-        qParcelas.Filter := 'par_pago = 1';
-        qParcelas.Filtered := true;
-      end;
-  2 : begin
-        qParcelas.Filtered := false;
-      end;
+  0 : qParcelas.SelectSQL.Text := Format(v_sql,['and par_pago = 0']);
+  1 : qParcelas.SelectSQL.Text := Format(v_sql,['and par_pago = 1']);
+  2 : qParcelas.SelectSQL.Text := Format(v_sql,['']);
   end;
+  qParcelas.Open;
 end;
 
 procedure TFCadTitulos2.qCadastroNewRecord(DataSet: TDataSet);

@@ -6,7 +6,6 @@ inherited FCadTitulos2: TFCadTitulos2
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgCadastro: TPageControl
-    ActivePage = tsCadastro
     inherited tsConsulta: TTabSheet
       inherited cxGrid1: TcxGrid
         inherited cxGrid1DBTableView1: TcxGridDBTableView
@@ -478,7 +477,6 @@ inherited FCadTitulos2: TFCadTitulos2
           'Fechada'
           'Todas')
         TabOrder = 12
-        Visible = False
         OnClick = rgSituacaoParcelasClick
       end
       object pgParcelas: TPageControl
@@ -502,6 +500,7 @@ inherited FCadTitulos2: TFCadTitulos2
               NavigatorButtons.ConfirmDelete = False
               OnCustomDrawCell = cxGrid2DBTableView1CustomDrawCell
               DataController.DataSource = dsParcelas
+              DataController.Filter.Active = True
               DataController.Summary.DefaultGroupSummaryItems = <>
               DataController.Summary.FooterSummaryItems = <
                 item
@@ -1075,6 +1074,7 @@ inherited FCadTitulos2: TFCadTitulos2
       '  from parcelas'
       ' where parcelas.par_id>-1'
       '   and par_fin_id = :FIN_ID'
+      '   and par_pago = 0'
       ' order by parcelas.par_vencto, parcelas.par_id')
     ModifySQL.Strings = (
       'update parcelas'
