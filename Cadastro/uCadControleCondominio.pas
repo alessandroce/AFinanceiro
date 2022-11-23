@@ -19,7 +19,7 @@ uses
   cxGridTableView, cxGridDBTableView, IBCustomDataSet, IBQuery, StdCtrls,
   ExtCtrls, Buttons, cxGridLevel, cxClasses, cxGridCustomView, cxGrid,
   ComCtrls, Mask, DBCtrls, Menus, cxButtons, frxClass, frxIBXComponents,
-  Spin, ComObj;
+  Spin, ComObj, wwdblook;
 
 type
   TFCadControleCondominio = class(TFCadastro2)
@@ -57,6 +57,22 @@ type
     cxGrid1DBTableView1MES: TcxGridDBColumn;
     cxButton1: TcxButton;
     OpenDialog1: TOpenDialog;
+    qClassif: TIBQuery;
+    dsClassif: TDataSource;
+    qClassifCNT_ID: TIntegerField;
+    qClassifCNT_DESCRICAO: TIBStringField;
+    wwDBLookupCombo2: TwwDBLookupCombo;
+    Label5: TLabel;
+    qCadastroCON_CLASSIF: TIntegerField;
+    qCadastroCON_VENCTO: TDateField;
+    qConsultaCLASSIF: TIBStringField;
+    cxGrid1DBTableView1CLASSIF: TcxGridDBColumn;
+    pnmensagem: TPanel;
+    mmensagem: TMemo;
+    lblmensagem: TLabel;
+    Bevel1: TBevel;
+    SpeedButton1: TSpeedButton;
+    cxButton2: TcxButton;
     procedure TBImprimirClick(Sender: TObject);
     procedure qCadastroNewRecord(DataSet: TDataSet);
     procedure dsCadastroDataChange(Sender: TObject; Field: TField);
@@ -64,6 +80,9 @@ type
     procedure ImportarExcel;
     function getMesSigla(pMes:String):Integer;
     procedure cxButton1Click(Sender: TObject);
+    procedure qCadastroAfterOpen(DataSet: TDataSet);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure cxButton2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -116,36 +135,83 @@ var
   i, j, linha, coluna: Integer;
   qParcela : String;
   iMes : Integer;
+  sMensagem : String;
 begin
   if OpenDialog1.Execute then
   begin
+    try
      i := 1;
      planilha:= CreateOleObject('Excel.Application');
      planilha.WorkBooks.open(OpenDialog1.FileName);
      sheet:= planilha.WorkSheets[1];
+     sMensagem := '';
+     mmensagem.Lines.Clear;
+
+
+    if not(DMConexao.IBTransacao.InTransaction) then
+      DMConexao.IBTransacao.StartTransaction;
+
+
      while Sheet.Cells[i, 2].Value <> '' do
      begin
-       qCadastro.Close;
-       qCadastro.ParamByName('con_id').asInteger :=0;
-       qCadastro.Open;
-       qCadastro.Insert;
-       //qCadastroCON_ID.AsInteger       := 0;
-       qCadastroCON_ANO.AsInteger      := StrToInt(trim(sheet.cells[i, 1].Text));
-       qCadastroCON_MESREF.AsInteger   := getMesSigla(trim(sheet.cells[i, 2].Text));
-       qCadastroCON_DESCRICAO.AsString := trim(sheet.cells[i, 3].Text);
-       qCadastroCON_VALOR.AsFloat      := StrToFloat(trim(sheet.cells[i, 4].Text));
-       qCadastroCON_DH_CA.AsDateTime   := Now;
-       qCadastroCON_USU_ID.AsInteger   := 1;
-       qCadastro.Post;
+
+       if trim(sheet.cells[i, 1].Text) = '' then
+         sMensagem := sMensagem + 'ANO,';
+       if trim(sheet.cells[i, 2].Text) = '' then
+         sMensagem := sMensagem + 'MESREF,';
+       if trim(sheet.cells[i, 3].Text) = '' then
+         sMensagem := sMensagem + 'DESCRICAO,';
+       if trim(sheet.cells[i, 4].Text) = '' then
+         sMensagem := sMensagem + 'VALOR,';
+       if trim(sheet.cells[i, 5].Text) = '' then
+         sMensagem := sMensagem + 'CLASSIFICACAO,';
+
+       if sMensagem<>'' then
+       begin
+         mmensagem.Lines.Add('Linha ' + IntToStr(i) + ' - ' +
+                             ' com os dados: ' + sMensagem +
+                             ' não pôde ser importada. ');
+       end
+       else
+       begin
+         qCadastro.Close;
+         qCadastro.ParamByName('con_id').asInteger :=0;
+         qCadastro.Open;
+         qCadastro.Insert;
+         //qCadastroCON_ID.AsInteger       := 0;
+         {ANO;MESREF;DESCRICAO;VALOR;CLASSIFICACAO}
+         qCadastroCON_ANO.AsInteger      := StrToInt(trim(sheet.cells[i, 1].Text));
+         qCadastroCON_MESREF.AsInteger   := getMesSigla(trim(sheet.cells[i, 2].Text));
+         qCadastroCON_DESCRICAO.AsString := trim(sheet.cells[i, 3].Text);
+         qCadastroCON_VALOR.AsFloat      := StrToFloat(trim(sheet.cells[i, 4].Text));
+         qCadastroCON_CLASSIF.AsFloat    := StrToFloat(trim(sheet.cells[i, 5].Text));
+         qCadastroCON_DH_CA.AsDateTime   := Now;
+         qCadastroCON_USU_ID.AsInteger   := DadosLogin.Id;
+         qCadastro.Post;
+       end;
+       sMensagem := '';
        inc(i);
      end;
      planilha.WorkBooks.Close;
 
      qConsulta.Close;
      qConsulta.Open;
-
-     ShowMessage('Importação finalizado com sucesso.');
-
+     if sMensagem<>'' then
+     begin
+       pnmensagem.Visible := true;
+     end
+     else
+     begin
+       DMConexao.IBTransacao.Commit;
+       ShowMessage('Importação finalizado com sucesso.');
+     end;
+    except
+      on e : Exception do
+      begin
+        DMConexao.IBTransacao.Rollback;
+        ShowMessage('Erro. ' + e.Message);
+      end;
+    end;
   end;
 end;
 
@@ -195,6 +261,36 @@ procedure TFCadControleCondominio.cxButton1Click(Sender: TObject);
 begin
   inherited;
   ImportarExcel;
+end;
+
+procedure TFCadControleCondominio.qCadastroAfterOpen(DataSet: TDataSet);
+begin
+  inherited;
+  qClassif.Close;
+  qClassif.Open;
+end;
+
+procedure TFCadControleCondominio.SpeedButton1Click(Sender: TObject);
+begin
+  inherited;
+  pnmensagem.Visible := false;
+end;
+
+procedure TFCadControleCondominio.cxButton2Click(Sender: TObject);
+begin
+  inherited;
+   pnmensagem.Visible := false;
+   mmensagem.Lines.Clear;
+   mmensagem.Lines.Add('');
+   mmensagem.Lines.Add('Arquivo deve ser em Excel (.xlsx) com as seguintes colunas');
+   mmensagem.Lines.Add('--');
+   mmensagem.Lines.Add('ANO;MESREF;DESCRICAO;VALOR;CLASSIFICACAO;');
+   mmensagem.Lines.Add('2022;JAN;DESCRICAO;0,00;1;');
+   mmensagem.Lines.Add('2022;FEV;DESCRICAO;0,00;1;');
+   mmensagem.Lines.Add('2022;MAR;DESCRICAO;0,00;1;');
+   mmensagem.Lines.Add('--');
+   mmensagem.Lines.Add('');
+   pnmensagem.Visible := true;
 end;
 
 end.

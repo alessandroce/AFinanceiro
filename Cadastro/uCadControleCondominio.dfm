@@ -1,6 +1,6 @@
 inherited FCadControleCondominio: TFCadControleCondominio
-  Left = 192
-  Top = 88
+  Left = 209
+  Top = 92
   Caption = 'Controle Condominio'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -47,6 +47,11 @@ inherited FCadControleCondominio: TFCadControleCondominio
             Caption = 'Valor'
             DataBinding.FieldName = 'CON_VALOR'
           end
+          object cxGrid1DBTableView1CLASSIF: TcxGridDBColumn
+            Caption = 'Classifica'#231#227'o'
+            DataBinding.FieldName = 'CLASSIF'
+            Width = 250
+          end
         end
       end
       inherited Panel1: TPanel
@@ -67,6 +72,25 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = True
           TabOrder = 0
           OnClick = cxButton1Click
+          LookAndFeel.Kind = lfStandard
+          LookAndFeel.NativeStyle = False
+        end
+        object cxButton2: TcxButton
+          Left = 66
+          Top = 1
+          Width = 13
+          Height = 40
+          Hint = 'Mensagem'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+          OnClick = cxButton2Click
           LookAndFeel.Kind = lfStandard
           LookAndFeel.NativeStyle = False
         end
@@ -153,6 +177,58 @@ inherited FCadControleCondominio: TFCadControleCondominio
           SpeedButtonOptions.Flat = True
         end
       end
+      object pnmensagem: TPanel
+        Left = 96
+        Top = 104
+        Width = 569
+        Height = 265
+        BevelOuter = bvNone
+        BorderWidth = 10
+        Color = clGradientInactiveCaption
+        TabOrder = 3
+        Visible = False
+        object lblmensagem: TLabel
+          Left = 10
+          Top = 10
+          Width = 549
+          Height = 22
+          Align = alTop
+          Caption = 'Mensagem'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Bevel1: TBevel
+          Left = 10
+          Top = 220
+          Width = 549
+          Height = 35
+          Align = alBottom
+          Shape = bsSpacer
+        end
+        object SpeedButton1: TSpeedButton
+          Left = 256
+          Top = 226
+          Width = 60
+          Height = 22
+          Caption = 'OK'
+          OnClick = SpeedButton1Click
+        end
+        object mmensagem: TMemo
+          Left = 10
+          Top = 32
+          Width = 549
+          Height = 188
+          Align = alClient
+          BevelOuter = bvNone
+          BorderStyle = bsNone
+          ScrollBars = ssBoth
+          TabOrder = 0
+        end
+      end
     end
     inherited tsCadastro: TTabSheet
       object Label1: TLabel [0]
@@ -185,6 +261,14 @@ inherited FCadControleCondominio: TFCadControleCondominio
         Height = 13
         Caption = 'Valor'
         FocusControl = DBEdit4
+      end
+      object Label5: TLabel [4]
+        Left = 249
+        Top = 16
+        Width = 62
+        Height = 13
+        Caption = 'Classifica'#231#227'o'
+        FocusControl = DBEdit1
       end
       inherited Panel3: TPanel
         Top = 454
@@ -239,9 +323,29 @@ inherited FCadControleCondominio: TFCadControleCondominio
           'NOVEMBRO'
           'DEZEMBRO')
       end
+      object wwDBLookupCombo2: TwwDBLookupCombo
+        Left = 248
+        Top = 30
+        Width = 273
+        Height = 21
+        DisableThemes = False
+        DropDownAlignment = taLeftJustify
+        Selected.Strings = (
+          'CNT_DESCRICAO'#9'50'#9'DESCRICAO'#9'F')
+        DataField = 'CON_CLASSIF'
+        DataSource = dsCadastro
+        LookupTable = qClassif
+        LookupField = 'CNT_ID'
+        Navigator = False
+        TabOrder = 5
+        AutoDropDown = False
+        ShowButton = True
+        AllowClearKey = False
+      end
     end
   end
   inherited qCadastro: TIBDataSet
+    AfterOpen = qCadastroAfterOpen
     BeforePost = qCadastroBeforePost
     OnNewRecord = qCadastroNewRecord
     DeleteSQL.Strings = (
@@ -250,23 +354,15 @@ inherited FCadControleCondominio: TFCadControleCondominio
       '  CON_ID = :OLD_CON_ID')
     InsertSQL.Strings = (
       'insert into condominio'
-      
-        '  (CON_ANO, CON_DESCRICAO, CON_DH_CA, CON_ID, CON_MESREF, CON_US' +
-        'U_ID, CON_VALOR)'
+      '  (CON_ID, CON_USU_ID, CON_ANO, CON_MESREF, CON_DESCRICAO, '
+      'CON_VALOR, CON_DH_CA, '
+      '   CON_CLASSIF, CON_VENCTO)'
       'values'
-      
-        '  (:CON_ANO, :CON_DESCRICAO, :CON_DH_CA, :CON_ID, :CON_MESREF, :' +
-        'CON_USU_ID, '
-      '   :CON_VALOR)')
+      '  (:CON_ID, :CON_USU_ID, :CON_ANO, :CON_MESREF, :CON_DESCRICAO, '
+      ':CON_VALOR, '
+      '   :CON_DH_CA, :CON_CLASSIF, :CON_VENCTO)')
     RefreshSQL.Strings = (
-      'Select '
-      '  CON_ID,'
-      '  CON_USU_ID,'
-      '  CON_ANO,'
-      '  CON_MESREF,'
-      '  CON_DESCRICAO,'
-      '  CON_VALOR,'
-      '  CON_DH_CA'
+      'Select *'
       'from condominio '
       'where'
       '  CON_ID = :CON_ID')
@@ -275,19 +371,21 @@ inherited FCadControleCondominio: TFCadControleCondominio
     ModifySQL.Strings = (
       'update condominio'
       'set'
-      '  CON_ANO = :CON_ANO,'
-      '  CON_DESCRICAO = :CON_DESCRICAO,'
-      '  CON_DH_CA = :CON_DH_CA,'
       '  CON_ID = :CON_ID,'
-      '  CON_MESREF = :CON_MESREF,'
       '  CON_USU_ID = :CON_USU_ID,'
-      '  CON_VALOR = :CON_VALOR'
+      '  CON_ANO = :CON_ANO,'
+      '  CON_MESREF = :CON_MESREF,'
+      '  CON_DESCRICAO = :CON_DESCRICAO,'
+      '  CON_VALOR = :CON_VALOR,'
+      '  CON_DH_CA = :CON_DH_CA,'
+      '  CON_CLASSIF = :CON_CLASSIF,'
+      '  CON_VENCTO = :CON_VENCTO'
       'where'
       '  CON_ID = :OLD_CON_ID')
     GeneratorField.Field = 'CON_ID'
     GeneratorField.Generator = 'GEN_CONDOMINIO'
     DataSource = dsConsulta
-    Left = 416
+    Left = 384
     object qCadastroCON_ID: TIntegerField
       FieldName = 'CON_ID'
       Origin = '"CONDOMINIO"."CON_ID"'
@@ -330,15 +428,29 @@ inherited FCadControleCondominio: TFCadControleCondominio
       Size = 50
       Calculated = True
     end
+    object qCadastroCON_CLASSIF: TIntegerField
+      FieldName = 'CON_CLASSIF'
+      Origin = 'CONDOMINIO.CON_CLASSIF'
+    end
+    object qCadastroCON_VENCTO: TDateField
+      FieldName = 'CON_VENCTO'
+      Origin = 'CONDOMINIO.CON_VENCTO'
+    end
   end
   inherited qConsulta: TIBQuery
     SQL.Strings = (
       'select condominio.*,'
       
         '       upper((select resultado from mes_extenso( condominio.con_' +
-        'mesref))) mes'
+        'mesref))) mes,'
+      '       condominio_conta.cnt_descricao classif'
       '  from condominio'
-      'order by con_ano, con_mesref, con_descricao')
+      
+        '  left join condominio_conta on (condominio_conta.cnt_id = condo' +
+        'minio.con_classif)'
+      
+        'order by con_ano, con_mesref, condominio_conta.cnt_descricao, co' +
+        'n_descricao')
     object qConsultaCON_ID: TIntegerField
       FieldName = 'CON_ID'
       Origin = '"CONDOMINIO"."CON_ID"'
@@ -381,6 +493,11 @@ inherited FCadControleCondominio: TFCadControleCondominio
       ProviderFlags = []
       Size = 10
     end
+    object qConsultaCLASSIF: TIBStringField
+      FieldName = 'CLASSIF'
+      Origin = 'CONDOMINIO_CONTA.CNT_DESCRICAO'
+      Size = 100
+    end
   end
   inherited dsCadastro: TDataSource
     OnDataChange = dsCadastroDataChange
@@ -394,7 +511,7 @@ inherited FCadControleCondominio: TFCadControleCondominio
     PrintOptions.Printer = 'Padr'#227'o'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 42503.689077060200000000
-    ReportOptions.LastChange = 43287.557825590280000000
+    ReportOptions.LastChange = 44888.068697951390000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'begin'
@@ -403,8 +520,8 @@ inherited FCadControleCondominio: TFCadControleCondominio
       '  IBXQuery1.Open;              '
       ''
       'end.')
-    Left = 408
-    Top = 344
+    Left = 400
+    Top = 296
     Datasets = <
       item
         DataSet = frxReport1.IBXQuery1
@@ -438,9 +555,8 @@ inherited FCadControleCondominio: TFCadControleCondominio
         IgnoreDupParams = False
         Params = <>
         SQL.Strings = (
-          'select'
-          '       condominio.con_ano,'
-          '       condominio.con_descricao,'
+          'select condominio.con_ano,'
+          '       condominio_conta.cnt_descricao con_descricao,'
           '       sum(case when(con_mesref=1)  then con_valor end) mes_01,'
           '       sum(case when(con_mesref=2)  then con_valor end) mes_02,'
           '       sum(case when(con_mesref=3)  then con_valor end) mes_03,'
@@ -454,10 +570,11 @@ inherited FCadControleCondominio: TFCadControleCondominio
           '       sum(case when(con_mesref=11) then con_valor end) mes_11,'
           '       sum(case when(con_mesref=12) then con_valor end) mes_12'
           '  from condominio'
-          ' group by condominio.con_ano, condominio.con_descricao'
           
-            '                                                                ' +
-            '       ')
+            '  left join condominio_conta on (condominio_conta.cnt_id = condo' +
+            'minio.con_classif)'
+          ' group by condominio.con_ano,condominio_conta.cnt_descricao'
+          '     ')
         pLeft = 32
         pTop = 16
         Parameters = <>
@@ -473,8 +590,8 @@ inherited FCadControleCondominio: TFCadControleCondominio
       TopMargin = 5.000000000000000000
       BottomMargin = 5.000000000000000000
       object ReportTitle1: TfrxReportTitle
-        Height = 37.795275590000000000
-        Top = 18.897650000000000000
+        Height = 56.692913385826800000
+        Top = 16.000000000000000000
         Width = 1084.725110000000000000
         object Memo4: TfrxMemoView
           Width = 434.645950000000000000
@@ -532,14 +649,14 @@ inherited FCadControleCondominio: TFCadControleCondominio
         end
       end
       object MasterData1: TfrxMasterData
-        Height = 22.677180000000000000
-        Top = 162.519790000000000000
+        Height = 18.897637800000000000
+        Top = 152.000000000000000000
         Width = 1084.725110000000000000
         DataSet = frxReport1.IBXQuery1
         DataSetName = 'IBXQuery1'
         RowCount = 0
         object IBXQuery1CON_DESCRICAO: TfrxMemoView
-          Width = 158.740260000000000000
+          Width = 177.637910000000000000
           Height = 18.897650000000000000
           ShowHint = False
           DataField = 'CON_DESCRICAO'
@@ -550,6 +667,8 @@ inherited FCadControleCondominio: TFCadControleCondominio
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           Memo.UTF8 = (
             '[IBXQuery1."CON_DESCRICAO"]')
           ParentFont = False
@@ -561,12 +680,18 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
           Memo.UTF8 = (
             '[IBXQuery1."MES_01"]')
           ParentFont = False
@@ -578,12 +703,18 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
           Memo.UTF8 = (
             '[IBXQuery1."MES_02"]')
           ParentFont = False
@@ -595,12 +726,18 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
           Memo.UTF8 = (
             '[IBXQuery1."MES_03"]')
           ParentFont = False
@@ -612,12 +749,18 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
           Memo.UTF8 = (
             '[IBXQuery1."MES_04"]')
           ParentFont = False
@@ -629,12 +772,18 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
           Memo.UTF8 = (
             '[IBXQuery1."MES_05"]')
           ParentFont = False
@@ -646,12 +795,18 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
           Memo.UTF8 = (
             '[IBXQuery1."MES_06"]')
           ParentFont = False
@@ -663,12 +818,18 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
           Memo.UTF8 = (
             '[IBXQuery1."MES_07"]')
           ParentFont = False
@@ -680,12 +841,18 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
           Memo.UTF8 = (
             '[IBXQuery1."MES_08"]')
           ParentFont = False
@@ -697,12 +864,18 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
           Memo.UTF8 = (
             '[IBXQuery1."MES_09"]')
           ParentFont = False
@@ -714,12 +887,18 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
           Memo.UTF8 = (
             '[IBXQuery1."MES_10"]')
           ParentFont = False
@@ -731,12 +910,18 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
           Memo.UTF8 = (
             '[IBXQuery1."MES_11"]')
           ParentFont = False
@@ -748,24 +933,30 @@ inherited FCadControleCondominio: TFCadControleCondominio
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Arial'
           Font.Style = []
+          Frame.Color = 13421772
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
           Memo.UTF8 = (
             '[IBXQuery1."MES_12"]')
           ParentFont = False
         end
       end
       object GroupHeader1: TfrxGroupHeader
-        Height = 22.677180000000000000
-        Top = 117.165430000000000000
+        Height = 18.897637800000000000
+        Top = 112.000000000000000000
         Width = 1084.725110000000000000
         Condition = 'IBXQuery1."CON_ANO"'
         object IBXQuery1CON_ANO: TfrxMemoView
-          Width = 143.622140000000000000
+          Width = 177.637910000000000000
           Height = 18.897650000000000000
           ShowHint = False
           DataField = 'CON_ANO'
@@ -776,14 +967,584 @@ inherited FCadControleCondominio: TFCadControleCondominio
           Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
           Memo.UTF8 = (
             '[IBXQuery1."CON_ANO"]')
           ParentFont = False
         end
+        object Memo14: TfrxMemoView
+          Left = 177.637910000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            'JAN')
+          ParentFont = False
+        end
+        object Memo15: TfrxMemoView
+          Left = 253.228510000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            'FEV')
+          ParentFont = False
+        end
+        object Memo16: TfrxMemoView
+          Left = 328.819110000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            'MAR')
+          ParentFont = False
+        end
+        object Memo17: TfrxMemoView
+          Left = 404.409710000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            'ABR')
+          ParentFont = False
+        end
+        object Memo18: TfrxMemoView
+          Left = 480.000310000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          Memo.UTF8 = (
+            'MAI')
+          ParentFont = False
+        end
+        object Memo19: TfrxMemoView
+          Left = 555.590910000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          Memo.UTF8 = (
+            'JUN')
+          ParentFont = False
+        end
+        object Memo20: TfrxMemoView
+          Left = 631.181510000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          Memo.UTF8 = (
+            'JUL')
+          ParentFont = False
+        end
+        object Memo21: TfrxMemoView
+          Left = 706.772110000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          Memo.UTF8 = (
+            'AGO')
+          ParentFont = False
+        end
+        object Memo22: TfrxMemoView
+          Left = 782.362710000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          Memo.UTF8 = (
+            'SET')
+          ParentFont = False
+        end
+        object Memo23: TfrxMemoView
+          Left = 857.953310000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          Memo.UTF8 = (
+            'OUT')
+          ParentFont = False
+        end
+        object Memo24: TfrxMemoView
+          Left = 933.543910000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          Memo.UTF8 = (
+            'NOV')
+          ParentFont = False
+        end
+        object Memo25: TfrxMemoView
+          Left = 1009.134510000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          Memo.UTF8 = (
+            'DEZ')
+          ParentFont = False
+        end
       end
       object GroupFooter1: TfrxGroupFooter
-        Height = 22.677180000000000000
-        Top = 207.874150000000000000
+        Height = 37.795275590000000000
+        Top = 192.000000000000000000
+        Width = 1084.725110000000000000
+        object Memo26: TfrxMemoView
+          Left = 177.637910000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."MES_01">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo27: TfrxMemoView
+          Left = 253.228510000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."MES_02">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo28: TfrxMemoView
+          Left = 328.819110000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."MES_03">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo29: TfrxMemoView
+          Left = 404.409710000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."MES_04">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo32: TfrxMemoView
+          Left = 480.000310000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."MES_05">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo33: TfrxMemoView
+          Left = 555.590910000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."MES_06">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo34: TfrxMemoView
+          Left = 631.181510000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."MES_07">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo35: TfrxMemoView
+          Left = 706.772110000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."MES_08">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo36: TfrxMemoView
+          Left = 782.362710000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."MES_09">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo37: TfrxMemoView
+          Left = 857.953310000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."MES_10">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo38: TfrxMemoView
+          Left = 933.543910000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."MES_11">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo39: TfrxMemoView
+          Left = 1009.134510000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          HideZeros = True
+          Memo.UTF8 = (
+            '[SUM(<IBXQuery1."MES_12">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo40: TfrxMemoView
+          Width = 177.637910000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Color = 13421772
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          ParentFont = False
+        end
+      end
+      object Header1: TfrxHeader
+        Top = 92.000000000000000000
+        Width = 1084.725110000000000000
+      end
+      object Footer1: TfrxFooter
+        Top = 248.000000000000000000
         Width = 1084.725110000000000000
       end
     end
@@ -794,7 +1555,36 @@ inherited FCadControleCondominio: TFCadControleCondominio
     Top = 332
   end
   object OpenDialog1: TOpenDialog
-    Left = 352
-    Top = 232
+    Left = 656
+    Top = 216
+  end
+  object qClassif: TIBQuery
+    Database = DMConexao.IBConexao
+    Transaction = DMConexao.IBTransacao
+    BufferChunks = 1000
+    CachedUpdates = False
+    SQL.Strings = (
+      'select * from condominio_conta ct order by ct.cnt_descricao')
+    Left = 512
+    Top = 392
+    object qClassifCNT_DESCRICAO: TIBStringField
+      DisplayLabel = 'DESCRICAO'
+      DisplayWidth = 50
+      FieldName = 'CNT_DESCRICAO'
+      Origin = 'CONDOMINIO_CONTA.CNT_DESCRICAO'
+      Size = 100
+    end
+    object qClassifCNT_ID: TIntegerField
+      DisplayWidth = 10
+      FieldName = 'CNT_ID'
+      Origin = 'CONDOMINIO_CONTA.CNT_ID'
+      Required = True
+      Visible = False
+    end
+  end
+  object dsClassif: TDataSource
+    DataSet = qClassif
+    Left = 544
+    Top = 392
   end
 end
