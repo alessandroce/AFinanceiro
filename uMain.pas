@@ -175,6 +175,8 @@ type
     N10: TMenuItem;
     RelCartaoCreditoMensal: TAction;
     CartoCreditoMensal1: TMenuItem;
+    PagamentoCCustoMediaAnual: TAction;
+    PagamentoporCentroCustoMdiaAnual1: TMenuItem;
     procedure btSairClick(Sender: TObject);
     procedure cad_FornecedoresExecute(Sender: TObject);
     procedure aTitulosExecute(Sender: TObject);
@@ -225,6 +227,7 @@ type
     procedure RelLimiteCreditosExecute(Sender: TObject);
     procedure RelCartaoCreditoDetalhadoExecute(Sender: TObject);
     procedure RelCartaoCreditoMensalExecute(Sender: TObject);
+    procedure PagamentoCCustoMediaAnualExecute(Sender: TObject);
   private
     { Private declarations }
     function Continua(pContinua:Boolean;pTexto:String=''):Boolean;
@@ -697,6 +700,11 @@ end;
 procedure TFFinanceiro.RelCartaoCreditoMensalExecute(Sender: TObject);
 begin
   getRelatorio('PagamentoMensalCartao','Pagamentos a relaizar Cartao - Mensal');
+end;
+
+procedure TFFinanceiro.PagamentoCCustoMediaAnualExecute(Sender: TObject);
+begin
+  getRelatorio('PagamentosPorCentroCustoMediaAnual', 'Pagamentos Por Centro de Custo - Média Anual');
 end;
 
 end.
