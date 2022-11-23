@@ -17,103 +17,6 @@ object FDetalheParcelas: TFDetalheParcelas
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Bevel2: TBevel
-    Left = 7
-    Top = 108
-    Width = 707
-    Height = 86
-    Shape = bsFrame
-  end
-  object Bevel1: TBevel
-    Left = 7
-    Top = 45
-    Width = 707
-    Height = 60
-    Shape = bsFrame
-  end
-  object Label1: TLabel
-    Left = 16
-    Top = 112
-    Width = 23
-    Height = 13
-    Caption = 'Data'
-    FocusControl = DBEdit1
-  end
-  object Label2: TLabel
-    Left = 93
-    Top = 112
-    Width = 46
-    Height = 13
-    Caption = 'Data Doc'
-    FocusControl = DBEdit2
-  end
-  object Label3: TLabel
-    Left = 16
-    Top = 152
-    Width = 48
-    Height = 13
-    Caption = 'Descri'#231#227'o'
-    FocusControl = DBEdit3
-  end
-  object Label4: TLabel
-    Left = 499
-    Top = 152
-    Width = 24
-    Height = 13
-    Caption = 'Valor'
-    FocusControl = DBEdit4
-  end
-  object Label5: TLabel
-    Left = 16
-    Top = 48
-    Width = 36
-    Height = 13
-    Caption = 'Parcela'
-    FocusControl = DBEdit5
-  end
-  object Label6: TLabel
-    Left = 88
-    Top = 48
-    Width = 96
-    Height = 13
-    Caption = 'Observa'#231#227'o parcela'
-    FocusControl = DBEdit6
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -8
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-  end
-  object Label8: TLabel
-    Left = 170
-    Top = 110
-    Width = 61
-    Height = 13
-    Caption = 'Centro Custo'
-  end
-  object Label7: TLabel
-    Left = 368
-    Top = 152
-    Width = 57
-    Height = 13
-    Caption = 'Quant Parc.'
-    FocusControl = DBEdit7
-  end
-  object Label9: TLabel
-    Left = 432
-    Top = 152
-    Width = 52
-    Height = 13
-    Caption = 'Total Parc.'
-  end
-  object Label10: TLabel
-    Left = 424
-    Top = 112
-    Width = 54
-    Height = 13
-    Caption = 'Emprestimo'
-  end
   object StatusBar1: TStatusBar
     Left = 0
     Top = 440
@@ -121,143 +24,19 @@ object FDetalheParcelas: TFDetalheParcelas
     Height = 19
     Panels = <>
   end
-  object cxGrid1: TcxGrid
-    Left = 0
-    Top = 217
-    Width = 721
-    Height = 223
-    Align = alBottom
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 11
-    object cxGrid1DBTableView1: TcxGridDBTableView
-      NavigatorButtons.ConfirmDelete = False
-      DataController.DataSource = dsDetalheParcelas
-      DataController.Summary.DefaultGroupSummaryItems = <
-        item
-          Kind = skSum
-          Column = cxGrid1DBTableView1DET_VALOR
-        end>
-      DataController.Summary.FooterSummaryItems = <
-        item
-          Kind = skSum
-          Column = cxGrid1DBTableView1DET_VALOR
-        end
-        item
-          Kind = skCount
-          Column = cxGrid1DBTableView1DET_DATA
-        end>
-      DataController.Summary.SummaryGroups = <>
-      OptionsSelection.CellSelect = False
-      OptionsView.Footer = True
-      OptionsView.GroupByBox = False
-      object cxGrid1DBTableView1DET_DATA: TcxGridDBColumn
-        Caption = 'Data'
-        DataBinding.FieldName = 'DET_DATA'
-        Width = 80
-      end
-      object cxGrid1DBTableView1DET_DATA_DOC: TcxGridDBColumn
-        Caption = 'Data Doc.'
-        DataBinding.FieldName = 'DET_DATA_DOC'
-        Width = 80
-      end
-      object cxGrid1DBTableView1DET_DESCRICAO: TcxGridDBColumn
-        Caption = 'Descri'#231#227'o'
-        DataBinding.FieldName = 'DET_DESCRICAO'
-        Width = 300
-      end
-      object cxGrid1DBTableView1DET_VALOR: TcxGridDBColumn
-        Caption = 'Valor'
-        DataBinding.FieldName = 'DET_VALOR'
-        Width = 100
-      end
-      object cxGrid1DBTableView1DESC_CCUSTO: TcxGridDBColumn
-        Caption = 'Centro Custo'
-        DataBinding.FieldName = 'DESC_CCUSTO'
-        Width = 150
-      end
-      object cxGrid1DBTableView1DET_PAGO: TcxGridDBColumn
-        Caption = 'Pago'
-        DataBinding.FieldName = 'DET_PAGO'
-      end
-    end
-    object cxGrid1Level1: TcxGridLevel
-      GridView = cxGrid1DBTableView1
-    end
-  end
-  object DBEdit1: TDBEdit
-    Left = 16
-    Top = 128
-    Width = 73
-    Height = 21
-    DataField = 'DET_DATA'
-    DataSource = dsDetalheParcelas
-    TabOrder = 2
-  end
-  object DBEdit2: TDBEdit
-    Left = 93
-    Top = 128
-    Width = 73
-    Height = 21
-    DataField = 'DET_DATA_DOC'
-    DataSource = dsDetalheParcelas
-    TabOrder = 3
-  end
-  object DBEdit3: TDBEdit
-    Left = 16
-    Top = 168
-    Width = 345
-    Height = 21
-    DataField = 'DET_DESCRICAO'
-    DataSource = dsDetalheParcelas
-    TabOrder = 6
-  end
-  object DBEdit4: TDBEdit
-    Left = 499
-    Top = 168
-    Width = 70
-    Height = 21
-    DataField = 'DET_VALOR'
-    DataSource = dsDetalheParcelas
-    TabOrder = 9
-  end
-  object DBEdit5: TDBEdit
-    Left = 16
-    Top = 64
-    Width = 65
-    Height = 21
-    DataField = 'DESC_PARCELA'
-    DataSource = dsDetalheParcelas
-    Enabled = False
-    TabOrder = 0
-  end
-  object DBEdit6: TDBEdit
-    Left = 88
-    Top = 64
-    Width = 481
-    Height = 21
-    DataField = 'PAR_OBSERVACAO'
-    DataSource = dsDetalheParcelas
-    Enabled = False
-    TabOrder = 1
-  end
   object Panel2: TPanel
     Left = 0
     Top = 0
     Width = 721
     Height = 41
     Align = alTop
-    TabOrder = 12
+    TabOrder = 1
     object btbar1Novo: TcxButton
       Left = 0
       Top = 1
       Width = 40
       Height = 40
-      Action = bNovo
+      Hint = 'Novo'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -267,6 +46,7 @@ object FDetalheParcelas: TFDetalheParcelas
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
+      OnClick = bNovoExecute
       Glyph.Data = {
         36100000424D3610000000000000360000002800000020000000200000000100
         2000000000000010000000000000000000000000000000000000000000000000
@@ -406,10 +186,11 @@ object FDetalheParcelas: TFDetalheParcelas
       Top = 1
       Width = 40
       Height = 40
-      Action = bAlterar
+      Hint = 'Alterar'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
+      OnClick = bAlterarExecute
       Glyph.Data = {
         36100000424D3610000000000000360000002800000020000000200000000100
         2000000000000010000000000000000000000000000000000000000000000000
@@ -549,10 +330,11 @@ object FDetalheParcelas: TFDetalheParcelas
       Top = 1
       Width = 40
       Height = 40
-      Action = bCancelar
+      Hint = 'Cancelar'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 2
+      OnClick = bCancelarExecute
       Glyph.Data = {
         36100000424D3610000000000000360000002800000020000000200000000100
         2000000000000010000000000000000000000000000000000000000000000000
@@ -692,10 +474,11 @@ object FDetalheParcelas: TFDetalheParcelas
       Top = 1
       Width = 40
       Height = 40
-      Action = bGravar
+      Hint = 'Gravar'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 3
+      OnClick = bGravarExecute
       Glyph.Data = {
         36100000424D3610000000000000360000002800000020000000200000000100
         2000000000000010000000000000000000000000000000000000000000000000
@@ -835,10 +618,11 @@ object FDetalheParcelas: TFDetalheParcelas
       Top = 1
       Width = 40
       Height = 40
-      Action = bExcluir
+      Hint = 'Excluir'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 4
+      OnClick = bExcluirExecute
       Glyph.Data = {
         36100000424D3610000000000000360000002800000020000000200000000100
         2000000000000010000000000000000000000000000000000000000000000000
@@ -1109,77 +893,333 @@ object FDetalheParcelas: TFDetalheParcelas
       LookAndFeel.NativeStyle = False
     end
   end
-  object wwDBLookupCombo3: TwwDBLookupCombo
-    Left = 170
-    Top = 126
-    Width = 247
-    Height = 21
-    DisableThemes = False
-    DropDownAlignment = taLeftJustify
-    Selected.Strings = (
-      'CCT_DESCRICAO'#9'50'#9'Descri'#231#227'o'#9'F'#9)
-    DataField = 'DET_FLAG'
-    DataSource = dsDetalheParcelas
-    LookupTable = qCentroCusto
-    LookupField = 'CCT_ID'
-    Navigator = False
-    TabOrder = 4
-    AutoDropDown = False
-    ShowButton = True
-    AllowClearKey = False
+  object Panel1: TPanel
+    Left = 0
+    Top = 41
+    Width = 721
+    Height = 168
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 2
+    object Bevel2: TBevel
+      Left = 7
+      Top = 69
+      Width = 707
+      Height = 86
+      Shape = bsFrame
+    end
+    object Bevel1: TBevel
+      Left = 7
+      Top = 6
+      Width = 707
+      Height = 60
+      Shape = bsFrame
+    end
+    object Label1: TLabel
+      Left = 16
+      Top = 73
+      Width = 23
+      Height = 13
+      Caption = 'Data'
+      FocusControl = DBEdit1
+    end
+    object Label2: TLabel
+      Left = 93
+      Top = 73
+      Width = 46
+      Height = 13
+      Caption = 'Data Doc'
+      FocusControl = DBEdit2
+    end
+    object Label3: TLabel
+      Left = 16
+      Top = 113
+      Width = 48
+      Height = 13
+      Caption = 'Descri'#231#227'o'
+      FocusControl = DBEdit3
+    end
+    object Label4: TLabel
+      Left = 499
+      Top = 113
+      Width = 24
+      Height = 13
+      Caption = 'Valor'
+      FocusControl = DBEdit4
+    end
+    object Label5: TLabel
+      Left = 96
+      Top = 9
+      Width = 36
+      Height = 13
+      Caption = 'Parcela'
+      FocusControl = DBEdit5
+    end
+    object Label6: TLabel
+      Left = 168
+      Top = 9
+      Width = 96
+      Height = 13
+      Caption = 'Observa'#231#227'o parcela'
+      FocusControl = DBEdit6
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -8
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label8: TLabel
+      Left = 170
+      Top = 71
+      Width = 61
+      Height = 13
+      Caption = 'Centro Custo'
+    end
+    object Label7: TLabel
+      Left = 368
+      Top = 113
+      Width = 57
+      Height = 13
+      Caption = 'Quant Parc.'
+      FocusControl = DBEdit7
+    end
+    object Label9: TLabel
+      Left = 432
+      Top = 113
+      Width = 52
+      Height = 13
+      Caption = 'Total Parc.'
+    end
+    object Label10: TLabel
+      Left = 424
+      Top = 73
+      Width = 54
+      Height = 13
+      Caption = 'Emprestimo'
+    end
+    object Label11: TLabel
+      Left = 16
+      Top = 9
+      Width = 60
+      Height = 13
+      Caption = 'Data Vencto'
+      FocusControl = DBEdit9
+    end
+    object DBEdit1: TDBEdit
+      Left = 16
+      Top = 89
+      Width = 73
+      Height = 21
+      DataField = 'DET_DATA'
+      DataSource = dsDetalheParcelas
+      TabOrder = 3
+    end
+    object DBEdit2: TDBEdit
+      Left = 93
+      Top = 89
+      Width = 73
+      Height = 21
+      DataField = 'DET_DATA_DOC'
+      DataSource = dsDetalheParcelas
+      TabOrder = 4
+    end
+    object DBEdit3: TDBEdit
+      Left = 16
+      Top = 129
+      Width = 345
+      Height = 21
+      DataField = 'DET_DESCRICAO'
+      DataSource = dsDetalheParcelas
+      TabOrder = 7
+    end
+    object DBEdit4: TDBEdit
+      Left = 499
+      Top = 129
+      Width = 70
+      Height = 21
+      DataField = 'DET_VALOR'
+      DataSource = dsDetalheParcelas
+      TabOrder = 10
+    end
+    object DBEdit5: TDBEdit
+      Left = 96
+      Top = 25
+      Width = 65
+      Height = 21
+      DataField = 'DESC_PARCELA'
+      DataSource = dsDetalheParcelas
+      Enabled = False
+      TabOrder = 1
+    end
+    object DBEdit6: TDBEdit
+      Left = 168
+      Top = 25
+      Width = 497
+      Height = 21
+      DataField = 'PAR_OBSERVACAO'
+      DataSource = dsDetalheParcelas
+      Enabled = False
+      TabOrder = 2
+    end
+    object wwDBLookupCombo3: TwwDBLookupCombo
+      Left = 170
+      Top = 87
+      Width = 247
+      Height = 21
+      DisableThemes = False
+      DropDownAlignment = taLeftJustify
+      Selected.Strings = (
+        'CCT_DESCRICAO'#9'50'#9'Descri'#231#227'o'#9'F'#9)
+      DataField = 'DET_FLAG'
+      DataSource = dsDetalheParcelas
+      LookupTable = qCentroCusto
+      LookupField = 'CCT_ID'
+      Navigator = False
+      TabOrder = 5
+      AutoDropDown = False
+      ShowButton = True
+      AllowClearKey = False
+    end
+    object DBEdit7: TDBEdit
+      Left = 432
+      Top = 129
+      Width = 60
+      Height = 21
+      DataField = 'DET_QUANTIDADE'
+      DataSource = dsDetalheParcelas
+      TabOrder = 9
+    end
+    object DBEdit8: TDBEdit
+      Left = 368
+      Top = 129
+      Width = 60
+      Height = 21
+      DataField = 'DET_NUMERO'
+      DataSource = dsDetalheParcelas
+      TabOrder = 8
+    end
+    object DBCheckBox1: TDBCheckBox
+      Left = 584
+      Top = 131
+      Width = 51
+      Height = 17
+      Caption = 'Pago'
+      DataField = 'DET_PAGO'
+      DataSource = dsDetalheParcelas
+      TabOrder = 11
+      ValueChecked = '0'
+      ValueUnchecked = '1'
+    end
+    object wwDBLookupCombo1: TwwDBLookupCombo
+      Left = 422
+      Top = 87
+      Width = 247
+      Height = 21
+      DisableThemes = False
+      DropDownAlignment = taLeftJustify
+      Selected.Strings = (
+        'EMPR_DESCRICAO'#9'40'#9'Descri'#231#227'o'#9'F'#9
+        'EMPR_DATA'#9'10'#9'Data'#9'F'#9
+        'EMPR_VALOR'#9'10'#9'Valor'#9'F'#9
+        'CREDOR'#9'40'#9'Credor'#9'F'#9)
+      DataField = 'DET_EMPRESTIMO_ID'
+      DataSource = dsDetalheParcelas
+      LookupTable = qEmprestimo
+      LookupField = 'EMPR_ID'
+      Navigator = False
+      TabOrder = 6
+      AutoDropDown = False
+      ShowButton = True
+      AllowClearKey = False
+      OnChange = wwDBLookupCombo1Change
+    end
+    object DBEdit9: TDBEdit
+      Left = 16
+      Top = 25
+      Width = 73
+      Height = 21
+      DataField = 'PAR_VENCTO'
+      DataSource = dsDetalheParcelas
+      TabOrder = 0
+    end
   end
-  object DBEdit7: TDBEdit
-    Left = 432
-    Top = 168
-    Width = 60
-    Height = 21
-    DataField = 'DET_QUANTIDADE'
-    DataSource = dsDetalheParcelas
-    TabOrder = 8
-  end
-  object DBEdit8: TDBEdit
-    Left = 368
-    Top = 168
-    Width = 60
-    Height = 21
-    DataField = 'DET_NUMERO'
-    DataSource = dsDetalheParcelas
-    TabOrder = 7
-  end
-  object DBCheckBox1: TDBCheckBox
-    Left = 584
-    Top = 170
-    Width = 51
-    Height = 17
-    Caption = 'Pago'
-    DataField = 'DET_PAGO'
-    DataSource = dsDetalheParcelas
-    TabOrder = 13
-    ValueChecked = '0'
-    ValueUnchecked = '1'
-  end
-  object wwDBLookupCombo1: TwwDBLookupCombo
-    Left = 422
-    Top = 126
-    Width = 247
-    Height = 21
-    DisableThemes = False
-    DropDownAlignment = taLeftJustify
-    Selected.Strings = (
-      'EMPR_DESCRICAO'#9'40'#9'Descri'#231#227'o'#9'F'#9
-      'EMPR_DATA'#9'10'#9'Data'#9'F'#9
-      'EMPR_VALOR'#9'10'#9'Valor'#9'F'#9
-      'CREDOR'#9'40'#9'Credor'#9'F'#9)
-    DataField = 'DET_EMPRESTIMO_ID'
-    DataSource = dsDetalheParcelas
-    LookupTable = qEmprestimo
-    LookupField = 'EMPR_ID'
-    Navigator = False
-    TabOrder = 5
-    AutoDropDown = False
-    ShowButton = True
-    AllowClearKey = False
-    OnChange = wwDBLookupCombo1Change
+  object Panel3: TPanel
+    Left = 0
+    Top = 209
+    Width = 721
+    Height = 231
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 3
+    object cxGrid1: TcxGrid
+      Left = 0
+      Top = 0
+      Width = 721
+      Height = 231
+      Align = alClient
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      object cxGrid1DBTableView1: TcxGridDBTableView
+        NavigatorButtons.ConfirmDelete = False
+        DataController.DataSource = dsDetalheParcelas
+        DataController.Summary.DefaultGroupSummaryItems = <
+          item
+            Kind = skSum
+            Column = cxGrid1DBTableView1DET_VALOR
+          end>
+        DataController.Summary.FooterSummaryItems = <
+          item
+            Kind = skSum
+            Column = cxGrid1DBTableView1DET_VALOR
+          end
+          item
+            Kind = skCount
+            Column = cxGrid1DBTableView1DET_DATA
+          end>
+        DataController.Summary.SummaryGroups = <>
+        OptionsSelection.CellSelect = False
+        OptionsView.Footer = True
+        OptionsView.GroupByBox = False
+        object cxGrid1DBTableView1DET_DATA: TcxGridDBColumn
+          Caption = 'Data'
+          DataBinding.FieldName = 'DET_DATA'
+          Width = 80
+        end
+        object cxGrid1DBTableView1DET_DATA_DOC: TcxGridDBColumn
+          Caption = 'Data Doc.'
+          DataBinding.FieldName = 'DET_DATA_DOC'
+          Width = 80
+        end
+        object cxGrid1DBTableView1DET_DESCRICAO: TcxGridDBColumn
+          Caption = 'Descri'#231#227'o'
+          DataBinding.FieldName = 'DET_DESCRICAO'
+          Width = 300
+        end
+        object cxGrid1DBTableView1DET_VALOR: TcxGridDBColumn
+          Caption = 'Valor'
+          DataBinding.FieldName = 'DET_VALOR'
+          Width = 100
+        end
+        object cxGrid1DBTableView1DESC_CCUSTO: TcxGridDBColumn
+          Caption = 'Centro Custo'
+          DataBinding.FieldName = 'DESC_CCUSTO'
+          Width = 150
+        end
+        object cxGrid1DBTableView1DET_PAGO: TcxGridDBColumn
+          Caption = 'Pago'
+          DataBinding.FieldName = 'DET_PAGO'
+        end
+      end
+      object cxGrid1Level1: TcxGridLevel
+        GridView = cxGrid1DBTableView1
+      end
+    end
   end
   object ibDetalheParcelas: TIBDataSet
     Database = DMConexao.IBConexao
@@ -1219,14 +1259,16 @@ object FDetalheParcelas: TFDetalheParcelas
       
         '       parcelas.par_numero||'#39'/'#39'||parcelas.par_quantidade desc_pa' +
         'rcela,'
-      '       parcelas.par_observacao,'
+      '       parcelas.par_observacao, parcelas.par_vencto,'
       
-        '(select cct_descricao from centro_custo where cct_id=parcelas_de' +
-        'talhe.det_flag) desc_ccusto'
+        '       (select cct_descricao from centro_custo where cct_id=parc' +
+        'elas_detalhe.det_flag) desc_ccusto'
       '  from parcelas_detalhe'
       '  join parcelas on (parcelas.par_id=parcelas_detalhe.det_par_id)'
       ' where parcelas.par_id = :par_id'
-      ' order by det_data_doc')
+      
+        ' order by parcelas_detalhe.det_data_doc, parcelas_detalhe.det_dh' +
+        '_ca asc')
     ModifySQL.Strings = (
       'update parcelas_detalhe'
       'set'
@@ -1333,6 +1375,10 @@ object FDetalheParcelas: TFDetalheParcelas
     object ibDetalheParcelasDET_EMPRESTIMO_ID: TIntegerField
       FieldName = 'DET_EMPRESTIMO_ID'
       Origin = 'PARCELAS_DETALHE.DET_EMPRESTIMO_ID'
+    end
+    object ibDetalheParcelasPAR_VENCTO: TDateField
+      FieldName = 'PAR_VENCTO'
+      Origin = 'PARCELAS.PAR_VENCTO'
     end
   end
   object dsDetalheParcelas: TDataSource
@@ -1485,37 +1531,76 @@ object FDetalheParcelas: TFDetalheParcelas
     Left = 328
     Top = 272
   end
+  object OpenDialog1: TOpenDialog
+    Left = 352
+    Top = 232
+  end
   object ActionListBotao: TActionList
     Left = 304
     Top = 104
     object bNovo: TAction
+      Caption = 'bNovo'
       Hint = 'Novo'
       ShortCut = 113
       OnExecute = bNovoExecute
     end
     object bAlterar: TAction
+      Caption = 'bAlterar'
       Hint = 'Alterar'
       ShortCut = 114
       OnExecute = bAlterarExecute
     end
     object bCancelar: TAction
+      Caption = 'bCancelar'
       Hint = 'Cancelar'
       ShortCut = 115
       OnExecute = bCancelarExecute
     end
     object bGravar: TAction
+      Caption = 'bGravar'
       Hint = 'Gravar'
       ShortCut = 116
       OnExecute = bGravarExecute
     end
     object bExcluir: TAction
+      Caption = 'bExcluir'
       Hint = 'Excluir'
       ShortCut = 117
       OnExecute = bExcluirExecute
     end
   end
-  object OpenDialog1: TOpenDialog
-    Left = 352
-    Top = 232
+  object ActionList1: TActionList
+    Left = 304
+    Top = 104
+    object Action1: TAction
+      Caption = 'Action1'
+      Hint = 'Novo'
+      ShortCut = 113
+      OnExecute = bNovoExecute
+    end
+    object Action2: TAction
+      Caption = 'Action2'
+      Hint = 'Alterar'
+      ShortCut = 114
+      OnExecute = bAlterarExecute
+    end
+    object Action3: TAction
+      Caption = 'Action3'
+      Hint = 'Cancelar'
+      ShortCut = 115
+      OnExecute = bCancelarExecute
+    end
+    object Action4: TAction
+      Caption = 'Action4'
+      Hint = 'Gravar'
+      ShortCut = 116
+      OnExecute = bGravarExecute
+    end
+    object Action5: TAction
+      Caption = 'Action5'
+      Hint = 'Excluir'
+      ShortCut = 117
+      OnExecute = bExcluirExecute
+    end
   end
 end

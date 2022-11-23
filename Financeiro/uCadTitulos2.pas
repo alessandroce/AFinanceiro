@@ -20,7 +20,7 @@ uses
   dxSkinOffice2007Silver, dxSkinOffice2010Black, dxSkinOffice2010Blue,
   dxSkinOffice2010Silver, dxSkinPumpkin, dxSkinSeven, dxSkinSharp,
   dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
-  dxSkinValentine, dxSkinXmas2008Blue, ActnList;
+  dxSkinValentine, dxSkinXmas2008Blue, ActnList, frxClass;
 
 type
   TFCadTitulos2 = class(TFCadastro2)
@@ -265,6 +265,15 @@ type
     qEditarParcelaFLAG: TIntegerField;
     qEditarParcelaPAR_EMPRESTIMO_ID: TIntegerField;
     qEditarParcelaPAR_PROVISIONAR: TIBStringField;
+    cxGrid2DBTableView1PAR_PROVISIONAR: TcxGridDBColumn;
+    Label15: TLabel;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    Label16: TLabel;
+    qCadastroFIN_MELHORDIA: TIntegerField;
+    qCadastroFIN_VENCTODIA: TIntegerField;
+    BitBtn1: TBitBtn;
+    frxReport1: TfrxReport;
     procedure FormShow(Sender: TObject);
     procedure qCadastroAfterOpen(DataSet: TDataSet);
     procedure qParcelasAfterInsert(DataSet: TDataSet);
@@ -300,6 +309,7 @@ type
       Sender: TcxCustomGridTableView;
       ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
       AShift: TShiftState; var AHandled: Boolean);
+    procedure BitBtn1Click(Sender: TObject);
   private
     { Private declarations }
     vSQL_TITULO : String;
@@ -309,6 +319,7 @@ type
   public
     { Public declarations }
     FPagarReceber : Integer;//0=pagar 1=receber
+    FTitulo_Id : Integer;
   end;
 
 var
@@ -317,7 +328,6 @@ const
   v_ativo : Array[0..2] of String = (' ','N','S');
   v_debitocredito : Array[0..1] of String = ('D','C');
   v_situacao : Array[0..2] of Integer = (1,0,3);
-
 
 implementation
 
@@ -329,12 +339,23 @@ uses uFerramentas, uDetalheParcelas, uDMConexao, uClassAvisos,
 procedure TFCadTitulos2.FormShow(Sender: TObject);
 begin
   inherited;
+  Caption := Caption + ' - ' + IfThen(FPagarReceber=0,'Pagar','Receber');
   vSQL_TITULO := qConsulta.SQL.Text+#13+' %s ';
-  pgCadastro.ActivePageIndex := 0;
-  pgParcelas.ActivePageIndex := 0;
-  rgDebitoCredito.ItemIndex := FPagarReceber;
-  getTitulos;
-  cdsTmp.Append;
+  if FTitulo_Id > 0 then
+  begin
+    rgDebitoCredito.ItemIndex := FPagarReceber;
+    getTitulos;
+    qConsulta.Locate('FIN_ID',IntToStr(FTitulo_Id),[loPartialKey]);
+    btAlterarClick(Sender);
+  end
+  else
+  begin
+    pgCadastro.ActivePageIndex := 0;
+    pgParcelas.ActivePageIndex := 0;
+    rgDebitoCredito.ItemIndex := FPagarReceber;
+    getTitulos;
+    cdsTmp.Append;
+  end;
   //cbGerarParcelasAuto.Caption := formatDateTime('dd/mm/yyyy',Now)
   edDataParcela.Date    := Date;
   edDataVencimento.Date := Date;
@@ -523,6 +544,7 @@ begin
     {}  {}  {}    //ibDetalheParcelasDESCRICAO.asString      :=
     {}  {}  {}    ibDetalheParcelasDET_NUMERO.asInteger      := i;
     {}  {}  {}    ibDetalheParcelasDET_QUANTIDADE.asInteger  := StrToInt(edQuant.Text);
+    {}  {}  {}    ibDetalheParcelasDET_PROVISIONAR.asString  := ifthen(cbProvisionar.Checked,'S','N');
     {}  {}  {}    ibDetalheParcelas.Post;
     {}  {}  {}
     {}  {}  {}    //editar parcela
@@ -531,6 +553,7 @@ begin
     {}  {}  {}    qEditarParcela.Open;
     {}  {}  {}    qEditarParcela.Edit;
     {}  {}  {}    qEditarParcelaPAR_VALOR.AsFloat := vValorAcum;
+    {}  {}  {}    qEditarParcelaPAR_PROVISIONAR.asString  := ifthen(cbProvisionar.Checked,'S','N');
     {}  {}  {}    qEditarParcela.Post;
     {}  {}  {}
     {}  {}  {}    qParcelas.Refresh;
@@ -543,7 +566,7 @@ begin
     {}  {}  {}  qGetIdParcelas.Close;
     {}  {}  {}  qGetIdParcelas.Open;
     {}  {}  {}  vPAR_ID := qGetIdParcelasID.asInteger;
-    {}  {}  {}    //criar parcela
+    {}  {}  {}
     {}  {}  {}    if not(qParcelas.State=dsInsert) then
     {}  {}  {}      qParcelas.Insert;
     {}  {}  {}    qParcelasPAR_ID.Value          := vPAR_ID;
@@ -557,6 +580,7 @@ begin
     {}  {}  {}    qParcelasPAR_VENCTO.Value      := vPAR_VENCTO;
     {}  {}  {}    qParcelasPAR_VALOR.Value       := StrToFloat(edValor.Text);
     {}  {}  {}    qParcelasPAR_PAGO.Value        := 0;
+    {}  {}  {}    qParcelasPAR_PROVISIONAR.asString  := ifthen(cbProvisionar.Checked,'S','N');
     {}  {}  {}
     {}  {}  {}    qParcelas.Post;
     {}  {}  {}
@@ -577,6 +601,7 @@ begin
     {}  {}  {}    //ibDetalheParcelasDESCRICAO.asString      :=
     {}  {}  {}    ibDetalheParcelasDET_NUMERO.asInteger      := i;
     {}  {}  {}    ibDetalheParcelasDET_QUANTIDADE.asInteger  := StrToInt(edQuant.Text);
+    {}  {}  {}    ibDetalheParcelasDET_PROVISIONAR.asString  := ifthen(cbProvisionar.Checked,'S','N');
     {}  {}  {}    ibDetalheParcelas.Post;
     {}  {}  end;
     {}  end;
@@ -642,7 +667,7 @@ end;
 procedure TFCadTitulos2.btApagarClick(Sender: TObject);
 begin
   inherited;
-  getTitulos;
+ getTitulos;
 end;
 
 procedure TFCadTitulos2.getTitulos(pTitulo:String='');
@@ -683,7 +708,8 @@ procedure TFCadTitulos2.dsCategoriaDataChange(Sender: TObject;
   Field: TField);
 begin
   inherited;
-  cdsTmpCodigo.asinteger := qCategoriaCAT_CATG_ID.asinteger;
+  if (cdsTmp.State in [dsEdit,dsInsert]) then
+    cdsTmpCodigo.asinteger := qCategoriaCAT_CATG_ID.asinteger;
 end;
 
 procedure TFCadTitulos2.rgSituacaoParcelasClick(Sender: TObject);
@@ -803,6 +829,18 @@ procedure TFCadTitulos2.cxGridDBTableView1CellDblClick(
 begin
   inherited;
   sbDetalhes.Click;
+end;
+
+
+procedure TFCadTitulos2.BitBtn1Click(Sender: TObject);
+begin
+  inherited;
+  if ChamaRelatorioDesign(frxReport1,'AFINANCEIRO','PagamentosPorCentroCustoAnual') then
+  begin
+    getVariavelDesign('USUARIO',IntToStr(DadosLogin.Id));
+    getVariavelDesign('NOMEUSUARIO',QuotedStr(DadosLogin.Nome));
+    ImprimirAlterarRelatorio(0,'PagamentosPorCentroCustoAnual','Pagamentos Por Centro de Custo - Anual');
+  end;
 end;
 
 end.

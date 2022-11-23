@@ -1,6 +1,6 @@
 object FTitulosAnual: TFTitulosAnual
-  Left = 229
-  Top = 173
+  Left = 218
+  Top = 204
   Width = 930
   Height = 650
   Caption = 'Titulos anual'
@@ -17,7 +17,7 @@ object FTitulosAnual: TFTitulosAnual
   TextHeight = 13
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 592
+    Top = 593
     Width = 914
     Height = 19
     Panels = <>
@@ -26,7 +26,7 @@ object FTitulosAnual: TFTitulosAnual
     Left = 0
     Top = 50
     Width = 914
-    Height = 542
+    Height = 543
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 1
@@ -37,10 +37,11 @@ object FTitulosAnual: TFTitulosAnual
         Left = 0
         Top = 55
         Width = 906
-        Height = 459
+        Height = 460
         Align = alClient
         TabOrder = 0
         object cxGrid2DBTableView1: TcxGridDBTableView
+          PopupMenu = PopupMenu1
           NavigatorButtons.ConfirmDelete = False
           OnCustomDrawCell = cxGrid2DBTableView1CustomDrawCell
           DataController.DataSource = dsAPagar
@@ -254,6 +255,15 @@ object FTitulosAnual: TFTitulosAnual
             item
               Kind = skSum
               Column = cxGrid2DBTableView1MES_12
+            end
+            item
+              Kind = skSum
+              Position = spFooter
+              Column = cxGrid2DBTableView1MEDIA
+            end
+            item
+              Kind = skSum
+              Column = cxGrid2DBTableView1MEDIA
             end>
           DataController.Summary.FooterSummaryItems = <
             item
@@ -354,6 +364,10 @@ object FTitulosAnual: TFTitulosAnual
             item
               Kind = skSum
               Column = cxGrid2DBTableView1MES_12
+            end
+            item
+              Kind = skSum
+              Column = cxGrid2DBTableView1MEDIA
             end>
           DataController.Summary.SummaryGroups = <>
           OptionsSelection.CellSelect = False
@@ -372,7 +386,7 @@ object FTitulosAnual: TFTitulosAnual
           end
           object cxGrid2DBTableView1MES_01: TcxGridDBColumn
             DataBinding.FieldName = 'MES_01'
-            Width = 70
+            Width = 60
           end
           object cxGrid2DBTableView1MES_02_PA: TcxGridDBColumn
             Caption = ' 02'
@@ -382,7 +396,7 @@ object FTitulosAnual: TFTitulosAnual
           end
           object cxGrid2DBTableView1MES_02: TcxGridDBColumn
             DataBinding.FieldName = 'MES_02'
-            Width = 70
+            Width = 60
           end
           object cxGrid2DBTableView1MES_03_PA: TcxGridDBColumn
             Caption = '  03'
@@ -392,7 +406,7 @@ object FTitulosAnual: TFTitulosAnual
           end
           object cxGrid2DBTableView1MES_03: TcxGridDBColumn
             DataBinding.FieldName = 'MES_03'
-            Width = 70
+            Width = 60
           end
           object cxGrid2DBTableView1MES_04_PA: TcxGridDBColumn
             Caption = ' 04'
@@ -402,7 +416,7 @@ object FTitulosAnual: TFTitulosAnual
           end
           object cxGrid2DBTableView1MES_04: TcxGridDBColumn
             DataBinding.FieldName = 'MES_04'
-            Width = 70
+            Width = 60
           end
           object cxGrid2DBTableView1MES_05_PA: TcxGridDBColumn
             Caption = '  05'
@@ -412,7 +426,7 @@ object FTitulosAnual: TFTitulosAnual
           end
           object cxGrid2DBTableView1MES_05: TcxGridDBColumn
             DataBinding.FieldName = 'MES_05'
-            Width = 70
+            Width = 60
           end
           object cxGrid2DBTableView1MES_06_PA: TcxGridDBColumn
             Caption = ' 06'
@@ -422,7 +436,7 @@ object FTitulosAnual: TFTitulosAnual
           end
           object cxGrid2DBTableView1MES_06: TcxGridDBColumn
             DataBinding.FieldName = 'MES_06'
-            Width = 70
+            Width = 60
           end
           object cxGrid2DBTableView1MES_07_PA: TcxGridDBColumn
             Caption = ' 07'
@@ -432,7 +446,7 @@ object FTitulosAnual: TFTitulosAnual
           end
           object cxGrid2DBTableView1MES_07: TcxGridDBColumn
             DataBinding.FieldName = 'MES_07'
-            Width = 70
+            Width = 60
           end
           object cxGrid2DBTableView1MES_08_PA: TcxGridDBColumn
             Caption = ' 08'
@@ -442,7 +456,7 @@ object FTitulosAnual: TFTitulosAnual
           end
           object cxGrid2DBTableView1MES_08: TcxGridDBColumn
             DataBinding.FieldName = 'MES_08'
-            Width = 70
+            Width = 60
           end
           object cxGrid2DBTableView1MES_09_PA: TcxGridDBColumn
             Caption = ' 09'
@@ -452,7 +466,7 @@ object FTitulosAnual: TFTitulosAnual
           end
           object cxGrid2DBTableView1MES_09: TcxGridDBColumn
             DataBinding.FieldName = 'MES_09'
-            Width = 70
+            Width = 60
           end
           object cxGrid2DBTableView1MES_10_PA: TcxGridDBColumn
             Caption = ' 10'
@@ -462,7 +476,7 @@ object FTitulosAnual: TFTitulosAnual
           end
           object cxGrid2DBTableView1MES_10: TcxGridDBColumn
             DataBinding.FieldName = 'MES_10'
-            Width = 70
+            Width = 60
           end
           object cxGrid2DBTableView1MES_11_PA: TcxGridDBColumn
             Caption = ' 11'
@@ -472,7 +486,7 @@ object FTitulosAnual: TFTitulosAnual
           end
           object cxGrid2DBTableView1MES_11: TcxGridDBColumn
             DataBinding.FieldName = 'MES_11'
-            Width = 70
+            Width = 60
           end
           object cxGrid2DBTableView1MES_12_PA: TcxGridDBColumn
             Caption = ' 12'
@@ -482,7 +496,11 @@ object FTitulosAnual: TFTitulosAnual
           end
           object cxGrid2DBTableView1MES_12: TcxGridDBColumn
             DataBinding.FieldName = 'MES_12'
-            Width = 70
+            Width = 60
+          end
+          object cxGrid2DBTableView1MEDIA: TcxGridDBColumn
+            DataBinding.FieldName = 'MEDIA'
+            Width = 80
           end
         end
         object cxGrid2Level1: TcxGridLevel
@@ -772,11 +790,69 @@ object FTitulosAnual: TFTitulosAnual
   object qAPagar: TIBQuery
     Database = DMConexao.IBConexao
     Transaction = DMConexao.IBTransactionRead
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'select '#39'N'#39' selecao,'
-      '       sp_rel_tituloanual.*'
-      '  from SP_REL_TITULOANUAL (:ativo,:debcred,:ano,:usuario)'
-      ' order by sp_rel_tituloanual.nome')
+      '       ta.*,'
+      '       case when('
+      '      (coalesce(ta.mes_01,0) +'
+      '       coalesce(ta.mes_02,0) +'
+      '       coalesce(ta.mes_03,0) +'
+      '       coalesce(ta.mes_04,0) +'
+      '       coalesce(ta.mes_05,0) +'
+      '       coalesce(ta.mes_06,0) +'
+      '       coalesce(ta.mes_07,0) +'
+      '       coalesce(ta.mes_08,0) +'
+      '       coalesce(ta.mes_09,0) +'
+      '       coalesce(ta.mes_10,0) +'
+      '       coalesce(ta.mes_11,0) +'
+      '       coalesce(ta.mes_12,0) ) = 0) then 1 else'
+      ''
+      '       (coalesce(ta.mes_01,0) +'
+      '       coalesce(ta.mes_02,0) +'
+      '       coalesce(ta.mes_03,0) +'
+      '       coalesce(ta.mes_04,0) +'
+      '       coalesce(ta.mes_05,0) +'
+      '       coalesce(ta.mes_06,0) +'
+      '       coalesce(ta.mes_07,0) +'
+      '       coalesce(ta.mes_08,0) +'
+      '       coalesce(ta.mes_09,0) +'
+      '       coalesce(ta.mes_10,0) +'
+      '       coalesce(ta.mes_11,0) +'
+      '       coalesce(ta.mes_12,0) ) end'
+      '       / --divide'
+      '       case when('
+      '       (case when(coalesce(ta.mes_01,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_02,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_03,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_04,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_05,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_06,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_07,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_08,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_09,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_10,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_11,0)=0) then 0 else 1 end +'
+      
+        '       case when(coalesce(ta.mes_12,0)=0) then 0 else 1 end)) = ' +
+        '0 then 1 else'
+      ''
+      '       (case when(coalesce(ta.mes_01,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_02,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_03,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_04,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_05,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_06,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_07,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_08,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_09,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_10,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_11,0)=0) then 0 else 1 end +'
+      '       case when(coalesce(ta.mes_12,0)=0) then 0 else 1 end) end'
+      '       media'
+      '  from SP_REL_TITULOANUAL (:ativo,:debcred,:ano,:usuario) ta'
+      ' order by ta.nome')
     Left = 264
     Top = 176
     ParamData = <
@@ -931,6 +1007,19 @@ object FTitulosAnual: TFTitulosAnual
     object qAPagarMES_12: TIBBCDField
       FieldName = 'MES_12'
       DisplayFormat = '0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qAPagarFIN_ID: TIntegerField
+      FieldName = 'FIN_ID'
+      Origin = 'SP_REL_TITULOANUAL.FIN_ID'
+    end
+    object qAPagarPLANOCONTAS_ID: TIntegerField
+      FieldName = 'PLANOCONTAS_ID'
+      Origin = 'SP_REL_TITULOANUAL.PLANOCONTAS_ID'
+    end
+    object qAPagarMEDIA: TIBBCDField
+      FieldName = 'MEDIA'
       Precision = 18
       Size = 2
     end
@@ -1106,6 +1195,17 @@ object FTitulosAnual: TFTitulosAnual
       Precision = 18
       Size = 2
     end
+    object cdsAPagarFIN_ID: TIntegerField
+      FieldName = 'FIN_ID'
+    end
+    object cdsAPagarPLANOCONTAS_ID: TIntegerField
+      FieldName = 'PLANOCONTAS_ID'
+    end
+    object cdsAPagarMEDIA: TBCDField
+      FieldName = 'MEDIA'
+      Precision = 18
+      Size = 2
+    end
   end
   object dspAPagar: TDataSetProvider
     DataSet = qAPagar
@@ -1121,6 +1221,8 @@ object FTitulosAnual: TFTitulosAnual
   object qAPagarEx: TIBQuery
     Database = DMConexao.IBConexao
     Transaction = DMConexao.IBTransactionRead
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'select * from SP_REL_TITULOANUAL (:ativo,:debcred,:ano,:usuario)'
       ' order by sp_rel_tituloanual.nome')
@@ -2232,6 +2334,14 @@ object FTitulosAnual: TFTitulosAnual
           ParentFont = False
         end
       end
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 188
+    Top = 170
+    object LanamentoAnual1: TMenuItem
+      Caption = 'Lan'#231'amento Anual '
+      OnClick = LanamentoAnual1Click
     end
   end
 end

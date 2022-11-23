@@ -19,7 +19,7 @@ uses
   dxSkinOffice2010Blue, dxSkinOffice2010Silver, dxSkinPumpkin, dxSkinSeven,
   dxSkinSharp, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
   dxSkinSummer2008, dxSkinsDefaultPainters, dxSkinValentine,
-  dxSkinXmas2008Blue, dxSkinscxPCPainter;
+  dxSkinXmas2008Blue, dxSkinscxPCPainter, Menus;
 
 type
   TFTitulosAnual = class(TForm)
@@ -143,6 +143,15 @@ type
     frxXLSExport1: TfrxXLSExport;
     frxReport1: TfrxReport;
     btLocalizar: TBitBtn;
+    qAPagarFIN_ID: TIntegerField;
+    qAPagarPLANOCONTAS_ID: TIntegerField;
+    qAPagarMEDIA: TIBBCDField;
+    cdsAPagarFIN_ID: TIntegerField;
+    cdsAPagarPLANOCONTAS_ID: TIntegerField;
+    cdsAPagarMEDIA: TBCDField;
+    cxGrid2DBTableView1MEDIA: TcxGridDBColumn;
+    PopupMenu1: TPopupMenu;
+    LanamentoAnual1: TMenuItem;
     procedure FormShow(Sender: TObject);
     procedure cxGrid2DBTableView1CustomDrawCell(
       Sender: TcxCustomGridTableView; ACanvas: TcxCanvas;
@@ -152,6 +161,7 @@ type
     procedure btExportarClick(Sender: TObject);
     procedure rgDebitoCreditoClick(Sender: TObject);
     procedure btLocalizarClick(Sender: TObject);
+    procedure LanamentoAnual1Click(Sender: TObject);
   private
     { Private declarations }
     function Continua(pContinua:Boolean;pTexto:String=''):Boolean;
@@ -168,7 +178,8 @@ const v_ativo : Array[0..2] of String = (' ','N','S');
 
 implementation
 
-uses uDMConexao, DateUtils, uClassAvisos, uClassServidorIni, uFerramentas;
+uses uDMConexao, DateUtils, uClassAvisos, uClassServidorIni, uFerramentas,
+  uCadTitulos2;
 
 {$R *.dfm}
 
@@ -319,6 +330,15 @@ end;
 procedure TFTitulosAnual.btLocalizarClick(Sender: TObject);
 begin
   BuscarRegistros;
+end;
+
+procedure TFTitulosAnual.LanamentoAnual1Click(Sender: TObject);
+begin
+  FCadTitulos2 := TFCadTitulos2.Create(nil);
+  FCadTitulos2.FPagarReceber := rgDebitoCredito.ItemIndex;
+  FCadTitulos2.FTitulo_Id    := cdsAPagarFIN_ID.AsInteger;
+  FCadTitulos2.ShowModal;
+  FCadTitulos2.free;
 end;
 
 end.

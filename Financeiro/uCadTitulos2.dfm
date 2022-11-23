@@ -1,11 +1,12 @@
 inherited FCadTitulos2: TFCadTitulos2
-  Left = 194
-  Top = 91
+  Left = 168
+  Top = 123
   Caption = 'Cadastro Titulos'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgCadastro: TPageControl
+    ActivePage = tsCadastro
     inherited tsConsulta: TTabSheet
       inherited cxGrid1: TcxGrid
         inherited cxGrid1DBTableView1: TcxGridDBTableView
@@ -85,6 +86,63 @@ inherited FCadTitulos2: TFCadTitulos2
           ItemIndex = 1
           OnClick = rgAtivoClick
         end
+        object BitBtn1: TBitBtn
+          Left = 575
+          Top = 1
+          Width = 90
+          Height = 40
+          Hint = 'Imprimir'
+          Caption = 'Rel. Anual'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 5
+          OnClick = BitBtn1Click
+          Glyph.Data = {
+            E6040000424DE604000000000000360000002800000014000000140000000100
+            180000000000B0040000120B0000120B00000000000000000000FFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBEBEB9C9C9CA5A5A5FDFDFDFFFFFF
+            ACACACEBEBEBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFC7C7C7E1E1E18383835E5E5E232323222222ACACAC9B9B9B5252526E
+            6E6EF1F1F1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBABABA
+            4848485555554D4D4D393939363636494949212121565656E5E5E59F9F9F6565
+            65F1F1F1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBABABA383838C3C3C33A
+            3A3A8181813A3A3A434343AAAAAA333333E2E2E2F9F9F9FAFAFA9E9E9E636363
+            EFEFEFFFFFFFFFFFFFFFFFFFFFFFFFB9B9B93737376E6E6EF0F0F06767677D7D
+            7D858585585858A4A4A46D6D6DF0F0F0F8F8F8F4F4F4EDEDED9A9A9A777777FF
+            FFFFFFFFFFFFFFFFB7B7B7383838707070808080C0C0C06C6C6CB5B5B5A8A8A8
+            C6C6C6757575BEBEBEFEFEFEF0F0F0F3F3F3CECECEF6F6F6A0A0A0A7A7A7FFFF
+            FFE0E0E03C3C3C6F6F6F8686867E7E7E8181812E2E2E666666CECECE8A8A8AB4
+            B4B4C4C4C4D2D2D2EDEDEDCCCCCCF5F5F5F4F4F48F8F8FC3C3C3FFFFFFCACACA
+            3F3F3F8989897979799A9A9AE6E6E63F3F3F2A2A2A6C6C6C5F5F5FF7F7F7D6D6
+            D6B4B4B4D4D4D4EBEBEBF7F7F7868686C4C4C4FFFFFFFFFFFFCDCDCD40404083
+            83837A7A7AD0D0D0CDCDCDA6A6A64C4C4C0000000D0D0D838383F6F6F6D4D4D4
+            B8B8B8E0E0E07A7A7A2B2B2BADADADF9F9F9FFFFFFCDCDCD414141858585C2C2
+            C2F9F9F9BCBCBC9B9B9BA9A9A95050500000000808087F7F7FCDCDCDC9C9C94F
+            4F4F4D4D4D3B3B3B5F5F5FE7E7E7FFFFFFCACACA292929C0C0C0FDFCFCE0E0E0
+            E1E1E1BCBCBC9D9D9DA9A9A94F4F4F0000000606066666663B3B3B5B5B5BA6A6
+            A64E4E4ED9D9D9FFFFFFFFFFFFE9E9E93E3E3E8C8F8FEEEDEDE1DFDFE0E0E0E3
+            E3E3BCBCBC9C9C9CAAAAAA4E4E4E000000000000606060B0B0B0505050D9D9D9
+            FFFFFFFFFFFFFFFFFFFFFFFF847F7F394E4E7BB1B1E9E6E6E2E1E1E0E0E0E3E3
+            E3BBBBBB9D9D9DA8A8A8454545303030A0A0A0434343D8D8D8FFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFC9C9C95F5B5B5E848475AAAAE9E5E5E2E0E0E0E0E0E2E2E2
+            BBBBBB9E9E9E9C9C9C464646444444595959FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFCACACA6F68685E848475ABABE9E5E5E3E0E0DFE0E0E3E3E3C4
+            C4C45050508E8E8E696969969696FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFCACACA7169695E858574A9A9E8E4E4E2E0E0E0E0E0E6E6E69E9E
+            9E6262625E5E5EEEEEEEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFCACACA7069695D848478AEAEE8E8E8DFDFDFE5E5E5E0E0E0585858
+            C9C9C9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFC5C5C57069693B63637D9D9DF8F4F4DFDFDF707070C4C4C4FFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFD2D1D1AFACAC4E4E4E6767676E6E6EC6C6C6FFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFF}
+        end
       end
     end
     inherited tsCadastro: TTabSheet
@@ -152,6 +210,22 @@ inherited FCadTitulos2: TFCadTitulos2
         Height = 13
         Caption = 'Limite Cr'#233'dito'
         FocusControl = DBEdit3
+      end
+      object Label15: TLabel [9]
+        Left = 504
+        Top = 85
+        Width = 51
+        Height = 13
+        Caption = 'Vencto dia'
+        FocusControl = DBEdit4
+      end
+      object Label16: TLabel [10]
+        Left = 584
+        Top = 85
+        Width = 49
+        Height = 13
+        Caption = 'Melhor dia'
+        FocusControl = DBEdit5
       end
       inherited Panel3: TPanel
         Top = 454
@@ -520,6 +594,15 @@ inherited FCadTitulos2: TFCadTitulos2
                 PropertiesClassName = 'TcxCheckBoxProperties'
                 Properties.ValueChecked = '1'
                 Properties.ValueUnchecked = '0'
+                Width = 48
+              end
+              object cxGrid2DBTableView1PAR_PROVISIONAR: TcxGridDBColumn
+                Caption = 'Provis'#227'o'
+                DataBinding.FieldName = 'PAR_PROVISIONAR'
+                PropertiesClassName = 'TcxCheckBoxProperties'
+                Properties.ValueChecked = 'S'
+                Properties.ValueUnchecked = 'N'
+                Width = 51
               end
               object cxGrid2DBTableView1PAR_NUMERO: TcxGridDBColumn
                 DataBinding.FieldName = 'PAR_NUMERO'
@@ -790,11 +873,29 @@ inherited FCadTitulos2: TFCadTitulos2
       object DBEdit3: TDBEdit
         Left = 424
         Top = 101
-        Width = 89
+        Width = 75
         Height = 21
         DataField = 'FIN_VALORLIMITE'
         DataSource = dsCadastro
         TabOrder = 16
+      end
+      object DBEdit4: TDBEdit
+        Left = 504
+        Top = 101
+        Width = 75
+        Height = 21
+        DataField = 'FIN_VENCTODIA'
+        DataSource = dsCadastro
+        TabOrder = 17
+      end
+      object DBEdit5: TDBEdit
+        Left = 584
+        Top = 101
+        Width = 75
+        Height = 21
+        DataField = 'FIN_MELHORDIA'
+        DataSource = dsCadastro
+        TabOrder = 18
       end
     end
   end
@@ -814,7 +915,7 @@ inherited FCadTitulos2: TFCadTitulos2
         'DEBCRED, '
       '   FIN_TIPO_DC, FIN_INATIVO, FIN_USU_ID, FIN_PLANOCONTAS_ID, '
       'FIN_PROVISIONAR, '
-      '   FIN_VALORLIMITE)'
+      '   FIN_VALORLIMITE, FIN_MELHORDIA, FIN_VENCTODIA)'
       'values'
       
         '  (:FIN_ID, :FIN_DATA, :FIN_DESCRICAO, :FIN_PES_ID, :FIN_CAT_ID,' +
@@ -824,7 +925,7 @@ inherited FCadTitulos2: TFCadTitulos2
         '   :FIN_TIPO_DC, :FIN_INATIVO, :FIN_USU_ID, :FIN_PLANOCONTAS_ID,' +
         ' '
       ':FIN_PROVISIONAR, '
-      '   :FIN_VALORLIMITE)')
+      '   :FIN_VALORLIMITE, :FIN_MELHORDIA, :FIN_VENCTODIA)')
     RefreshSQL.Strings = (
       'Select *'
       'from financeiro '
@@ -850,7 +951,9 @@ inherited FCadTitulos2: TFCadTitulos2
       '  FIN_USU_ID = :FIN_USU_ID,'
       '  FIN_PLANOCONTAS_ID = :FIN_PLANOCONTAS_ID,'
       '  FIN_PROVISIONAR = :FIN_PROVISIONAR,'
-      '  FIN_VALORLIMITE = :FIN_VALORLIMITE'
+      '  FIN_VALORLIMITE = :FIN_VALORLIMITE,'
+      '  FIN_MELHORDIA = :FIN_MELHORDIA,'
+      '  FIN_VENCTODIA = :FIN_VENCTODIA'
       'where'
       '  FIN_ID = :OLD_FIN_ID')
     GeneratorField.Field = 'FIN_ID'
@@ -917,6 +1020,14 @@ inherited FCadTitulos2: TFCadTitulos2
       Origin = 'FINANCEIRO.FIN_VALORLIMITE'
       Precision = 18
       Size = 2
+    end
+    object qCadastroFIN_MELHORDIA: TIntegerField
+      FieldName = 'FIN_MELHORDIA'
+      Origin = 'FINANCEIRO.FIN_MELHORDIA'
+    end
+    object qCadastroFIN_VENCTODIA: TIntegerField
+      FieldName = 'FIN_VENCTODIA'
+      Origin = 'FINANCEIRO.FIN_VENCTODIA'
     end
   end
   inherited qConsulta: TIBQuery
@@ -1018,53 +1129,28 @@ inherited FCadTitulos2: TFCadTitulos2
       '  PAR_ID = :OLD_PAR_ID')
     InsertSQL.Strings = (
       'insert into parcelas'
+      '  (PAR_ID, PAR_FIN_ID, PAR_NUMERO, PAR_QUANTIDADE, PAR_VENCTO, '
+      'PAR_VALOR, '
+      '   PAR_VALOR_PAGO, PAR_PAGO, PAR_OBSERVACAO, PAR_DATA, '
+      'PAR_DESCONTOSABAT, '
+      '   PAR_OUTDEDUCOES, PAR_JUROSMULTA, PAR_OUTACRESCIMOS, '
+      'PAR_DH_CA, PAR_DATAPGTO, '
       
-        '  (DESCRICAO, FLAG, PAR_DATA, PAR_DATAPGTO, PAR_DESCONTOSABAT, P' +
-        'AR_DH_CA, '
-      
-        '   PAR_EMPRESTIMO_ID, PAR_FIN_ID, PAR_FLAG, PAR_ID, PAR_JUROSMUL' +
-        'TA, PAR_NUMERO, '
-      
-        '   PAR_OBSERVACAO, PAR_OUTACRESCIMOS, PAR_OUTDEDUCOES, PAR_PAGO,' +
-        ' PAR_PROVISIONAR, '
-      '   PAR_QUANTIDADE, PAR_VALOR, PAR_VALOR_PAGO, PAR_VENCTO)'
+        '   PAR_FLAG, DESCRICAO, FLAG, PAR_EMPRESTIMO_ID, PAR_PROVISIONAR' +
+        ')'
       'values'
       
-        '  (:DESCRICAO, :FLAG, :PAR_DATA, :PAR_DATAPGTO, :PAR_DESCONTOSAB' +
-        'AT, :PAR_DH_CA, '
-      
-        '   :PAR_EMPRESTIMO_ID, :PAR_FIN_ID, :PAR_FLAG, :PAR_ID, :PAR_JUR' +
-        'OSMULTA, '
-      
-        '   :PAR_NUMERO, :PAR_OBSERVACAO, :PAR_OUTACRESCIMOS, :PAR_OUTDED' +
-        'UCOES, '
-      
-        '   :PAR_PAGO, :PAR_PROVISIONAR, :PAR_QUANTIDADE, :PAR_VALOR, :PA' +
-        'R_VALOR_PAGO, '
-      '   :PAR_VENCTO)')
+        '  (:PAR_ID, :PAR_FIN_ID, :PAR_NUMERO, :PAR_QUANTIDADE, :PAR_VENC' +
+        'TO, '
+      ':PAR_VALOR, '
+      '   :PAR_VALOR_PAGO, :PAR_PAGO, :PAR_OBSERVACAO, :PAR_DATA, '
+      ':PAR_DESCONTOSABAT, '
+      '   :PAR_OUTDEDUCOES, :PAR_JUROSMULTA, :PAR_OUTACRESCIMOS, '
+      ':PAR_DH_CA, :PAR_DATAPGTO, '
+      '   :PAR_FLAG, :DESCRICAO, :FLAG, :PAR_EMPRESTIMO_ID, '
+      ':PAR_PROVISIONAR)')
     RefreshSQL.Strings = (
-      'Select '
-      '  PAR_ID,'
-      '  PAR_FIN_ID,'
-      '  PAR_NUMERO,'
-      '  PAR_QUANTIDADE,'
-      '  PAR_VENCTO,'
-      '  PAR_VALOR,'
-      '  PAR_VALOR_PAGO,'
-      '  PAR_PAGO,'
-      '  PAR_OBSERVACAO,'
-      '  PAR_DATA,'
-      '  PAR_DESCONTOSABAT,'
-      '  PAR_OUTDEDUCOES,'
-      '  PAR_JUROSMULTA,'
-      '  PAR_OUTACRESCIMOS,'
-      '  PAR_DH_CA,'
-      '  PAR_DATAPGTO,'
-      '  PAR_FLAG,'
-      '  DESCRICAO,'
-      '  FLAG,'
-      '  PAR_EMPRESTIMO_ID,'
-      '  PAR_PROVISIONAR'
+      'Select *'
       'from parcelas '
       'where'
       '  PAR_ID = :PAR_ID')
@@ -1079,27 +1165,27 @@ inherited FCadTitulos2: TFCadTitulos2
     ModifySQL.Strings = (
       'update parcelas'
       'set'
-      '  DESCRICAO = :DESCRICAO,'
-      '  FLAG = :FLAG,'
-      '  PAR_DATA = :PAR_DATA,'
-      '  PAR_DATAPGTO = :PAR_DATAPGTO,'
-      '  PAR_DESCONTOSABAT = :PAR_DESCONTOSABAT,'
-      '  PAR_DH_CA = :PAR_DH_CA,'
-      '  PAR_EMPRESTIMO_ID = :PAR_EMPRESTIMO_ID,'
-      '  PAR_FIN_ID = :PAR_FIN_ID,'
-      '  PAR_FLAG = :PAR_FLAG,'
       '  PAR_ID = :PAR_ID,'
-      '  PAR_JUROSMULTA = :PAR_JUROSMULTA,'
+      '  PAR_FIN_ID = :PAR_FIN_ID,'
       '  PAR_NUMERO = :PAR_NUMERO,'
-      '  PAR_OBSERVACAO = :PAR_OBSERVACAO,'
-      '  PAR_OUTACRESCIMOS = :PAR_OUTACRESCIMOS,'
-      '  PAR_OUTDEDUCOES = :PAR_OUTDEDUCOES,'
-      '  PAR_PAGO = :PAR_PAGO,'
-      '  PAR_PROVISIONAR = :PAR_PROVISIONAR,'
       '  PAR_QUANTIDADE = :PAR_QUANTIDADE,'
+      '  PAR_VENCTO = :PAR_VENCTO,'
       '  PAR_VALOR = :PAR_VALOR,'
       '  PAR_VALOR_PAGO = :PAR_VALOR_PAGO,'
-      '  PAR_VENCTO = :PAR_VENCTO'
+      '  PAR_PAGO = :PAR_PAGO,'
+      '  PAR_OBSERVACAO = :PAR_OBSERVACAO,'
+      '  PAR_DATA = :PAR_DATA,'
+      '  PAR_DESCONTOSABAT = :PAR_DESCONTOSABAT,'
+      '  PAR_OUTDEDUCOES = :PAR_OUTDEDUCOES,'
+      '  PAR_JUROSMULTA = :PAR_JUROSMULTA,'
+      '  PAR_OUTACRESCIMOS = :PAR_OUTACRESCIMOS,'
+      '  PAR_DH_CA = :PAR_DH_CA,'
+      '  PAR_DATAPGTO = :PAR_DATAPGTO,'
+      '  PAR_FLAG = :PAR_FLAG,'
+      '  DESCRICAO = :DESCRICAO,'
+      '  FLAG = :FLAG,'
+      '  PAR_EMPRESTIMO_ID = :PAR_EMPRESTIMO_ID,'
+      '  PAR_PROVISIONAR = :PAR_PROVISIONAR'
       'where'
       '  PAR_ID = :OLD_PAR_ID')
     Filtered = True
@@ -1155,6 +1241,12 @@ inherited FCadTitulos2: TFCadTitulos2
       DisplayLabel = 'Pago'
       FieldName = 'PAR_PAGO'
       Origin = 'PARCELAS.PAR_PAGO'
+    end
+    object qParcelasPAR_PROVISIONAR: TIBStringField
+      FieldName = 'PAR_PROVISIONAR'
+      Origin = '"PARCELAS"."PAR_PROVISIONAR"'
+      FixedChar = True
+      Size = 1
     end
     object qParcelasPAR_OBSERVACAO: TIBStringField
       DisplayLabel = 'Observa'#231#227'o'
@@ -1220,12 +1312,6 @@ inherited FCadTitulos2: TFCadTitulos2
     object qParcelasPAR_EMPRESTIMO_ID: TIntegerField
       FieldName = 'PAR_EMPRESTIMO_ID'
       Origin = '"PARCELAS"."PAR_EMPRESTIMO_ID"'
-    end
-    object qParcelasPAR_PROVISIONAR: TIBStringField
-      FieldName = 'PAR_PROVISIONAR'
-      Origin = '"PARCELAS"."PAR_PROVISIONAR"'
-      FixedChar = True
-      Size = 1
     end
   end
   object dsParcelas: TDataSource
@@ -1486,7 +1572,11 @@ inherited FCadTitulos2: TFCadTitulos2
     CachedUpdates = False
     DataSource = dsParcelas
     SQL.Strings = (
-      'select * from parcelas_detalhe where det_par_id= :PAR_ID')
+      'select *'
+      '  from parcelas_detalhe'
+      ' where det_par_id= :PAR_ID'
+      ' ORDER BY parcelas_detalhe.det_data_doc,'
+      '                     parcelas_detalhe.det_dh_ca asc')
     Left = 272
     Top = 368
     ParamData = <
@@ -1860,8 +1950,8 @@ inherited FCadTitulos2: TFCadTitulos2
     end
   end
   object ActionListBotao: TActionList
-    Left = 224
-    Top = 184
+    Left = 152
+    Top = 80
     object bNovo: TAction
       Caption = 'bNovo'
       Hint = 'Novo'
@@ -2092,5 +2182,26 @@ inherited FCadTitulos2: TFCadTitulos2
       FixedChar = True
       Size = 1
     end
+  end
+  object frxReport1: TfrxReport
+    Version = '4.9.38'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Padr'#227'o'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 44719.947765763890000000
+    ReportOptions.LastChange = 44719.947765763890000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    Left = 224
+    Top = 320
+    Datasets = <>
+    Variables = <>
+    Style = <>
   end
 end
