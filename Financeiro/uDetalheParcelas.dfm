@@ -1,8 +1,8 @@
 object FDetalheParcelas: TFDetalheParcelas
-  Left = 210
-  Top = 152
+  Left = 208
+  Top = 177
   Width = 737
-  Height = 497
+  Height = 495
   Caption = 'Detalhe de parcelas'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,7 +19,7 @@ object FDetalheParcelas: TFDetalheParcelas
   TextHeight = 13
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 440
+    Top = 438
     Width = 721
     Height = 19
     Panels = <>
@@ -1149,7 +1149,7 @@ object FDetalheParcelas: TFDetalheParcelas
     Left = 0
     Top = 209
     Width = 721
-    Height = 231
+    Height = 229
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 3
@@ -1157,7 +1157,7 @@ object FDetalheParcelas: TFDetalheParcelas
       Left = 0
       Top = 0
       Width = 721
-      Height = 231
+      Height = 229
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
