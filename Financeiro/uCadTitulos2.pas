@@ -274,6 +274,9 @@ type
     qCadastroFIN_VENCTODIA: TIntegerField;
     BitBtn1: TBitBtn;
     frxReport1: TfrxReport;
+    ibDetalheParcelasDET_ID_PAI: TIntegerField;
+    qGetIdParcelasDetalhe: TIBQuery;
+    qGetIdParcelasDetalheID: TLargeintField;
     procedure FormShow(Sender: TObject);
     procedure qCadastroAfterOpen(DataSet: TDataSet);
     procedure qParcelasAfterInsert(DataSet: TDataSet);
@@ -452,6 +455,8 @@ var i : Integer;
     vPAR_VENCTO : TDate;
     vDataDoc, vDescricao : String;
     vValorAcum : Double;
+    vDET_ID     : Integer;
+    vDET_ID_PAI : Integer;
 
   function getInformeDadosParcelasDet:Boolean;
   begin
@@ -485,6 +490,7 @@ begin
     try
     {}  //if not(DMConexao.IBTransacao.InTransaction) then
     {}  //  DMConexao.IBTransacao.StartTransaction;
+    {}
     {}  for i := 1 to StrToInt(edQuant.Text) do
     {}  begin
     {}  {}  if i=1 then
@@ -500,6 +506,15 @@ begin
     {}  {}     Break;
     {}  {}   end;
     {}  {}  end;
+    {}  {}
+    {}  {}
+    {}  {}  qGetIdParcelasDetalhe.Close;
+    {}  {}  qGetIdParcelasDetalhe.Open;
+    {}  {}  vDET_ID := qGetIdParcelasDetalheID.AsInteger;
+    {}  {}  if i = 1 then
+    {}  {}    vDET_ID_PAI := vDET_ID;
+    {}  {}
+    {}  {}
     {}  {}
     {}  {}  //se existe parcela, acrescenta parcela_detalhe
     {}  {}  qExisteParcela.Close;
@@ -518,12 +533,13 @@ begin
     {}  {}  {}
     {}  {}  {}    if not(ibDetalheParcelas.State=dsInsert) then
     {}  {}  {}      ibDetalheParcelas.Insert;
-    {}  {}  {}    //ibDetalheParcelasDET_ID.asInteger        :=
+    {}  {}  {}
+    {}  {}  {}    ibDetalheParcelasDET_ID.asInteger        := vDET_ID;
+    {}  {}  {}    ibDetalheParcelasDET_ID_PAI.asInteger    := vDET_ID_PAI;
     {}  {}  {}    //ibDetalheParcelasDET_PAR_ID.asInteger    := vPAR_ID;
     {}  {}  {}    vPAR_ID := qExisteParcelaPAR_ID.Value;
     {}  {}  {}    ibDetalheParcelasDET_PAR_ID.asInteger    := vPAR_ID;
     {}  {}  {}    ibDetalheParcelasDET_DATA.asDateTime     := Now;
-    {}  {}  {}
     {}  {}  {}
     {}  {}  {}    //if sDataDoc='' then
     {}  {}  {}    //  InputQuery('Informe','Data Doc.', sDatadoc);
@@ -587,6 +603,9 @@ begin
     {}  {}  {}    //criar parcelas detalhe
     {}  {}  {}    if not(ibDetalheParcelas.State=dsInsert) then
     {}  {}  {}      ibDetalheParcelas.Insert;
+    {}  {}  {}
+    {}  {}  {}    ibDetalheParcelasDET_ID.asInteger        := vDET_ID;
+    {}  {}  {}    ibDetalheParcelasDET_ID_PAI.asInteger    := vDET_ID_PAI;
     {}  {}  {}    ibDetalheParcelasDET_PAR_ID.asInteger    := vPAR_ID;
     {}  {}  {}    ibDetalheParcelasDET_DATA.asDateTime     := Now;
     {}  {}  {}    ibDetalheParcelasDET_DATA_DOC.asDateTime := StrToDateTime(vDataDoc);
@@ -750,16 +769,15 @@ begin
   FDetalheParcelas := TFDetalheParcelas.Create(nil);
   FDetalheParcelas.FIdParcela := vPAR_ID;
   FDetalheParcelas.ShowModal;
-
   //qEditarParcela.Close;
   //qEditarParcela.ParamByName('PAR_ID').AsInteger := vPAR_ID;
   //qEditarParcela.Open;
   //qEditarParcela.Edit;
   //qEditarParcelaPAR_VALOR.AsFloat := FDetalheParcelas.FTotalValorParcelas;
   //qEditarParcela.Post;
-
   FDetalheParcelas.Free;
-
+  pgParcelas.ActivePageIndex := 0;
+  qParcelas.Refresh;
 end;
 
 procedure TFCadTitulos2.btCancelarClick(Sender: TObject);

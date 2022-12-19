@@ -132,6 +132,7 @@ type
     procedure cxButton1Click(Sender: TObject);
     procedure ibDetalheParcelasAfterPost(DataSet: TDataSet);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure DBEdit3Exit(Sender: TObject);
   private
     { Private declarations }
     procedure botao(tabela:TIBDataset);
@@ -464,6 +465,15 @@ begin
   //  AValue := Summary.GroupSummaryValues[AGroupIndex, AIndex];
   //end;
   //FTotalValorParcelas := AValue;
+end;
+
+procedure TFDetalheParcelas.DBEdit3Exit(Sender: TObject);
+begin
+  if (ibDetalheParcelas.State in [dsEdit, dsInsert]) then
+  begin
+    ibDetalheParcelasDET_NUMERO.AsInteger     := 1;
+    ibDetalheParcelasDET_QUANTIDADE.AsInteger := 1;
+  end;
 end;
 
 end.

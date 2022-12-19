@@ -1032,6 +1032,7 @@ object FDetalheParcelas: TFDetalheParcelas
       DataField = 'DET_DESCRICAO'
       DataSource = dsDetalheParcelas
       TabOrder = 7
+      OnExit = DBEdit3Exit
     end
     object DBEdit4: TDBEdit
       Left = 499

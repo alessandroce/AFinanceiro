@@ -6,7 +6,6 @@ inherited FCadTitulos2: TFCadTitulos2
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgCadastro: TPageControl
-    ActivePage = tsCadastro
     inherited tsConsulta: TTabSheet
       inherited cxGrid1: TcxGrid
         inherited cxGrid1DBTableView1: TcxGridDBTableView
@@ -55,7 +54,7 @@ inherited FCadTitulos2: TFCadTitulos2
           Width = 229
           Height = 35
           Columns = 3
-          ItemIndex = 2
+          ItemIndex = 0
           Items.Strings = (
             'Aberto'
             'Fechado'
@@ -228,7 +227,6 @@ inherited FCadTitulos2: TFCadTitulos2
         FocusControl = DBEdit5
       end
       inherited Panel3: TPanel
-        Top = 454
         TabOrder = 8
       end
       object DBEdit1: TDBEdit
@@ -1793,42 +1791,25 @@ inherited FCadTitulos2: TFCadTitulos2
       '  DET_ID = :OLD_DET_ID')
     InsertSQL.Strings = (
       'insert into parcelas_detalhe'
-      
-        '  (DESCRICAO, DET_DATA, DET_DATA_DOC, DET_DATAPGTO, DET_DATAVENC' +
-        'TO, DET_DESCRICAO, '
-      
-        '   DET_DH_CA, DET_EMPRESTIMO_ID, DET_FLAG, DET_ID, DET_NUMERO, D' +
-        'ET_PAGO, '
-      '   DET_PAR_ID, DET_PROVISIONAR, DET_QUANTIDADE, DET_VALOR)'
+      '  (DET_ID, DET_PAR_ID, DET_DATA, DET_DATA_DOC, DET_DESCRICAO, '
+      'DET_VALOR, '
+      '   DET_DH_CA, DET_PAGO, DET_DATAPGTO, DET_FLAG, DESCRICAO, '
+      'DET_NUMERO, '
+      '   DET_QUANTIDADE, DET_DATAVENCTO, DET_EMPRESTIMO_ID, '
+      'DET_PROVISIONAR, '
+      '   DET_ID_PAI)'
       'values'
       
-        '  (:DESCRICAO, :DET_DATA, :DET_DATA_DOC, :DET_DATAPGTO, :DET_DAT' +
-        'AVENCTO, '
-      
-        '   :DET_DESCRICAO, :DET_DH_CA, :DET_EMPRESTIMO_ID, :DET_FLAG, :D' +
-        'ET_ID, '
-      
-        '   :DET_NUMERO, :DET_PAGO, :DET_PAR_ID, :DET_PROVISIONAR, :DET_Q' +
-        'UANTIDADE, '
-      '   :DET_VALOR)')
+        '  (:DET_ID, :DET_PAR_ID, :DET_DATA, :DET_DATA_DOC, :DET_DESCRICA' +
+        'O, '
+      ':DET_VALOR, '
+      '   :DET_DH_CA, :DET_PAGO, :DET_DATAPGTO, :DET_FLAG, :DESCRICAO, '
+      ':DET_NUMERO, '
+      '   :DET_QUANTIDADE, :DET_DATAVENCTO, :DET_EMPRESTIMO_ID, '
+      ':DET_PROVISIONAR, '
+      '   :DET_ID_PAI)')
     RefreshSQL.Strings = (
-      'Select '
-      '  DET_ID,'
-      '  DET_PAR_ID,'
-      '  DET_DATA,'
-      '  DET_DATA_DOC,'
-      '  DET_DESCRICAO,'
-      '  DET_VALOR,'
-      '  DET_DH_CA,'
-      '  DET_PAGO,'
-      '  DET_DATAPGTO,'
-      '  DET_FLAG,'
-      '  DESCRICAO,'
-      '  DET_NUMERO,'
-      '  DET_QUANTIDADE,'
-      '  DET_DATAVENCTO,'
-      '  DET_EMPRESTIMO_ID,'
-      '  DET_PROVISIONAR'
+      'Select *'
       'from parcelas_detalhe '
       'where'
       '  DET_ID = :DET_ID')
@@ -1839,22 +1820,23 @@ inherited FCadTitulos2: TFCadTitulos2
     ModifySQL.Strings = (
       'update parcelas_detalhe'
       'set'
-      '  DESCRICAO = :DESCRICAO,'
+      '  DET_ID = :DET_ID,'
+      '  DET_PAR_ID = :DET_PAR_ID,'
       '  DET_DATA = :DET_DATA,'
       '  DET_DATA_DOC = :DET_DATA_DOC,'
-      '  DET_DATAPGTO = :DET_DATAPGTO,'
-      '  DET_DATAVENCTO = :DET_DATAVENCTO,'
       '  DET_DESCRICAO = :DET_DESCRICAO,'
+      '  DET_VALOR = :DET_VALOR,'
       '  DET_DH_CA = :DET_DH_CA,'
-      '  DET_EMPRESTIMO_ID = :DET_EMPRESTIMO_ID,'
-      '  DET_FLAG = :DET_FLAG,'
-      '  DET_ID = :DET_ID,'
-      '  DET_NUMERO = :DET_NUMERO,'
       '  DET_PAGO = :DET_PAGO,'
-      '  DET_PAR_ID = :DET_PAR_ID,'
-      '  DET_PROVISIONAR = :DET_PROVISIONAR,'
+      '  DET_DATAPGTO = :DET_DATAPGTO,'
+      '  DET_FLAG = :DET_FLAG,'
+      '  DESCRICAO = :DESCRICAO,'
+      '  DET_NUMERO = :DET_NUMERO,'
       '  DET_QUANTIDADE = :DET_QUANTIDADE,'
-      '  DET_VALOR = :DET_VALOR'
+      '  DET_DATAVENCTO = :DET_DATAVENCTO,'
+      '  DET_EMPRESTIMO_ID = :DET_EMPRESTIMO_ID,'
+      '  DET_PROVISIONAR = :DET_PROVISIONAR,'
+      '  DET_ID_PAI = :DET_ID_PAI'
       'where'
       '  DET_ID = :OLD_DET_ID')
     GeneratorField.Field = 'DET_ID'
@@ -1933,6 +1915,10 @@ inherited FCadTitulos2: TFCadTitulos2
       Origin = '"PARCELAS_DETALHE"."DET_PROVISIONAR"'
       FixedChar = True
       Size = 1
+    end
+    object ibDetalheParcelasDET_ID_PAI: TIntegerField
+      FieldName = 'DET_ID_PAI'
+      Origin = 'PARCELAS_DETALHE.DET_ID_PAI'
     end
   end
   object qGetIdParcelas: TIBQuery
@@ -2203,5 +2189,19 @@ inherited FCadTitulos2: TFCadTitulos2
     Datasets = <>
     Variables = <>
     Style = <>
+  end
+  object qGetIdParcelasDetalhe: TIBQuery
+    Database = DMConexao.IBConexao
+    Transaction = DMConexao.IBTransacao
+    BufferChunks = 1000
+    CachedUpdates = False
+    SQL.Strings = (
+      'select gen_id(gen_parcelas_detalhe,1) id from rdb$database')
+    Left = 88
+    Top = 392
+    object qGetIdParcelasDetalheID: TLargeintField
+      FieldName = 'ID'
+      Required = True
+    end
   end
 end

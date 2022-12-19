@@ -9,7 +9,8 @@ uses
   Buttons, ExtCtrls, cxGridLevel, cxClasses, cxControls, cxGridCustomView,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGrid,
   ComCtrls, Spin, DBCtrls, wwdblook, Mask, DateUtils, wwdbdatetimepicker,
-  cxCheckBox, DBClient;
+  cxCheckBox, DBClient, cxLookAndFeels, cxLookAndFeelPainters, dxSkinsCore,
+  dxSkinsDefaultPainters, dxSkinscxPCPainter;
 
 type
   TFCadTitulos = class(TFCadastro)
