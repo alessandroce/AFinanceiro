@@ -45,7 +45,8 @@ uses
   uFormPadrao in 'Biblioteca\uFormPadrao.pas' {FFormPadrao},
   uCadLimiteCreditoTitulos in 'Financeiro\uCadLimiteCreditoTitulos.pas' {FCadLimiteCreditoTitulos},
   uTitulosAPagar in 'Financeiro\uTitulosAPagar.pas' {FTitulosAPagar},
-  uCadUsuarioVisao in 'Cadastro\uCadUsuarioVisao.pas' {FCadUsuarioVisao};
+  uCadUsuarioVisao in 'Cadastro\uCadUsuarioVisao.pas' {FCadUsuarioVisao},
+  uCadTitulos2Provisao in 'Financeiro\uCadTitulos2Provisao.pas' {FCadTitulos2Provisao};
 
 {$R *.res}
 
@@ -60,5 +61,6 @@ begin
   Application.CreateForm(TFRelatorio, FRelatorio);
   Application.CreateForm(TFTitulosAPagar, FTitulosAPagar);
   Application.CreateForm(TFCadUsuarioVisao, FCadUsuarioVisao);
+  Application.CreateForm(TFCadTitulos2Provisao, FCadTitulos2Provisao);
   Application.Run;
 end.

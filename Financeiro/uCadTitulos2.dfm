@@ -1,6 +1,5 @@
 inherited FCadTitulos2: TFCadTitulos2
-  Left = 168
-  Top = 123
+  Left = 209
   Caption = 'Cadastro Titulos'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -181,7 +180,7 @@ inherited FCadTitulos2: TFCadTitulos2
         Caption = 'Grupo'
       end
       object Label8: TLabel [5]
-        Left = 200
+        Left = 176
         Top = 86
         Width = 45
         Height = 13
@@ -203,7 +202,7 @@ inherited FCadTitulos2: TFCadTitulos2
         Caption = 'PAR_FIN_ID'
       end
       object Label13: TLabel [8]
-        Left = 424
+        Left = 328
         Top = 85
         Width = 63
         Height = 13
@@ -211,7 +210,7 @@ inherited FCadTitulos2: TFCadTitulos2
         FocusControl = DBEdit3
       end
       object Label15: TLabel [9]
-        Left = 504
+        Left = 408
         Top = 85
         Width = 51
         Height = 13
@@ -219,12 +218,20 @@ inherited FCadTitulos2: TFCadTitulos2
         FocusControl = DBEdit4
       end
       object Label16: TLabel [10]
-        Left = 584
+        Left = 488
         Top = 85
         Width = 49
         Height = 13
         Caption = 'Melhor dia'
         FocusControl = DBEdit5
+      end
+      object Label17: TLabel [11]
+        Left = 568
+        Top = 85
+        Width = 41
+        Height = 13
+        Caption = 'Provis'#227'o'
+        FocusControl = DBEdit6
       end
       inherited Panel3: TPanel
         TabOrder = 8
@@ -261,7 +268,7 @@ inherited FCadTitulos2: TFCadTitulos2
       object wwDBLookupCombo2: TwwDBLookupCombo
         Left = 24
         Top = 102
-        Width = 169
+        Width = 150
         Height = 21
         DisableThemes = False
         DropDownAlignment = taLeftJustify
@@ -278,9 +285,9 @@ inherited FCadTitulos2: TFCadTitulos2
         AllowClearKey = False
       end
       object wwDBLookupCombo3: TwwDBLookupCombo
-        Left = 200
+        Left = 176
         Top = 102
-        Width = 217
+        Width = 150
         Height = 21
         DisableThemes = False
         DropDownAlignment = taLeftJustify
@@ -556,16 +563,52 @@ inherited FCadTitulos2: TFCadTitulos2
         Top = 258
         Width = 722
         Height = 195
-        ActivePage = tsParcelas
+        ActivePage = tsDetParcelas
         TabOrder = 13
         object tsParcelas: TTabSheet
           Caption = 'Parcelas'
+          object SpeedButton2: TSpeedButton
+            Left = 0
+            Top = -1
+            Width = 80
+            Height = 23
+            Hint = 'Adicionar detalhe'
+            Caption = 'Provis'#227'o'
+            Glyph.Data = {
+              36030000424D3603000000000000360000002800000010000000100000000100
+              18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFF0048001E51001757001757001A5700155500FFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1A5D00176F0B17
+              710D17710C16710C186300FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFF17600004790A057A0C05790B047A0B0F6701FFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF186100027E0D00
+              7F0D007E0D007F0D106903FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFF1B630306891A008A17008916028B19156F0AFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF194C001C5B00195B00195C001C59001A680609952500
+              931F00931F0396231576121B5B001A5D00195E001D5D00115500165A00057D0F
+              028817028A19028C1A029220029E2A009E28009E28009D28029522028B1A0289
+              1802861603821118610018570004932000A12A00A42D00A73000A83100A83100
+              A83100A83100A62F00A42E00A22C009F29009A230095201766061959001DA23B
+              0CAE3C04AC3700AE3600B03600B13700B13700B13700AF3500AC3300A93001A6
+              3008A53119A63C1B690A14590043BA623FCC703BCB6E36CC6C2BCA651BC35618
+              C25418C25318C05123C35A32C76538C5673DC46845C16A226C111745003A953D
+              47A75544A75345A65355B86A55D98746D67D48D67D4DD7825DC57A48A85744A8
+              5545A754409F4B186200FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF206B0E63DF935A
+              E39159E08F67E89D36913AFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFF226F146FE69F6EEDA46DEAA278F1AD38963EFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF22731483EDB08B
+              F4BA87F2B68EF9BF3D9942FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFF1F7513A0F6C6B6FED8B1FCD4B3FFDB3F9E46FFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF134E003183313C
+              89393C8939398C3C1B670DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+            OnClick = SpeedButton2Click
+          end
           object cxGrid2: TcxGrid
             Left = 0
-            Top = 0
+            Top = 23
             Width = 714
-            Height = 167
-            Align = alClient
+            Height = 144
+            Align = alBottom
             TabOrder = 0
             LookAndFeel.Kind = lfUltraFlat
             object cxGrid2DBTableView1: TcxGridDBTableView
@@ -851,6 +894,110 @@ inherited FCadTitulos2: TFCadTitulos2
             end
           end
         end
+        object TabSheet1: TTabSheet
+          Caption = 'Centro de Custos'
+          ImageIndex = 2
+          object cxGrid4: TcxGrid
+            Left = 0
+            Top = 23
+            Width = 714
+            Height = 144
+            Align = alBottom
+            TabOrder = 0
+            object cxGridDBTableView4: TcxGridDBTableView
+              NavigatorButtons.ConfirmDelete = False
+              OnCellDblClick = cxGridDBTableView1CellDblClick
+              OnCustomDrawCell = cxGrid2DBTableView1CustomDrawCell
+              DataController.DataSource = dsParcelasCentroCusto
+              DataController.Filter.Active = True
+              DataController.Summary.DefaultGroupSummaryItems = <
+                item
+                  Kind = skSum
+                  Position = spFooter
+                end
+                item
+                  Kind = skSum
+                end
+                item
+                  Kind = skSum
+                  Position = spFooter
+                  Column = cxGridDBTableView4VALOR
+                end
+                item
+                  Kind = skSum
+                  Column = cxGridDBTableView4VALOR
+                end>
+              DataController.Summary.FooterSummaryItems = <
+                item
+                  Kind = skSum
+                end
+                item
+                  Kind = skCount
+                end
+                item
+                  Kind = skSum
+                end
+                item
+                  Kind = skSum
+                  Column = cxGridDBTableView4VALOR
+                end>
+              DataController.Summary.SummaryGroups = <>
+              OptionsSelection.CellSelect = False
+              OptionsView.Footer = True
+              OptionsView.GroupByBox = False
+              object cxGridDBTableView4DET_PAR_ID: TcxGridDBColumn
+                DataBinding.FieldName = 'DET_PAR_ID'
+              end
+              object cxGridDBTableView4CCT_DESCRICAO: TcxGridDBColumn
+                Caption = 'Descri'#231#227'o'
+                DataBinding.FieldName = 'CCT_DESCRICAO'
+                Width = 400
+              end
+              object cxGridDBTableView4VALOR: TcxGridDBColumn
+                Caption = 'Valor'
+                DataBinding.FieldName = 'VALOR'
+              end
+            end
+            object cxGridDBTableView5: TcxGridDBTableView
+              NavigatorButtons.ConfirmDelete = False
+              DataController.DetailKeyFieldNames = 'DET_ID'
+              DataController.KeyFieldNames = 'DET_PAR_ID'
+              DataController.MasterKeyFieldNames = 'PAR_ID'
+              DataController.Summary.DefaultGroupSummaryItems = <>
+              DataController.Summary.FooterSummaryItems = <>
+              DataController.Summary.SummaryGroups = <>
+              OptionsView.Footer = True
+              OptionsView.GroupByBox = False
+              object cxGridDBColumn7: TcxGridDBColumn
+                DataBinding.FieldName = 'DET_ID'
+              end
+              object cxGridDBColumn8: TcxGridDBColumn
+                DataBinding.FieldName = 'DET_PAR_ID'
+              end
+              object cxGridDBColumn9: TcxGridDBColumn
+                DataBinding.FieldName = 'DET_DATA'
+              end
+              object cxGridDBColumn16: TcxGridDBColumn
+                DataBinding.FieldName = 'DET_DATA_DOC'
+              end
+              object cxGridDBColumn17: TcxGridDBColumn
+                DataBinding.FieldName = 'DET_DESCRICAO'
+              end
+              object cxGridDBColumn18: TcxGridDBColumn
+                DataBinding.FieldName = 'DET_VALOR'
+              end
+            end
+            object cxGridDBTableView6: TcxGridDBTableView
+              NavigatorButtons.ConfirmDelete = False
+              DataController.Summary.DefaultGroupSummaryItems = <>
+              DataController.Summary.FooterSummaryItems = <>
+              DataController.Summary.SummaryGroups = <>
+            end
+            object cxGridLevel2: TcxGridLevel
+              GridView = cxGridDBTableView4
+            end
+          end
+        end
       end
       object cbAgrupar: TCheckBox
         Left = 215
@@ -869,7 +1016,7 @@ inherited FCadTitulos2: TFCadTitulos2
         TabOrder = 15
       end
       object DBEdit3: TDBEdit
-        Left = 424
+        Left = 328
         Top = 101
         Width = 75
         Height = 21
@@ -878,7 +1025,7 @@ inherited FCadTitulos2: TFCadTitulos2
         TabOrder = 16
       end
       object DBEdit4: TDBEdit
-        Left = 504
+        Left = 408
         Top = 101
         Width = 75
         Height = 21
@@ -887,13 +1034,22 @@ inherited FCadTitulos2: TFCadTitulos2
         TabOrder = 17
       end
       object DBEdit5: TDBEdit
-        Left = 584
+        Left = 488
         Top = 101
         Width = 75
         Height = 21
         DataField = 'FIN_MELHORDIA'
         DataSource = dsCadastro
         TabOrder = 18
+      end
+      object DBEdit6: TDBEdit
+        Left = 568
+        Top = 101
+        Width = 75
+        Height = 21
+        DataField = 'FIN_VALORPROVISAO'
+        DataSource = dsCadastro
+        TabOrder = 19
       end
     end
   end
@@ -913,7 +1069,9 @@ inherited FCadTitulos2: TFCadTitulos2
         'DEBCRED, '
       '   FIN_TIPO_DC, FIN_INATIVO, FIN_USU_ID, FIN_PLANOCONTAS_ID, '
       'FIN_PROVISIONAR, '
-      '   FIN_VALORLIMITE, FIN_MELHORDIA, FIN_VENCTODIA)'
+      
+        '   FIN_VALORLIMITE, FIN_MELHORDIA, FIN_VENCTODIA, FIN_VALORPROVI' +
+        'SAO)'
       'values'
       
         '  (:FIN_ID, :FIN_DATA, :FIN_DESCRICAO, :FIN_PES_ID, :FIN_CAT_ID,' +
@@ -923,7 +1081,8 @@ inherited FCadTitulos2: TFCadTitulos2
         '   :FIN_TIPO_DC, :FIN_INATIVO, :FIN_USU_ID, :FIN_PLANOCONTAS_ID,' +
         ' '
       ':FIN_PROVISIONAR, '
-      '   :FIN_VALORLIMITE, :FIN_MELHORDIA, :FIN_VENCTODIA)')
+      '   :FIN_VALORLIMITE, :FIN_MELHORDIA, :FIN_VENCTODIA, '
+      ':FIN_VALORPROVISAO)')
     RefreshSQL.Strings = (
       'Select *'
       'from financeiro '
@@ -951,7 +1110,8 @@ inherited FCadTitulos2: TFCadTitulos2
       '  FIN_PROVISIONAR = :FIN_PROVISIONAR,'
       '  FIN_VALORLIMITE = :FIN_VALORLIMITE,'
       '  FIN_MELHORDIA = :FIN_MELHORDIA,'
-      '  FIN_VENCTODIA = :FIN_VENCTODIA'
+      '  FIN_VENCTODIA = :FIN_VENCTODIA,'
+      '  FIN_VALORPROVISAO = :FIN_VALORPROVISAO'
       'where'
       '  FIN_ID = :OLD_FIN_ID')
     GeneratorField.Field = 'FIN_ID'
@@ -1026,6 +1186,20 @@ inherited FCadTitulos2: TFCadTitulos2
     object qCadastroFIN_VENCTODIA: TIntegerField
       FieldName = 'FIN_VENCTODIA'
       Origin = 'FINANCEIRO.FIN_VENCTODIA'
+    end
+    object qCadastroFIN_PROVCCUSTO: TIBStringField
+      FieldName = 'FIN_PROVCCUSTO'
+      Origin = 'FINANCEIRO.FIN_PROVCCUSTO'
+      FixedChar = True
+      Size = 1
+    end
+    object qCadastroFIN_VALORPROVISAO: TIBBCDField
+      FieldName = 'FIN_VALORPROVISAO'
+      Origin = 'FINANCEIRO.FIN_VALORPROVISAO'
+      DisplayFormat = '0.00'
+      EditFormat = '0.00'
+      Precision = 18
+      Size = 2
     end
   end
   inherited qConsulta: TIBQuery
@@ -1715,8 +1889,8 @@ inherited FCadTitulos2: TFCadTitulos2
       
         'select * from centro_custo where centro_custo.cct_id>-1 order by' +
         ' centro_custo.cct_descricao')
-    Left = 536
-    Top = 160
+    Left = 512
+    Top = 280
     object qCentroCustoGridCCT_ID: TIntegerField
       FieldName = 'CCT_ID'
       Origin = 'CENTRO_CUSTO.CCT_ID'
@@ -1734,8 +1908,8 @@ inherited FCadTitulos2: TFCadTitulos2
   end
   object dsCentroCustoGrid: TDataSource
     DataSet = qCentroCustoGrid
-    Left = 568
-    Top = 160
+    Left = 544
+    Top = 280
   end
   object qExisteParcela: TIBQuery
     Database = DMConexao.IBConexao
@@ -2184,8 +2358,8 @@ inherited FCadTitulos2: TFCadTitulos2
       'begin'
       ''
       'end.')
-    Left = 224
-    Top = 320
+    Left = 304
+    Top = 248
     Datasets = <>
     Variables = <>
     Style = <>
@@ -2203,5 +2377,51 @@ inherited FCadTitulos2: TFCadTitulos2
       FieldName = 'ID'
       Required = True
     end
+  end
+  object qParcelasCentroCusto: TIBQuery
+    Database = DMConexao.IBConexao
+    Transaction = DMConexao.IBTransacao
+    BufferChunks = 1000
+    CachedUpdates = False
+    DataSource = dsParcelas
+    SQL.Strings = (
+      'select d.DET_PAR_ID,'
+      '       o.CCT_DESCRICAO,'
+      '       sum(d.DET_VALOR) valor'
+      '  from parcelas_detalhe d,'
+      '       CENTRO_CUSTO o'
+      ' where d.DET_FLAG = o.CCT_ID'
+      '   and det_par_id= :PAR_ID'
+      ' group by o.CCT_DESCRICAO, d.DET_PAR_ID'
+      ' order by 2')
+    Left = 336
+    Top = 304
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'PAR_ID'
+        ParamType = ptUnknown
+        Size = 4
+      end>
+    object qParcelasCentroCustoDET_PAR_ID: TIntegerField
+      FieldName = 'DET_PAR_ID'
+      Origin = 'PARCELAS_DETALHE.DET_PAR_ID'
+      Required = True
+    end
+    object qParcelasCentroCustoCCT_DESCRICAO: TIBStringField
+      FieldName = 'CCT_DESCRICAO'
+      Origin = 'CENTRO_CUSTO.CCT_DESCRICAO'
+      Size = 100
+    end
+    object qParcelasCentroCustoVALOR: TIBBCDField
+      FieldName = 'VALOR'
+      Precision = 18
+      Size = 2
+    end
+  end
+  object dsParcelasCentroCusto: TDataSource
+    DataSet = qParcelasCentroCusto
+    Left = 368
+    Top = 304
   end
 end

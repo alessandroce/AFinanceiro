@@ -288,7 +288,7 @@ object FTitulosAPagar: TFTitulosAPagar
         Height = 22
         MaxLength = 4
         MaxValue = 2050
-        MinValue = 2010
+        MinValue = 2000
         TabOrder = 3
         Value = 2015
       end

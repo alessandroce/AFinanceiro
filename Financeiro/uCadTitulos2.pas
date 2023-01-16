@@ -277,6 +277,31 @@ type
     ibDetalheParcelasDET_ID_PAI: TIntegerField;
     qGetIdParcelasDetalhe: TIBQuery;
     qGetIdParcelasDetalheID: TLargeintField;
+    TabSheet1: TTabSheet;
+    cxGrid4: TcxGrid;
+    cxGridDBTableView4: TcxGridDBTableView;
+    cxGridDBTableView5: TcxGridDBTableView;
+    cxGridDBColumn7: TcxGridDBColumn;
+    cxGridDBColumn8: TcxGridDBColumn;
+    cxGridDBColumn9: TcxGridDBColumn;
+    cxGridDBColumn16: TcxGridDBColumn;
+    cxGridDBColumn17: TcxGridDBColumn;
+    cxGridDBColumn18: TcxGridDBColumn;
+    cxGridDBTableView6: TcxGridDBTableView;
+    cxGridLevel2: TcxGridLevel;
+    qParcelasCentroCusto: TIBQuery;
+    dsParcelasCentroCusto: TDataSource;
+    qParcelasCentroCustoDET_PAR_ID: TIntegerField;
+    qParcelasCentroCustoCCT_DESCRICAO: TIBStringField;
+    qParcelasCentroCustoVALOR: TIBBCDField;
+    cxGridDBTableView4DET_PAR_ID: TcxGridDBColumn;
+    cxGridDBTableView4CCT_DESCRICAO: TcxGridDBColumn;
+    cxGridDBTableView4VALOR: TcxGridDBColumn;
+    SpeedButton2: TSpeedButton;
+    qCadastroFIN_PROVCCUSTO: TIBStringField;
+    Label17: TLabel;
+    DBEdit6: TDBEdit;
+    qCadastroFIN_VALORPROVISAO: TIBBCDField;
     procedure FormShow(Sender: TObject);
     procedure qCadastroAfterOpen(DataSet: TDataSet);
     procedure qParcelasAfterInsert(DataSet: TDataSet);
@@ -313,6 +338,7 @@ type
       ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
       AShift: TShiftState; var AHandled: Boolean);
     procedure BitBtn1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
   private
     { Private declarations }
     vSQL_TITULO : String;
@@ -335,7 +361,7 @@ const
 implementation
 
 uses uFerramentas, uDetalheParcelas, uDMConexao, uClassAvisos,
-  uInformeDadosParcelasDet, uTransferirParcelasDet;
+  uInformeDadosParcelasDet, uTransferirParcelasDet, uCadTitulos2Provisao;
 
 {$R *.dfm}
 
@@ -395,6 +421,9 @@ begin
 
   qCentroCustoGrid.Close;
   qCentroCustoGrid.Open;
+
+  qParcelasCentroCusto.Close;
+  qParcelasCentroCusto.Open;
 
 end;
 
@@ -859,6 +888,19 @@ begin
     getVariavelDesign('NOMEUSUARIO',QuotedStr(DadosLogin.Nome));
     ImprimirAlterarRelatorio(0,'PagamentosPorCentroCustoAnual','Pagamentos Por Centro de Custo - Anual');
   end;
+end;
+
+procedure TFCadTitulos2.SpeedButton2Click(Sender: TObject);
+begin
+  inherited;
+  FCadTitulos2Provisao := TFCadTitulos2Provisao.Create(nil);
+  FCadTitulos2Provisao.FMes    := MonthOf(qParcelasPAR_VENCTO.AsDateTime);
+  FCadTitulos2Provisao.FAno    := YearOf(qParcelasPAR_VENCTO.AsDateTime);
+  FCadTitulos2Provisao.FCCusto := qParcelasPAR_FLAG.AsInteger;
+  FCadTitulos2Provisao.FFinan  := qParcelasPAR_FIN_ID.AsInteger;
+  FCadTitulos2Provisao.FUsu    := DadosLogin.Id;
+  FCadTitulos2Provisao.ShowModal;
+  FCadTitulos2Provisao.Free;
 end;
 
 end.
