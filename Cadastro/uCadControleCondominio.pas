@@ -73,6 +73,14 @@ type
     Bevel1: TBevel;
     SpeedButton1: TSpeedButton;
     cxButton2: TcxButton;
+    Label6: TLabel;
+    ComboBox1: TComboBox;
+    qComboMes: TIBQuery;
+    qComboMesANO_INI: TIntegerField;
+    qComboMesANO_FIM: TLargeintField;
+    ComboBox2: TComboBox;
+    Label7: TLabel;
+    Label8: TLabel;
     procedure TBImprimirClick(Sender: TObject);
     procedure qCadastroNewRecord(DataSet: TDataSet);
     procedure dsCadastroDataChange(Sender: TObject; Field: TField);
@@ -83,8 +91,13 @@ type
     procedure qCadastroAfterOpen(DataSet: TDataSet);
     procedure SpeedButton1Click(Sender: TObject);
     procedure cxButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure ComboBox2Change(Sender: TObject);
   private
     { Private declarations }
+    procedure getComboMesAno;
+    procedure getFiltro;
   public
     { Public declarations }
   end;
@@ -291,6 +304,81 @@ begin
    mmensagem.Lines.Add('--');
    mmensagem.Lines.Add('');
    pnmensagem.Visible := true;
+end;
+
+procedure TFCadControleCondominio.getComboMesAno;
+var i : Integer;
+    cMES : String;
+    item, ItemIndex : Integer;
+begin
+  qComboMes.Close;
+  qComboMes.Open;
+  ComboBox1.Clear;
+  item := -1;
+  ItemIndex := -1;
+  ComboBox1.Items.Add('Todos');
+  for i := qComboMesANO_INI.AsInteger to qComboMesANO_FIM.AsInteger do
+  begin
+    Inc(item);
+    if i = YearOf(Date) then
+      ItemIndex := item;
+    ComboBox1.Items.Add(IntToStr(i));
+  end;
+  ComboBox1.ItemIndex := ItemIndex + 1;
+
+
+  {--}
+  item := -1;
+  ItemIndex := -1;
+  ComboBox2.Clear;
+  ComboBox2.Items.Add('Todos');
+  for i := 1 to 12 do
+  begin
+    if i < 10 then
+      cMES := '0' + IntToStr(i)
+    else
+      cMES := IntToStr(i);
+    Inc(item);
+    if i = MonthOf(Date) then
+      ItemIndex := item;
+    ComboBox2.Items.Add(cMES);
+  end;
+  ComboBox2.ItemIndex := ItemIndex + 1;
+  {--}
+end;
+
+procedure TFCadControleCondominio.FormShow(Sender: TObject);
+begin
+  inherited;
+  getComboMesAno;
+  getFiltro;
+end;
+
+procedure TFCadControleCondominio.getFiltro;
+begin
+  qConsulta.Close;
+  if ComboBox1.ItemIndex > 0 then
+    qConsulta.SQL[06] := '   and (condominio.CON_ANO = '+ComboBox1.Text+' or 0 = '+ComboBox1.Text+') '
+  else
+    qConsulta.SQL[06] := '';
+
+  if ComboBox2.ItemIndex > 0 then
+    qConsulta.SQL[07] := '   and (condominio.CON_MESREF = '+ComboBox2.Text+' or 0 = '+ComboBox2.Text+') '
+  else
+    qConsulta.SQL[07] := '';
+  qConsulta.Open;
+end;
+
+procedure TFCadControleCondominio.ComboBox1Change(Sender: TObject);
+begin
+  inherited;
+  getFiltro;
+end;
+
+procedure TFCadControleCondominio.ComboBox2Change(Sender: TObject);
+begin
+  inherited;
+  getFiltro;
 end;
 
 end.

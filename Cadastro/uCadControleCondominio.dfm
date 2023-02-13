@@ -1,6 +1,6 @@
 inherited FCadControleCondominio: TFCadControleCondominio
-  Left = 209
-  Top = 92
+  Left = 212
+  Top = 90
   Caption = 'Controle Condominio'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -55,8 +55,29 @@ inherited FCadControleCondominio: TFCadControleCondominio
         end
       end
       inherited Panel1: TPanel
+        object Label6: TLabel
+          Left = 16
+          Top = 12
+          Width = 25
+          Height = 13
+          Caption = 'Filtro:'
+        end
+        object Label7: TLabel
+          Left = 56
+          Top = 12
+          Width = 19
+          Height = 13
+          Caption = 'Ano'
+        end
+        object Label8: TLabel
+          Left = 160
+          Top = 12
+          Width = 20
+          Height = 13
+          Caption = 'M'#234's'
+        end
         object cxButton1: TcxButton
-          Left = 2
+          Left = 282
           Top = 1
           Width = 63
           Height = 40
@@ -76,7 +97,7 @@ inherited FCadControleCondominio: TFCadControleCondominio
           LookAndFeel.NativeStyle = False
         end
         object cxButton2: TcxButton
-          Left = 66
+          Left = 346
           Top = 1
           Width = 13
           Height = 40
@@ -93,6 +114,26 @@ inherited FCadControleCondominio: TFCadControleCondominio
           OnClick = cxButton2Click
           LookAndFeel.Kind = lfStandard
           LookAndFeel.NativeStyle = False
+        end
+        object ComboBox1: TComboBox
+          Left = 80
+          Top = 8
+          Width = 65
+          Height = 21
+          ItemHeight = 13
+          TabOrder = 2
+          Text = '2023'
+          OnChange = ComboBox1Change
+        end
+        object ComboBox2: TComboBox
+          Left = 184
+          Top = 8
+          Width = 65
+          Height = 21
+          ItemHeight = 13
+          TabOrder = 3
+          Text = '01'
+          OnChange = ComboBox2Change
         end
       end
       inherited Panel2: TPanel
@@ -191,7 +232,7 @@ inherited FCadControleCondominio: TFCadControleCondominio
           Left = 10
           Top = 10
           Width = 549
-          Height = 22
+          Height = 13
           Align = alTop
           Caption = 'Mensagem'
           Font.Charset = DEFAULT_CHARSET
@@ -219,9 +260,9 @@ inherited FCadControleCondominio: TFCadControleCondominio
         end
         object mmensagem: TMemo
           Left = 10
-          Top = 32
+          Top = 23
           Width = 549
-          Height = 188
+          Height = 197
           Align = alClient
           BevelOuter = bvNone
           BorderStyle = bsNone
@@ -448,6 +489,9 @@ inherited FCadControleCondominio: TFCadControleCondominio
       
         '  left join condominio_conta on (condominio_conta.cnt_id = condo' +
         'minio.con_classif)'
+      ' where 1=1'
+      ''
+      ''
       
         'order by con_ano, con_mesref, condominio_conta.cnt_descricao, co' +
         'n_descricao')
@@ -1586,5 +1630,23 @@ inherited FCadControleCondominio: TFCadControleCondominio
     DataSet = qClassif
     Left = 544
     Top = 392
+  end
+  object qComboMes: TIBQuery
+    Database = DMConexao.IBConexao
+    Transaction = DMConexao.IBTransactionRead
+    BufferChunks = 1000
+    CachedUpdates = False
+    SQL.Strings = (
+      'select min(CONDOMINIO.CON_ANO) ano_ini'
+      '      ,(max(CONDOMINIO.CON_ANO) + 2) ano_fim'
+      '  from CONDOMINIO')
+    Left = 320
+    Top = 424
+    object qComboMesANO_INI: TIntegerField
+      FieldName = 'ANO_INI'
+    end
+    object qComboMesANO_FIM: TLargeintField
+      FieldName = 'ANO_FIM'
+    end
   end
 end
