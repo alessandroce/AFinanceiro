@@ -722,184 +722,152 @@ object FFinanceiro: TFFinanceiro
     PrintOptions.Printer = 'Padr'#227'o'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 42503.689077060200000000
-    ReportOptions.LastChange = 44518.004686620370000000
+    ReportOptions.LastChange = 44983.809114189810000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'var FDebito, FCredito : Extended;'
       '    s_usu : String;'
-      '    MesCorrente : String;'
       
-        '    FMostrarMesDestaque : Boolean;                              ' +
-        '  '
-      '        '
-      'procedure MostrarMesDestaque(pEnabled:Boolean);'
-      'begin'
-      '  FMostrarMesDestaque := pEnabled;                           '
-      '  if pEnabled then'
-      '    edMesDestaque.Color   := clWindow'
-      '  else      '
-      '    edMesDestaque.Color   := clBtnFace;'
-      '  Label2.Enabled        := pEnabled;'
+        '    MesCorrente : String;                                       ' +
+        '           '
+      'const'
+      '  SQL_RELATORIO ='
       
-        '  edMesDestaque.Enabled := pEnabled;                            ' +
-        '               '
-      'end;'
+        #39' SELECT FIN_DESCRICAO,FIN_VALORLIMITE,VALOR_PARCELAS,          ' +
+        '              '#39'#13+'
+      
+        #39'        (FIN_VALORLIMITE - VALOR_PARCELAS) SALDO_LIMITE,       ' +
+        '              '#39'#13+'
+      
+        #39'        FIN_MELHORDIA, FIN_VENCTODIA                           ' +
+        '              '#39'#13+'
+      
+        #39'   FROM (select coalesce(                                      ' +
+        '              '#39'#13+'
+      
+        #39'                (select sum(case when(coalesce(parcelas.par_val' +
+        'or,0)=0) then '#39'#13+'
+      
+        #39'                               parcelas.par_valor_pago         ' +
+        '              '#39'#13+'
+      
+        #39'                             else                              ' +
+        '              '#39'#13+'
+      
+        #39'                               parcelas.par_valor              ' +
+        '              '#39'#13+'
+      
+        #39'                             end)                              ' +
+        '              '#39'#13+'
+      
+        #39'                    from parcelas                              ' +
+        '              '#39'#13+'
+      
+        #39'                   where parcelas.par_fin_id=financeiro.fin_id ' +
+        '              '#39'#13+'
+      
+        #39'                     and extract(month from parcelas.par_vencto' +
+        ') >= %s       '#39'#13+'
+      
+        #39'                     and extract(year from parcelas.par_vencto)' +
+        ' >= %s        '#39'#13+'
+      
+        #39'                  ) ,0) valor_parcelas,                        ' +
+        '              '#39'#13+'
+      
+        #39'                financeiro.FIN_DESCRICAO,                      ' +
+        '              '#39'#13+'
+      
+        #39'                (SELECT N_LIMITE FROM PR_RETORNA_LIMITE(finance' +
+        'iro.FIN_ID)) FIN_VALORLIMITE, '#39'#13+'
+      
+        #39'                financeiro.FIN_MELHORDIA,                      ' +
+        '              '#39'#13+'
+      
+        #39'                financeiro.FIN_VENCTODIA                       ' +
+        '              '#39'#13+'
+      
+        #39'           from financeiro                                     ' +
+        '              '#39'#13+'
+      
+        #39'          where 1=1                                            ' +
+        '              '#39'#13+'
+      
+        #39'            and financeiro.fin_inativo = '#39#39'N'#39#39'                 ' +
+        '              '#39'#13+'
+      
+        #39'            and financeiro.fin_debcred = '#39#39'D'#39#39'                 ' +
+        '              '#39'#13+'
+      
+        #39'            and exists (select usuario_visao.UVIS_USU_FILHO    ' +
+        '              '#39'#13+'
+      
+        #39'                          from usuario_visao                   ' +
+        '              '#39'#13+'
+      
+        #39'                         where usuario_visao.UVIS_USU_PAI = %s ' +
+        '              '#39'#13+'
+      
+        #39'                           and usuario_visao.UVIS_USU_FILHO =  ' +
+        '              '#39'#13+'
+      
+        #39'                           financeiro.fin_usu_id )             ' +
+        '              '#39'#13+'
+      
+        #39'          order by financeiro.fin_descricao)                   ' +
+        '              '#39'#13+'
+      
+        #39'  where FIN_VALORLIMITE>0                                      ' +
+        '              '#39';'
       '  '
-      'procedure ExibeTotal(pVisible:Boolean);'
-      'begin'
-      '  Memo28.Visible := pVisible;  '
-      '  Memo16.Visible := pVisible;  '
-      '  Memo17.Visible := pVisible;    '
-      '  Memo18.Visible := pVisible;    '
-      '  Memo19.Visible := pVisible;    '
-      '  Memo20.Visible := pVisible;    '
-      '  Memo21.Visible := pVisible;    '
-      '  Memo22.Visible := pVisible;    '
-      '  Memo23.Visible := pVisible;    '
-      '  Memo24.Visible := pVisible;    '
-      '  Memo25.Visible := pVisible;    '
-      '  Memo26.Visible := pVisible;    '
-      '  Memo27.Visible := pVisible;          '
-      'end;'
-      '  '
-      'procedure ExibeSaldo(pVisible:Boolean);'
-      'begin'
-      '  Memo44.Visible := pVisible;                              '
-      '  Memo32.Visible := pVisible;  '
-      '  Memo33.Visible := pVisible;    '
-      '  Memo34.Visible := pVisible;    '
-      '  Memo35.Visible := pVisible;    '
-      '  Memo36.Visible := pVisible;    '
-      '  Memo37.Visible := pVisible;    '
-      '  Memo38.Visible := pVisible;    '
-      '  Memo39.Visible := pVisible;  '
-      '  Memo40.Visible := pVisible;              '
-      '  Memo41.Visible := pVisible;    '
-      '  Memo42.Visible := pVisible;    '
-      '  Memo43.Visible := pVisible;    '
-      'end;'
       ''
-      '  '
+      '   '
       'procedure DialogPage1OnShow(Sender: TfrxComponent);'
-      'begin                                                           '
-      
-        '  edAno.ItemIndex         := edAno.Items.IndexOf(IntToStr(YearOf' +
-        '(Now)));'
-      '  edMesDestaque.ItemIndex := (MonthOf(Now)-1);'
+      'begin'
+      '  edAno.Text := IntToStr(YearOf(Now));'
       '  edAno.SetFocus;'
-      '  IBXQuery3.Open;'
-      '  FMostrarMesDestaque := False;                               '
       
-        '  //MesCorrente := trim(IBXQuery3.FieldByName('#39'Resultado'#39').asstr' +
-        'ing);'
-      '  //MesCorrente := '#39'MES_01'#39';'
-      ''
-      'end;'
-      ''
-      'procedure GroupHeader1OnBeforePrint(Sender: TfrxComponent);'
-      'begin'
-      '  if <IBXQuery1."DEBCRED">='#39'C'#39' then'
-      '  Memo29.Text := '#39'CREDITO'#39
-      '  else                      '
-      
-        '  if <IBXQuery1."DEBCRED">='#39'D'#39' then                             ' +
-        '          '
-      '  Memo29.Text := '#39'DEBITO'#39';    '
-      'end;'
-      ''
-      'procedure GroupFooter1OnAfterPrint(Sender: TfrxComponent);'
-      'begin'
-      'end;'
-      '  '
-      'function getTotal(p_debito,p_credito:Extended):Extended;'
-      'begin'
-      
-        '  if ( (p_debito>0) and (p_credito>0) )then                     ' +
-        '                                '
-      '    Result := p_debito - p_credito'
-      '  else                  '
-      
-        '  if ( p_debito>0 )then                                         ' +
-        '            '
-      '    Result := p_debito'
-      '  else                  '
-      
-        '  if ( p_credito>0 )then                                        ' +
-        '             '
-      '    Result := p_credito;  '
-      'end;'
-      '  '
-      'procedure PageFooter1OnBeforePrint(Sender: TfrxComponent);'
-      'begin'
+        '  cbMes.ItemIndex := (MonthOf(Now)-1);                          ' +
+        '                  '
       'end;'
       ''
       'procedure BitBtn1OnClick(Sender: TfrxComponent);'
       'var s_debcred : String;'
       '    i_usu : Integer;'
-      '    vMes : String;'
-      '    sFiltro : String;                                          '
-      'begin'
-      '  if Length(edMesDestaque.ItemIndex+1)=1 then'
-      '    vMes := '#39'0'#39'+IntToStr(edMesDestaque.ItemIndex+1)'
-      '  else'
       
-        '    vMes := IntToStr(edMesDestaque.ItemIndex+1);                ' +
-        '                       '
-      
-        '  if FMostrarMesDestaque then                                   ' +
-        '     '
-      '    MesCorrente := '#39'MES_'#39'+vMes        '
-      '  else      '
-      
-        '    MesCorrente := trim(IBXQuery3.FieldByName('#39'Resultado'#39').asstr' +
-        'ing);'
-      '          '
+        '    sFiltro : String;                                           ' +
+        ' '
       ''
-      '  if rbDebito.Checked then'
+      'begin'
       
-        '    s_debcred := '#39'D'#39'                                            ' +
-        '       '
-      '  else        '
-      '  if rbCredito.Checked then'
-      
-        '    s_debcred := '#39'C'#39'                                            ' +
-        '       '
-      '  else        '
-      '    s_debcred := '#39#39';'
+        '  s_debcred := '#39'D'#39';                                             ' +
+        '        '
       '  i_usu := StrToInt(<usuario>);        '
       '          '
       '  IBXQuery1.Close;'
-      '  IBXQuery1.ParamByName('#39'p_ano'#39').value := StrToInt(edAno.Text);'
-      '  IBXQuery1.ParamByName('#39'p_debcred'#39').value := s_debcred;'
-      '  IBXQuery1.ParamByName('#39'p_usu'#39').value := i_usu;'
-      '  IBXQuery1.open;'
-      ''
-      '  IBXQuery2.Close;'
-      '  IBXQuery2.ParamByName('#39'p_ano'#39').value := StrToInt(edAno.Text);'
-      '  IBXQuery2.ParamByName('#39'p_debcred'#39').value := s_debcred;'
-      '  IBXQuery2.ParamByName('#39'p_usu'#39').value := i_usu;'
-      '  IBXQuery2.open;'
-      ''
+      '  IBXQuery1.SQL.Clear;                                    '
       
-        '  sFiltro := '#39'Ano: '#39'+edAno.text+'#39' M'#234's destaque: '#39'+edMesDestaque.' +
-        'Text;                                      '
-      '    '
+        '  IBXQuery1.SQL.Text := Format(SQL_RELATORIO,[IntToStr(cbMes.Ite' +
+        'mIndex+1),edAno.Text,IntToStr(i_usu)]);'
+      '  //ShowMessage(IBXQuery1.SQL.Text);    '
+      '  IBXQuery1.open;'
+      
+        '  sFiltro := '#39'M'#234's: '#39'+cbMes.Text+'#39' | '#39';                          ' +
+        '              '
+      
+        '  sFiltro := sFiltro + '#39'Ano: '#39'+ edAno.Text+'#39' '#39';                 ' +
+        '                                        '
+      ''
       '  s_usu := <nomeusuario>;        '
       ''
-      ''
-      
-        '  sFiltro := '#39'Ano: '#39'+edAno.text+'#39' | M'#234's destaque: '#39'+edMesDestaqu' +
-        'e.Text+'#39' | Usu'#225'rio: '#39'+ s_usu;'
+      '  sFiltro := sFiltro + '#39' | Usu'#225'rio: '#39' + s_usu;'
       '  Memo31.Text := sFiltro;'
-      '  '
-      '  ExibeSaldo(rbAmbos.Checked);            '
-      '  ExibeTotal(cbMostrarTotal.Checked);  '
-      '  '
+      '    '
       'end;'
       ''
-      'procedure CheckBox1OnClick(Sender: TfrxComponent);'
+      'procedure GroupBox2OnClick(Sender: TfrxComponent);'
       'begin'
-      '  MostrarMesDestaque(CheckBox1.Checked)      '
+      ''
       'end;'
       ''
       'begin'
@@ -910,20 +878,8 @@ object FFinanceiro: TFFinanceiro
       item
         DataSet = frxReport1.IBXQuery1
         DataSetName = 'IBXQuery1'
-      end
-      item
-        DataSet = frxReport1.IBXQuery2
-        DataSetName = 'IBXQuery2'
-      end
-      item
-        DataSet = frxReport1.IBXQuery3
-        DataSetName = 'IBXQuery3'
       end>
     Variables = <
-      item
-        Name = 'MESREFERENCIA'
-        Value = Null
-      end
       item
         Name = 'DEBITO'
         Value = Null
@@ -933,16 +889,12 @@ object FFinanceiro: TFFinanceiro
         Value = Null
       end
       item
-        Name = 'RESULTADO'
-        Value = Null
-      end
-      item
         Name = 'usuario'
-        Value = '4'
+        Value = '3'
       end
       item
         Name = 'nomeusuario'
-        Value = #39'MARIA HELENA'#39
+        Value = #39'PADRAO'#39
       end>
     Style = <>
     object Data: TfrxDataPage
@@ -953,288 +905,19 @@ object FFinanceiro: TFFinanceiro
         CloseDataSource = True
         BCDToCurrency = False
         IgnoreDupParams = False
-        Params = <
-          item
-            Name = 'p_debcred'
-            DataType = ftUnknown
-          end
-          item
-            Name = 'p_usu'
-            DataType = ftUnknown
-          end
-          item
-            Name = 'p_ano'
-            DataType = ftUnknown
-          end>
+        Params = <>
         SQL.Strings = (
-          'select'
-          '       descricao,'
-          '       -----'
-          '       sum(case when extract(month from vencto)=1 then'
-          '         1'
-          '       end) QT_01,'
-          '       sum(case when extract(month from vencto)=1 then'
-          '         case when(valor_pago>0) then valor_pago else valor end'
-          '       end) mes_01,'
-          '       -----'
-          '       sum(case when extract(month from vencto)=2 then'
-          '         1'
-          '       end) QT_02,'
-          '       sum(case when extract(month from vencto)=2 then'
-          '         case when(valor_pago>0) then valor_pago else valor end'
-          '       end) mes_02,'
-          '       -----'
-          '       sum(case when extract(month from vencto)=3 then'
-          '         1'
-          '       end) QT_03,'
-          '       sum(case when extract(month from vencto)=3 then'
-          '         case when(valor_pago>0) then valor_pago else valor end'
-          '       end) mes_03,'
-          '       -----'
-          '       sum(case when extract(month from vencto)=4 then'
-          '         1'
-          '       end) QT_04,'
-          '       sum(case when extract(month from vencto)=4 then'
-          '         case when(valor_pago>0) then valor_pago else valor end'
-          '       end) mes_04,'
-          '       -----'
-          '       sum(case when extract(month from vencto)=5 then'
-          '         1'
-          '       end) QT_05,'
-          '       sum(case when extract(month from vencto)=5 then'
-          '         case when(valor_pago>0) then valor_pago else valor end'
-          '       end) mes_05,'
-          '       -----'
-          '       sum(case when extract(month from vencto)=6 then'
-          '         1'
-          '       end) QT_06,'
-          '       sum(case when extract(month from vencto)=6 then'
-          '         case when(valor_pago>0) then valor_pago else valor end'
-          '       end) mes_06,'
-          '       -----'
-          '       sum(case when extract(month from vencto)=7 then'
-          '         1'
-          '       end) QT_07,'
-          '       sum(case when extract(month from vencto)=7 then'
-          '         case when(valor_pago>0) then valor_pago else valor end'
-          '       end) mes_07,'
-          '       -----'
-          '       sum(case when extract(month from vencto)=8 then'
-          '         1'
-          '       end) QT_08,'
-          '       sum(case when extract(month from vencto)=8 then'
-          '         case when(valor_pago>0) then valor_pago else valor end'
-          '       end) mes_08,'
-          '       -----'
-          '       sum(case when extract(month from vencto)=9 then'
-          '         1'
-          '       end) QT_09,'
-          '       sum(case when extract(month from vencto)=9 then'
-          '         case when(valor_pago>0) then valor_pago else valor end'
-          '       end) mes_09,'
-          '       -----'
-          '       sum(case when extract(month from vencto)=10 then'
-          '         1'
-          '       end) QT_10,'
-          '       sum(case when extract(month from vencto)=10 then'
-          '         case when(valor_pago>0) then valor_pago else valor end'
-          '       end) mes_10,'
-          '       -----'
-          '       sum(case when extract(month from vencto)=11 then'
-          '         1'
-          '       end) QT_11,'
-          '       sum(case when extract(month from vencto)=11 then'
-          '         case when(valor_pago>0) then valor_pago else valor end'
-          '       end) mes_11,'
-          '       -----'
-          '       sum(case when extract(month from vencto)=12 then'
-          '         1'
-          '        end) QT_12,'
-          ''
-          '       sum(case when extract(month from vencto)=12 then'
-          '         case when(valor_pago>0) then valor_pago else valor end'
-          '       end) mes_12,'
-          '       -----'
-          '       debcred'
-          '       -----'
-          '  from sp_relpagar_centrocusto('#39'N'#39',:p_debcred,:p_usu)'
-          ' where 1=1'
-          '   and extract(year from vencto)=:p_ano'
-          ' group by descricao,debcred'
+          'SELECT cast('#39#39' as varchar(100)) FIN_DESCRICAO,'
+          '       cast(0 as numeric(12,2)) FIN_VALORLIMITE,'
+          '       cast(0 as numeric(12,2)) VALOR_PARCELAS,'
+          '       cast(0 as numeric(12,2)) SALDO_LIMITE,'
+          '       cast(0 as numeric(12,2)) FIN_VENCTODIA,'
+          '       cast(0 as numeric(12,2)) FIN_MELHORDIA           '
           
-            'ORDER BY DEBCRED, DESCRICAO                                     ' +
+            '  FROM RDB$DATABASE                                             ' +
             '                          ')
         pLeft = 32
         pTop = 16
-        Parameters = <
-          item
-            Name = 'p_debcred'
-            DataType = ftUnknown
-          end
-          item
-            Name = 'p_usu'
-            DataType = ftUnknown
-          end
-          item
-            Name = 'p_ano'
-            DataType = ftUnknown
-          end>
-      end
-      object IBXQuery2: TfrxIBXQuery
-        UserName = 'IBXQuery2'
-        CloseDataSource = True
-        BCDToCurrency = False
-        IgnoreDupParams = False
-        Params = <
-          item
-            Name = 'p_debcred'
-            DataType = ftUnknown
-          end
-          item
-            Name = 'p_usu'
-            DataType = ftUnknown
-          end
-          item
-            Name = 'p_ano'
-            DataType = ftUnknown
-          end>
-        SQL.Strings = (
-          'select sum(case when (debcred='#39'D'#39') then'
-          '        MES_01 *-1 else MES_01 end) MES_01,'
-          '       sum(case when (debcred='#39'D'#39') then'
-          '        MES_02 *-1 else MES_02 end) MES_02,'
-          '       sum(case when (debcred='#39'D'#39') then'
-          '        MES_03 *-1 else MES_03 end) MES_03,'
-          '       sum(case when (debcred='#39'D'#39') then'
-          '        MES_04 *-1 else MES_04 end) MES_04,'
-          '       sum(case when (debcred='#39'D'#39') then'
-          '        MES_05 *-1 else MES_05 end) MES_05,'
-          '       sum(case when (debcred='#39'D'#39') then'
-          '        MES_06 *-1 else MES_06 end) MES_06,'
-          '       sum(case when (debcred='#39'D'#39') then'
-          '        MES_07 *-1 else MES_07 end) MES_07,'
-          '       sum(case when (debcred='#39'D'#39') then'
-          '        MES_08 *-1 else MES_08 end) MES_08,'
-          '       sum(case when (debcred='#39'D'#39') then'
-          '        MES_09 *-1 else MES_09 end) MES_09,'
-          '       sum(case when (debcred='#39'D'#39') then'
-          '        MES_10 *-1 else MES_10 end) MES_10,'
-          '       sum(case when (debcred='#39'D'#39') then'
-          '        MES_11 *-1 else MES_11 end) MES_11,'
-          '       sum(case when (debcred='#39'D'#39') then'
-          '        MES_12 *-1 else MES_12 end) MES_12'
-          '  from (select descricao,'
-          '               sum(case when extract(month from vencto)=1 then'
-          
-            '                 case when(valor_pago>0) then valor_pago else va' +
-            'lor end'
-          '               end) mes_01,'
-          '               sum(case when extract(month from vencto)=2 then'
-          
-            '                 case when(valor_pago>0) then valor_pago else va' +
-            'lor end'
-          '               end) mes_02,'
-          '               sum(case when extract(month from vencto)=3 then'
-          
-            '                 case when(valor_pago>0) then valor_pago else va' +
-            'lor end'
-          '               end) mes_03,'
-          '               sum(case when extract(month from vencto)=4 then'
-          
-            '                 case when(valor_pago>0) then valor_pago else va' +
-            'lor end'
-          '               end) mes_04,'
-          '               sum(case when extract(month from vencto)=5 then'
-          
-            '                 case when(valor_pago>0) then valor_pago else va' +
-            'lor end'
-          '               end) mes_05,'
-          '               sum(case when extract(month from vencto)=6 then'
-          
-            '                 case when(valor_pago>0) then valor_pago else va' +
-            'lor end'
-          '               end) mes_06,'
-          '               sum(case when extract(month from vencto)=7 then'
-          
-            '                 case when(valor_pago>0) then valor_pago else va' +
-            'lor end'
-          '               end) mes_07,'
-          '               sum(case when extract(month from vencto)=8 then'
-          
-            '                 case when(valor_pago>0) then valor_pago else va' +
-            'lor end'
-          '               end) mes_08,'
-          '               sum(case when extract(month from vencto)=9 then'
-          
-            '                 case when(valor_pago>0) then valor_pago else va' +
-            'lor end'
-          '               end) mes_09,'
-          '               sum(case when extract(month from vencto)=10 then'
-          
-            '                 case when(valor_pago>0) then valor_pago else va' +
-            'lor end'
-          '               end) mes_10,'
-          '               sum(case when extract(month from vencto)=11 then'
-          
-            '                 case when(valor_pago>0) then valor_pago else va' +
-            'lor end'
-          '               end) mes_11,'
-          '               sum(case when extract(month from vencto)=12 then'
-          
-            '                 case when(valor_pago>0) then valor_pago else va' +
-            'lor end'
-          '               end) mes_12,'
-          '               debcred'
-          '          from sp_relpagar_centrocusto('#39'N'#39',:p_debcred,:p_usu)'
-          '         where 1=1'
-          '           and extract(year from vencto)=:p_ano'
-          '         group by descricao,debcred'
-          
-            '        ORDER BY DEBCRED )                                      ' +
-            '                           ')
-        pLeft = 32
-        pTop = 72
-        Parameters = <
-          item
-            Name = 'p_debcred'
-            DataType = ftUnknown
-          end
-          item
-            Name = 'p_usu'
-            DataType = ftUnknown
-          end
-          item
-            Name = 'p_ano'
-            DataType = ftUnknown
-          end>
-      end
-      object IBXQuery3: TfrxIBXQuery
-        UserName = 'IBXQuery3'
-        CloseDataSource = True
-        BCDToCurrency = False
-        IgnoreDupParams = False
-        Params = <>
-        SQL.Strings = (
-          'select case'
-          '         when(extract(month from current_date)=1)  then '#39'MES_01'#39
-          '         when(extract(month from current_date)=2)  then '#39'MES_02'#39
-          '         when(extract(month from current_date)=3)  then '#39'MES_03'#39
-          '         when(extract(month from current_date)=4)  then '#39'MES_04'#39
-          '         when(extract(month from current_date)=5)  then '#39'MES_05'#39
-          '         when(extract(month from current_date)=6)  then '#39'MES_06'#39
-          '         when(extract(month from current_date)=7)  then '#39'MES_07'#39
-          '         when(extract(month from current_date)=8)  then '#39'MES_08'#39
-          '         when(extract(month from current_date)=9)  then '#39'MES_09'#39
-          '         when(extract(month from current_date)=10) then '#39'MES_10'#39
-          '         when(extract(month from current_date)=11) then '#39'MES_11'#39
-          '         when(extract(month from current_date)=12) then '#39'MES_12'#39
-          '        end resultado'
-          '  from rdb$database'
-          
-            '                                                                ' +
-            ' ')
-        pLeft = 32
-        pTop = 128
         Parameters = <>
       end
     end
@@ -1244,17 +927,17 @@ object FFinanceiro: TFFinanceiro
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      Caption = 'Pagamentos por Centro Custo Anual'
-      Height = 291.000000000000000000
-      ClientHeight = 253.000000000000000000
+      Caption = 'Pagamentos por Centro Custo Mensal'
+      Height = 243.000000000000000000
+      ClientHeight = 205.000000000000000000
       Left = 292.000000000000000000
       Top = 119.000000000000000000
-      Width = 370.000000000000000000
-      ClientWidth = 354.000000000000000000
+      Width = 386.000000000000000000
+      ClientWidth = 370.000000000000000000
       OnShow = 'DialogPage1OnShow'
       object BitBtn1: TfrxBitBtnControl
         Left = 188.000000000000000000
-        Top = 196.000000000000000000
+        Top = 108.000000000000000000
         Width = 91.000000000000000000
         Height = 33.000000000000000000
         Font.Charset = DEFAULT_CHARSET
@@ -1289,7 +972,7 @@ object FFinanceiro: TFFinanceiro
       end
       object BitBtn2: TfrxBitBtnControl
         Left = 92.000000000000000000
-        Top = 196.000000000000000000
+        Top = 108.000000000000000000
         Width = 91.000000000000000000
         Height = 33.000000000000000000
         Font.Charset = DEFAULT_CHARSET
@@ -1321,62 +1004,6 @@ object FFinanceiro: TFFinanceiro
         ModalResult = 2
         NumGlyphs = 2
       end
-      object GroupBox1: TfrxGroupBoxControl
-        Left = 20.000000000000000000
-        Top = 76.000000000000000000
-        Width = 337.000000000000000000
-        Height = 65.000000000000000000
-        ShowHint = True
-        Color = 15916757
-        object rbDebito: TfrxRadioButtonControl
-          Left = 36.000000000000000000
-          Top = 28.000000000000000000
-          Width = 69.000000000000000000
-          Height = 17.000000000000000000
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ShowHint = True
-          Caption = 'Debito'
-          Checked = True
-          Color = 15916757
-        end
-        object rbCredito: TfrxRadioButtonControl
-          Left = 144.000000000000000000
-          Top = 28.000000000000000000
-          Width = 69.000000000000000000
-          Height = 17.000000000000000000
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ShowHint = True
-          Caption = 'Credito'
-          TabStop = False
-          Color = 15916757
-        end
-        object rbAmbos: TfrxRadioButtonControl
-          Left = 248.000000000000000000
-          Top = 28.000000000000000000
-          Width = 69.000000000000000000
-          Height = 17.000000000000000000
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ShowHint = True
-          Caption = 'Ambos'
-          TabStop = False
-          Color = 15916757
-        end
-      end
       object GroupBox2: TfrxGroupBoxControl
         Left = 20.000000000000000000
         Top = 8.000000000000000000
@@ -1384,47 +1011,30 @@ object FFinanceiro: TFFinanceiro
         Height = 65.000000000000000000
         ShowHint = True
         Color = 15916757
-        object edAno: TfrxComboBoxControl
-          Left = 40.000000000000000000
-          Top = 32.000000000000000000
-          Width = 73.000000000000000000
-          Height = 22.000000000000000000
+        OnClick = 'GroupBox2OnClick'
+        object edAno: TfrxMaskEditControl
+          Left = 160.000000000000000000
+          Top = 24.000000000000000000
+          Width = 80.000000000000000000
+          Height = 21.000000000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -12
+          Font.Height = -13
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
           ShowHint = True
           Color = clWindow
-          Items.Strings = (
-            '2017'
-            '2018'
-            '2019'
-            '2020'
-            '2021'
-            '2022'
-            '2023'
-            '2024'
-            '2025')
-          Style = csOwnerDrawFixed
-          Text = '2017'
-          ItemIndex = 0
+          MaxLength = 0
+          Text = '2018'
         end
-        object edMesDestaque: TfrxComboBoxControl
-          Left = 144.000000000000000000
-          Top = 32.000000000000000000
-          Width = 109.000000000000000000
-          Height = 22.000000000000000000
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          Enabled = False
+        object cbMes: TfrxComboBoxControl
+          Left = 8.000000000000000000
+          Top = 24.000000000000000000
+          Width = 145.000000000000000000
+          Height = 21.000000000000000000
           ShowHint = True
-          Color = clBtnFace
+          Color = clWindow
           Items.Strings = (
             'JANEIRO'
             'FEVEREIRO'
@@ -1435,64 +1045,17 @@ object FFinanceiro: TFFinanceiro
             'JULHO'
             'AGOSTO'
             'SETEMBRO'
-            'OUTUBRO '
+            'OUTUBRO'
             'NOVEMBRO'
             'DEZEMBRO')
-          Style = csOwnerDrawFixed
           Text = 'JANEIRO'
           ItemIndex = 0
         end
-        object Label1: TfrxLabelControl
-          Left = 40.000000000000000000
-          Top = 16.000000000000000000
-          Width = 19.000000000000000000
-          Height = 13.000000000000000000
-          ShowHint = True
-          Caption = 'Ano'
-          Color = 15916757
-        end
-        object Label2: TfrxLabelControl
-          Left = 144.000000000000000000
-          Top = 16.000000000000000000
-          Width = 67.000000000000000000
-          Height = 13.000000000000000000
-          Enabled = False
-          ShowHint = True
-          Caption = 'M'#234's destaque'
-          Color = 15916757
-        end
-        object CheckBox1: TfrxCheckBoxControl
-          Left = 128.000000000000000000
-          Top = 34.500000000000000000
-          Width = 13.000000000000000000
-          Height = 17.000000000000000000
-          ShowHint = True
-          Color = 15916757
-          OnClick = 'CheckBox1OnClick'
-        end
-      end
-      object cbMostrarTotal: TfrxCheckBoxControl
-        Left = 24.000000000000000000
-        Top = 156.000000000000000000
-        Width = 153.000000000000000000
-        Height = 17.000000000000000000
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -13
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-        ShowHint = True
-        Caption = 'Mostar Total'
-        Checked = True
-        State = cbChecked
-        Color = 15916757
       end
     end
     object Page1: TfrxReportPage
-      Orientation = poLandscape
-      PaperWidth = 297.000000000000000000
-      PaperHeight = 210.000000000000000000
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
       PaperSize = 9
       LeftMargin = 5.000000000000000000
       RightMargin = 5.000000000000000000
@@ -1500,10 +1063,10 @@ object FFinanceiro: TFFinanceiro
       BottomMargin = 5.000000000000000000
       object ReportTitle1: TfrxReportTitle
         Height = 37.795275590000000000
-        Top = 18.897650000000000000
-        Width = 1084.725110000000000000
+        Top = 16.000000000000000000
+        Width = 755.906000000000000000
         object Memo4: TfrxMemoView
-          Width = 903.307670000000000000
+          Width = 434.645950000000000000
           Height = 18.897650000000000000
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -1512,11 +1075,11 @@ object FFinanceiro: TFFinanceiro
           Font.Name = 'Arial'
           Font.Style = [fsBold]
           Memo.UTF8 = (
-            'RELAT'#195#8220'RIO DE T'#195#141'TULOS POR CENTRO CUSTO - M'#195#8240'DIA ANUAL')
+            'RELAT'#195#8220'RIO DE LIMITE DE CR'#195#8240'DITOS')
           ParentFont = False
         end
         object Memo30: TfrxMemoView
-          Left = 948.662030000000000000
+          Left = 619.842920000000000000
           Top = 18.897650000000000000
           Width = 136.063080000000000000
           Height = 18.897650000000000000
@@ -1532,7 +1095,7 @@ object FFinanceiro: TFFinanceiro
           ParentFont = False
         end
         object Memo3: TfrxMemoView
-          Left = 948.662030000000000000
+          Left = 619.842920000000000000
           Width = 136.063080000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -1548,7 +1111,7 @@ object FFinanceiro: TFFinanceiro
         end
         object Memo31: TfrxMemoView
           Top = 18.897650000000000000
-          Width = 903.307670000000000000
+          Width = 434.645950000000000000
           Height = 18.897650000000000000
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -1560,381 +1123,153 @@ object FFinanceiro: TFFinanceiro
         end
       end
       object PageFooter1: TfrxPageFooter
-        Height = 26.456710000000000000
-        Top = 359.055350000000000000
-        Width = 1084.725110000000000000
+        Top = 216.000000000000000000
+        Width = 755.906000000000000000
         OnBeforePrint = 'PageFooter1OnBeforePrint'
       end
       object MasterData1: TfrxMasterData
-        Height = 15.118110240000000000
-        Top = 200.315090000000000000
-        Width = 1084.725110000000000000
+        Height = 18.897637800000000000
+        Top = 132.000000000000000000
+        Width = 755.906000000000000000
         DataSet = frxReport1.IBXQuery1
         DataSetName = 'IBXQuery1'
         RowCount = 0
-        object Memo45: TfrxMemoView
-          Width = 1084.725110000000000000
-          Height = 15.118110240000000000
+        object Memo11: TfrxMemoView
+          Width = 755.905511810000000000
+          Height = 18.897650000000000000
           ShowHint = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          HAlign = haRight
           Highlight.Font.Charset = DEFAULT_CHARSET
           Highlight.Font.Color = clRed
-          Highlight.Font.Height = -11
+          Highlight.Font.Height = -13
           Highlight.Font.Name = 'Arial'
           Highlight.Font.Style = []
-          Highlight.Color = 15921906
-          Highlight.Condition = '<LINE> mod 2 = 0'
-          ParentFont = False
+          Highlight.Color = 15658734
+          Highlight.Condition = '<line> mod 2 <> 0'
         end
         object IBXQuery1DESCRICAO: TfrxMemoView
           Left = -0.000000000000000839
-          Width = 177.637910000000000000
-          Height = 15.118120000000000000
+          Width = 370.393705670000000000
+          Height = 18.897637800000000000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           Memo.UTF8 = (
-            '[IBXQuery1."DESCRICAO"]')
+            '[IBXQuery1."FIN_DESCRICAO"]')
           ParentFont = False
         end
-        object IBXQuery1MES_01: TfrxMemoView
-          Left = 177.637910000000000000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
+        object IBXQuery1FIN_VALORLIMITE: TfrxMemoView
+          Left = 506.457020000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
           DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
           HAlign = haRight
           Memo.UTF8 = (
-            '[IIF(<IBXQuery1."MES_01">>0,<IBXQuery1."MES_01">,'#39#39')]')
+            '[IBXQuery1."FIN_VALORLIMITE"]')
           ParentFont = False
         end
-        object IBXQuery1MES_02: TfrxMemoView
-          Left = 234.551330000000000000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IIF(<IBXQuery1."MES_02">>0,<IBXQuery1."MES_02">,'#39#39')]')
-          ParentFont = False
-        end
-        object IBXQuery1MES_03: TfrxMemoView
-          Left = 291.023622047244100000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
+        object IBXQuery1VALOR_PARCELAS: TfrxMemoView
+          Left = 582.047620000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
           DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
           HAlign = haRight
           Memo.UTF8 = (
-            '[IIF(<IBXQuery1."MES_03">>0,<IBXQuery1."MES_03">,'#39#39')]')
+            '[IBXQuery1."VALOR_PARCELAS"]')
           ParentFont = False
         end
-        object IBXQuery1MES_04: TfrxMemoView
-          Left = 347.716535433070900000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
+        object IBXQuery1VALOR_PARCELAS1: TfrxMemoView
+          Left = 657.638220000000000000
+          Width = 98.267780000000000000
+          Height = 18.897650000000000000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
           DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.FormatStr = '%2.2n'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
           HAlign = haRight
           Memo.UTF8 = (
-            '[IIF(<IBXQuery1."MES_04">>0,<IBXQuery1."MES_04">,'#39#39')]')
+            '[IBXQuery1."SALDO_LIMITE"]')
           ParentFont = False
         end
-        object IBXQuery1MES_05: TfrxMemoView
-          Left = 404.409448818897600000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
+        object Memo8: TfrxMemoView
+          Left = 438.425480000000000000
+          Width = 68.031540000000000000
+          Height = 18.897650000000000000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
           HAlign = haRight
           Memo.UTF8 = (
-            '[IIF(<IBXQuery1."MES_05">>0,<IBXQuery1."MES_05">,'#39#39')]')
+            '[IBXQuery1."FIN_MELHORDIA"]')
           ParentFont = False
         end
-        object IBXQuery1MES_06: TfrxMemoView
-          Left = 461.102362204724400000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
+        object Memo9: TfrxMemoView
+          Left = 370.393940000000000000
+          Width = 68.031540000000000000
+          Height = 18.897650000000000000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
           HAlign = haRight
           Memo.UTF8 = (
-            '[IIF(<IBXQuery1."MES_06">>0,<IBXQuery1."MES_06">,'#39#39')]')
-          ParentFont = False
-        end
-        object IBXQuery1MES_07: TfrxMemoView
-          Left = 517.795275590551200000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IIF(<IBXQuery1."MES_07">>0,<IBXQuery1."MES_07">,'#39#39')]')
-          ParentFont = False
-        end
-        object IBXQuery1MES_08: TfrxMemoView
-          Left = 574.488188976378000000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IIF(<IBXQuery1."MES_08">>0,<IBXQuery1."MES_08">,'#39#39')]')
-          ParentFont = False
-        end
-        object IBXQuery1MES_09: TfrxMemoView
-          Left = 631.181102362204700000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IIF(<IBXQuery1."MES_09">>0,<IBXQuery1."MES_09">,'#39#39')]')
-          ParentFont = False
-        end
-        object IBXQuery1MES_10: TfrxMemoView
-          Left = 687.874015748031500000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IIF(<IBXQuery1."MES_10">>0,<IBXQuery1."MES_10">,'#39#39')]')
-          ParentFont = False
-        end
-        object IBXQuery1MES_11: TfrxMemoView
-          Left = 744.566929133858300000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IIF(<IBXQuery1."MES_11">>0,<IBXQuery1."MES_11">,'#39#39')]')
-          ParentFont = False
-        end
-        object IBXQuery1MES_12: TfrxMemoView
-          Left = 801.259842520000000000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IIF(<IBXQuery1."MES_12">>0,<IBXQuery1."MES_12">,'#39#39')]')
-          ParentFont = False
-        end
-        object Memo47: TfrxMemoView
-          Left = 857.953310000000000000
-          Width = 56.692910940000000000
-          Height = 15.118110240000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = [ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[(IIF(<IBXQuery1."MES_01"> > 0, <IBXQuery1."MES_01">, 0) +'
-            '  IIF(<IBXQuery1."MES_02"> > 0, <IBXQuery1."MES_02">, 0) +'
-            '  IIF(<IBXQuery1."MES_03"> > 0, <IBXQuery1."MES_03">, 0) +'
-            '  IIF(<IBXQuery1."MES_04"> > 0, <IBXQuery1."MES_04">, 0) +'
-            '  IIF(<IBXQuery1."MES_05"> > 0, <IBXQuery1."MES_05">, 0) +'
-            '  IIF(<IBXQuery1."MES_06"> > 0, <IBXQuery1."MES_06">, 0) +'
-            '  IIF(<IBXQuery1."MES_07"> > 0, <IBXQuery1."MES_07">, 0) +'
-            '  IIF(<IBXQuery1."MES_08"> > 0, <IBXQuery1."MES_08">, 0) +'
-            '  IIF(<IBXQuery1."MES_09"> > 0, <IBXQuery1."MES_09">, 0) +'
-            '  IIF(<IBXQuery1."MES_10"> > 0, <IBXQuery1."MES_10">, 0) +'
-            '  IIF(<IBXQuery1."MES_11"> > 0, <IBXQuery1."MES_11">, 0) +'
-            '  IIF(<IBXQuery1."MES_12"> > 0, <IBXQuery1."MES_12">, 0)) /'
-            ' '
-            ' (IIF('
-            ' (IIF(<IBXQuery1."MES_01"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_02"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_03"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_04"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_05"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_06"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_07"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_08"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_09"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_10"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_11"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_12"> > 0, 1, 0) ) = 0,1,'
-            ' '
-            ' (IIF(<IBXQuery1."MES_01"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_02"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_03"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_04"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_05"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_06"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_07"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_08"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_09"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_10"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_11"> > 0, 1, 0) +'
-            '  IIF(<IBXQuery1."MES_12"> > 0, 1, 0) )'
-            '  ))]')
+            '[IBXQuery1."FIN_VENCTODIA"]')
           ParentFont = False
         end
       end
-      object GroupHeader1: TfrxGroupHeader
-        Height = 37.795300000000000000
-        Top = 139.842610000000000000
-        Width = 1084.725110000000000000
-        OnBeforePrint = 'GroupHeader1OnBeforePrint'
-        Condition = 'IBXQuery1."DEBCRED"'
-        object Memo2: TfrxMemoView
-          Top = 18.897637800000000000
-          Width = 177.637910000000000000
-          Height = 18.897650000000000000
+      object Header1: TfrxHeader
+        Height = 41.574803150000000000
+        Top = 72.000000000000000000
+        Width = 755.906000000000000000
+        object Memo1: TfrxMemoView
+          Width = 370.393705670000000000
+          Height = 37.795275590000000000
           ShowHint = False
-          DataSetName = 'frxAPagar'
+          DataSet = frxReport1.IBXQuery1
+          DataSetName = 'IBXQuery1'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = [fsBold]
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -1942,275 +1277,32 @@ object FFinanceiro: TFFinanceiro
             'Descri'#195#167#195#163'o')
           ParentFont = False
         end
-        object Memo1: TfrxMemoView
-          Left = 177.637910000000000000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
+        object Memo2: TfrxMemoView
+          Left = 506.457020000000000000
+          Width = 75.590600000000000000
+          Height = 37.795275590000000000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
           DisplayFormat.DecimalSeparator = ','
           DisplayFormat.FormatStr = '%2.2f'
           DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'JAN')
-          ParentFont = False
-        end
-        object Memo5: TfrxMemoView
-          Left = 234.330708660000000000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'FEV')
-          ParentFont = False
-        end
-        object Memo6: TfrxMemoView
-          Left = 291.023622047244100000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'MAR')
-          ParentFont = False
-        end
-        object Memo7: TfrxMemoView
-          Left = 347.716535433070900000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'ABR')
-          ParentFont = False
-        end
-        object Memo8: TfrxMemoView
-          Left = 404.409448818897600000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'MAI')
-          ParentFont = False
-        end
-        object Memo9: TfrxMemoView
-          Left = 461.102362204724400000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'JUN')
-          ParentFont = False
-        end
-        object Memo10: TfrxMemoView
-          Left = 517.795275590000000000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'JUL')
-          ParentFont = False
-        end
-        object Memo11: TfrxMemoView
-          Left = 574.488188976378000000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'AGO')
-          ParentFont = False
-        end
-        object Memo12: TfrxMemoView
-          Left = 631.181102362204700000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'SET')
-          ParentFont = False
-        end
-        object Memo13: TfrxMemoView
-          Left = 687.874015748031500000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'OUT')
-          ParentFont = False
-        end
-        object Memo14: TfrxMemoView
-          Left = 744.566929133858300000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'NOV')
-          ParentFont = False
-        end
-        object Memo15: TfrxMemoView
-          Left = 801.259842520000000000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'DEZ')
-          ParentFont = False
-        end
-        object Memo29: TfrxMemoView
-          Width = 1085.858292130000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSetName = 'frxAPagar'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = [fsBold]
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          HAlign = haRight
+          Memo.UTF8 = (
+            'Limite de'
+            'Cr'#195#169'dito')
           ParentFont = False
         end
-        object Memo46: TfrxMemoView
-          Left = 857.953310000000000000
-          Top = 18.897650000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
+        object Memo5: TfrxMemoView
+          Left = 582.047620000000000000
+          Width = 75.590600000000000000
+          Height = 37.795275590000000000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
@@ -2219,636 +1311,84 @@ object FFinanceiro: TFFinanceiro
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'MEDIA')
-          ParentFont = False
-        end
-      end
-      object GroupFooter1: TfrxGroupFooter
-        Height = 18.897637800000000000
-        Top = 238.110390000000000000
-        Width = 1084.725110000000000000
-        OnAfterPrint = 'GroupFooter1OnAfterPrint'
-        Stretched = True
-        object Memo16: TfrxMemoView
-          Left = 177.637910000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = [fsBold]
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haRight
           Memo.UTF8 = (
-            '[SUM(<IBXQuery1."MES_01">,MasterData1)]')
+            'Total em '
+            'Parcelas')
           ParentFont = False
         end
-        object Memo17: TfrxMemoView
-          Left = 234.330708661417300000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
+        object Memo6: TfrxMemoView
+          Left = 657.638220000000000000
+          Width = 98.267780000000000000
+          Height = 37.795275590000000000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
-          DisplayFormat.FormatStr = '%2.2n'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2f'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = [fsBold]
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haRight
           Memo.UTF8 = (
-            '[SUM(<IBXQuery1."MES_02">,MasterData1)]')
+            'Saldo')
           ParentFont = False
         end
-        object Memo18: TfrxMemoView
-          Left = 291.023622047244100000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
+        object Memo7: TfrxMemoView
+          Left = 438.425480000000000000
+          Width = 68.031540000000000000
+          Height = 37.795275590000000000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
           DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
+          DisplayFormat.FormatStr = '%2.2f'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = [fsBold]
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haRight
           Memo.UTF8 = (
-            '[SUM(<IBXQuery1."MES_03">,MasterData1)]')
+            'Melhor dia')
           ParentFont = False
         end
-        object Memo19: TfrxMemoView
-          Left = 347.716535433070900000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
+        object Memo10: TfrxMemoView
+          Left = 370.393940000000000000
+          Width = 68.031540000000000000
+          Height = 37.795275590000000000
           ShowHint = False
           DataSet = frxReport1.IBXQuery1
           DataSetName = 'IBXQuery1'
           DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
+          DisplayFormat.FormatStr = '%2.2f'
           DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = [fsBold]
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
           HAlign = haRight
           Memo.UTF8 = (
-            '[SUM(<IBXQuery1."MES_04">,MasterData1)]')
-          ParentFont = False
-        end
-        object Memo20: TfrxMemoView
-          Left = 404.409448818897600000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[SUM(<IBXQuery1."MES_05">,MasterData1)]')
-          ParentFont = False
-        end
-        object Memo21: TfrxMemoView
-          Left = 461.102362204724400000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[SUM(<IBXQuery1."MES_06">,MasterData1)]')
-          ParentFont = False
-        end
-        object Memo22: TfrxMemoView
-          Left = 517.795275590551200000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[SUM(<IBXQuery1."MES_07">,MasterData1)]')
-          ParentFont = False
-        end
-        object Memo23: TfrxMemoView
-          Left = 574.488188976378000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[SUM(<IBXQuery1."MES_08">,MasterData1)]')
-          ParentFont = False
-        end
-        object Memo24: TfrxMemoView
-          Left = 631.181102362204700000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[SUM(<IBXQuery1."MES_09">,MasterData1)]')
-          ParentFont = False
-        end
-        object Memo25: TfrxMemoView
-          Left = 687.874015748031500000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[SUM(<IBXQuery1."MES_10">,MasterData1)]')
-          ParentFont = False
-        end
-        object Memo26: TfrxMemoView
-          Left = 744.566929133858300000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[SUM(<IBXQuery1."MES_11">,MasterData1)]')
-          ParentFont = False
-        end
-        object Memo27: TfrxMemoView
-          Left = 801.259842520000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[SUM(<IBXQuery1."MES_12">,MasterData1)]')
-          ParentFont = False
-        end
-        object Memo28: TfrxMemoView
-          Width = 177.637910000000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'TOTAL')
-          ParentFont = False
-        end
-        object Memo48: TfrxMemoView
-          Left = 857.953310000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[(SUM(<IBXQuery1."MES_01">,MasterData1) +'
-            '  SUM(<IBXQuery1."MES_02">,MasterData1) +'
-            '  SUM(<IBXQuery1."MES_03">,MasterData1) +'
-            '  SUM(<IBXQuery1."MES_04">,MasterData1) +'
-            '  SUM(<IBXQuery1."MES_05">,MasterData1) +'
-            '  SUM(<IBXQuery1."MES_06">,MasterData1) +'
-            '  SUM(<IBXQuery1."MES_07">,MasterData1) +'
-            '  SUM(<IBXQuery1."MES_08">,MasterData1) +'
-            '  SUM(<IBXQuery1."MES_09">,MasterData1) +'
-            '  SUM(<IBXQuery1."MES_10">,MasterData1) +'
-            '  SUM(<IBXQuery1."MES_11">,MasterData1) +'
-            '  SUM(<IBXQuery1."MES_12">,MasterData1)) / '
-            ' (IIF(SUM(<IBXQuery1."MES_01">,MasterData1) > 0,1,0) +'
-            '  IIF(SUM(<IBXQuery1."MES_01">,MasterData1) > 0,1,0) +'
-            '  IIF(SUM(<IBXQuery1."MES_01">,MasterData1) > 0,1,0) +'
-            '  IIF(SUM(<IBXQuery1."MES_01">,MasterData1) > 0,1,0) +'
-            '  IIF(SUM(<IBXQuery1."MES_01">,MasterData1) > 0,1,0) +'
-            '  IIF(SUM(<IBXQuery1."MES_01">,MasterData1) > 0,1,0) +'
-            '  IIF(SUM(<IBXQuery1."MES_01">,MasterData1) > 0,1,0) +'
-            '  IIF(SUM(<IBXQuery1."MES_01">,MasterData1) > 0,1,0) +'
-            '  IIF(SUM(<IBXQuery1."MES_01">,MasterData1) > 0,1,0) +'
-            '  IIF(SUM(<IBXQuery1."MES_01">,MasterData1) > 0,1,0) +'
-            '  IIF(SUM(<IBXQuery1."MES_01">,MasterData1) > 0,1,0) +'
-            '  IIF(SUM(<IBXQuery1."MES_01">,MasterData1) > 0,1,0) )]'
-            '')
+            'Dia Vencto')
           ParentFont = False
         end
       end
       object Footer1: TfrxFooter
-        Height = 18.897637800000000000
-        Top = 279.685220000000000000
-        Width = 1084.725110000000000000
-        object Memo32: TfrxMemoView
-          Left = 177.637910000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_01"]')
-          ParentFont = False
-        end
-        object Memo33: TfrxMemoView
-          Left = 234.330708660000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_02"]')
-          ParentFont = False
-        end
-        object Memo34: TfrxMemoView
-          Left = 291.023622047244100000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_03"]')
-          ParentFont = False
-        end
-        object Memo35: TfrxMemoView
-          Left = 347.716535433070900000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_04"]')
-          ParentFont = False
-        end
-        object Memo36: TfrxMemoView
-          Left = 404.409448818897600000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_05"]')
-          ParentFont = False
-        end
-        object Memo37: TfrxMemoView
-          Left = 461.102362204724400000
-          Width = 60.472440940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_06"]')
-          ParentFont = False
-        end
-        object Memo38: TfrxMemoView
-          Left = 517.795275590551200000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_07"]')
-          ParentFont = False
-        end
-        object Memo39: TfrxMemoView
-          Left = 574.488188976378000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_08"]')
-          ParentFont = False
-        end
-        object Memo40: TfrxMemoView
-          Left = 631.181102362204700000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_09"]')
-          ParentFont = False
-        end
-        object Memo41: TfrxMemoView
-          Left = 687.874015748031500000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_10"]')
-          ParentFont = False
-        end
-        object Memo42: TfrxMemoView
-          Left = 744.566929133858300000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_11"]')
-          ParentFont = False
-        end
-        object Memo43: TfrxMemoView
-          Left = 801.259842520000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_12"]')
-          ParentFont = False
-        end
-        object Memo44: TfrxMemoView
-          Width = 177.637910000000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          Memo.UTF8 = (
-            'SALDO')
-          ParentFont = False
-        end
-        object Memo49: TfrxMemoView
-          Left = 857.953310000000000000
-          Width = 56.692910940000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frxReport1.IBXQuery1
-          DataSetName = 'IBXQuery1'
-          DisplayFormat.DecimalSeparator = ','
-          DisplayFormat.FormatStr = '%2.2n'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Arial'
-          Font.Style = [fsBold]
-          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[IBXQuery2."MES_12"]')
-          ParentFont = False
-        end
-      end
-      object Header1: TfrxHeader
-        Top = 117.165430000000000000
-        Width = 1084.725110000000000000
+        Height = 22.677180000000000000
+        Top = 172.000000000000000000
+        Width = 755.906000000000000000
       end
     end
   end
