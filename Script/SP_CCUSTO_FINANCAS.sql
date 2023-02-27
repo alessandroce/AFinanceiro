@@ -1,25 +1,21 @@
-CREATE OR ALTER PROCEDURE SP_CCUSTO_FINANCAS (
-  P_MES INTEGER,
-  P_ANO INTEGER
-  )
-  --
-  RETURNS (
-  DESCRICAO VARCHAR(100),
-  VALOR NUMERIC(10,2),
-  PER NUMERIC(10,2),
-  PER_TOTAL NUMERIC(10,2),
-  TOTAL NUMERIC(10,2),
-  VALOR_TOTAL NUMERIC(10,2),
-  VALOR_DIF NUMERIC(10,2)
-  )
-  --
-AS
-  DECLARE VARIABLE V_VALOR NUMERIC(10,2);
-  DECLARE VARIABLE V_VALOR_TOTAL NUMERIC(10,2);
-  DECLARE VARIABLE V_TOTAL NUMERIC(10,2);
-  DECLARE VARIABLE V_PER_TOTAL NUMERIC(10,2);
-  DECLARE VARIABLE V_PER NUMERIC(10,2);
-  DECLARE VARIABLE V_CCF_ID INTEGER;
+create or alter procedure SP_CCUSTO_FINANCAS (
+    P_MES integer,
+    P_ANO integer)
+returns (
+    DESCRICAO varchar(100),
+    VALOR numeric(10,2),
+    PER numeric(10,2),
+    PER_TOTAL numeric(10,2),
+    TOTAL numeric(10,2),
+    VALOR_TOTAL numeric(10,2),
+    VALOR_DIF numeric(10,2))
+as
+declare variable V_VALOR numeric(10,2);
+declare variable V_VALOR_TOTAL numeric(10,2);
+declare variable V_TOTAL numeric(10,2);
+declare variable V_PER_TOTAL numeric(10,2);
+declare variable V_PER numeric(10,2);
+declare variable V_CCF_ID integer;
 BEGIN
   --
   SELECT SUM(SP.VALOR) VALOR
@@ -42,7 +38,7 @@ BEGIN
                  FI.CCF_DESCRICAO DESCRICAO,
                  FI.CCF_PERCENTUAL,
                  FI.CCF_ID
-            FROM SP_RELPAGAR_CENTROCUSTO_2('N','D',1) SP
+            FROM SP_RELPAGAR_CENTROCUSTO('N','D',1) SP
             LEFT JOIN CENTRO_CUSTO CE ON CE.CCT_ID = SP.CCUSTO_ID
             LEFT JOIN CENTRO_CUSTO_FINANCAS FI ON FI.CCF_ID = CE.CCT_CCF_ID
            WHERE 1=1
@@ -67,8 +63,8 @@ BEGIN
     if (COALESCE(:V_PER_TOTAL,0)>0) then
     BEGIN
       --
-      TOTAL = :V_TOTAL;
-      PER_TOTAL = COALESCE(:V_PER_TOTAL,0);
+      TOTAL       = :V_TOTAL;
+      PER_TOTAL   = COALESCE(:V_PER_TOTAL,0);
       VALOR_TOTAL = COALESCE(:V_VALOR_TOTAL,0);
       --
     END
@@ -80,8 +76,8 @@ BEGIN
        WHERE S.CCF_ID = :V_CCF_ID
         INTO :V_PER;
       --
-      TOTAL = :V_TOTAL;
-      PER_TOTAL = COALESCE(:V_PER,0);
+      TOTAL       = :V_TOTAL;
+      PER_TOTAL   = COALESCE(:V_PER,0);
       VALOR_TOTAL = ((COALESCE(:V_TOTAL,1) * :V_PER) / 100);
       --
     END
