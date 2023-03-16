@@ -20,6 +20,11 @@ inherited FCadTitulos2: TFCadTitulos2
               Kind = skCount
               Column = cxGrid1DBTableView1FIN_ID
             end>
+          object cxGrid1DBTableView1PROVISAO: TcxGridDBColumn
+            DataBinding.FieldName = 'PROVISAO'
+            Width = 20
+            IsCaptionAssigned = True
+          end
           object cxGrid1DBTableView1FIN_ID: TcxGridDBColumn
             DataBinding.FieldName = 'FIN_ID'
           end
@@ -28,6 +33,10 @@ inherited FCadTitulos2: TFCadTitulos2
           end
           object cxGrid1DBTableView1SITUACAO: TcxGridDBColumn
             DataBinding.FieldName = 'SITUACAO'
+            Visible = False
+          end
+          object cxGrid1DBTableView1PROV: TcxGridDBColumn
+            DataBinding.FieldName = 'PROV'
             Visible = False
           end
         end
@@ -234,6 +243,7 @@ inherited FCadTitulos2: TFCadTitulos2
         FocusControl = DBEdit6
       end
       inherited Panel3: TPanel
+        Top = 454
         TabOrder = 8
       end
       object DBEdit1: TDBEdit
@@ -563,7 +573,7 @@ inherited FCadTitulos2: TFCadTitulos2
         Top = 258
         Width = 722
         Height = 195
-        ActivePage = tsDetParcelas
+        ActivePage = tsParcelas
         TabOrder = 13
         object tsParcelas: TTabSheet
           Caption = 'Parcelas'
@@ -1203,43 +1213,53 @@ inherited FCadTitulos2: TFCadTitulos2
     end
   end
   inherited qConsulta: TIBQuery
-    Active = True
     SQL.Strings = (
-      'select fin_id, fin_descricao, situacao from ('
-      '       select fin_id, fin_descricao,'
-      '              case when(pago=0 ) then 0'
-      '                   when(pago>0 ) then 1'
-      '                   when(pago>=0) then 3'
-      '              end situacao'
-      
-        '         from (select financeiro.fin_id,financeiro.fin_descricao' +
-        ','
+      'select fin_id,'
+      '       fin_descricao,'
+      '       situacao,'
+      '       prov'
+      '  from ('
+      '        select fin_id, fin_descricao,'
+      '               case when(pago=0 ) then 0'
+      '                    when(pago>0 ) then 1'
+      '                    when(pago>=0) then 3'
+      '               end situacao,'
+      '               prov'
+      '          from (select financeiro.fin_id,'
+      '                       financeiro.fin_descricao,'
       '                      (select count(*) pago'
-      '                               from parcelas'
+      '                         from parcelas'
       
-        '                              where parcelas.par_fin_id=financei' +
-        'ro.fin_id'
-      '                               and parcelas.par_pago=0)'
-      '                 from financeiro'
+        '                        where parcelas.par_fin_id=financeiro.fin' +
+        '_id'
+      '                          and parcelas.par_pago = 0'
+      '                      ),'
       
-        '                 left join pessoa on pessoa.pes_id=financeiro.fi' +
-        'n_pes_id'
+        '                      case when(FINANCEIRO.FIN_VALORPROVISAO > 0' +
+        ') then 1 else 0 end prov'
+      '                  from financeiro'
       
-        '                where ((coalesce(financeiro.fin_inativo,'#39'N'#39') = :' +
-        'ativo1) or ( :ativo2 = '#39' '#39' ))'
-      '               and fin_debcred = :debcred'
+        '                  left join pessoa on pessoa.pes_id=financeiro.f' +
+        'in_pes_id'
       
-        '                  and exists (select usuario_visao.UVIS_USU_FILH' +
-        'O'
-      '                                from usuario_visao'
+        '                 where ((coalesce(financeiro.fin_inativo,'#39'N'#39') = ' +
+        ':ativo1) or ( :ativo2 = '#39' '#39' ))'
+      '                   and fin_debcred = :debcred'
       
-        '                               where usuario_visao.UVIS_USU_PAI=' +
-        ':usuario'
+        '                   and exists (select usuario_visao.UVIS_USU_FIL' +
+        'HO'
+      '                                 from usuario_visao'
       
-        '                                 and usuario_visao.UVIS_USU_FILH' +
-        'O=financeiro.FIN_USU_ID )'
+        '                                where usuario_visao.UVIS_USU_PAI' +
+        '=:usuario'
+      
+        '                                  and usuario_visao.UVIS_USU_FIL' +
+        'HO=financeiro.FIN_USU_ID'
+      '                              )'
       '               order by financeiro.fin_descricao'
-      ')) where ((situacao = :situacao1) or (:situacao2 = 3))')
+      '               )'
+      '       )'
+      ' where ((situacao = :situacao1) or (:situacao2 = 3))')
     ParamData = <
       item
         DataType = ftUnknown
@@ -1285,6 +1305,15 @@ inherited FCadTitulos2: TFCadTitulos2
     end
     object qConsultaSITUACAO: TIntegerField
       FieldName = 'SITUACAO'
+    end
+    object qConsultaPROV: TIntegerField
+      FieldName = 'PROV'
+      Required = True
+    end
+    object qConsultaPROVISAO: TIntegerField
+      FieldKind = fkCalculated
+      FieldName = 'PROVISAO'
+      Calculated = True
     end
   end
   object qParcelas: TIBDataSet

@@ -302,6 +302,10 @@ type
     Label17: TLabel;
     DBEdit6: TDBEdit;
     qCadastroFIN_VALORPROVISAO: TIBBCDField;
+    qConsultaPROV: TIntegerField;
+    qConsultaPROVISAO: TIntegerField;
+    cxGrid1DBTableView1PROVISAO: TcxGridDBColumn;
+    cxGrid1DBTableView1PROV: TcxGridDBColumn;
     procedure FormShow(Sender: TObject);
     procedure qCadastroAfterOpen(DataSet: TDataSet);
     procedure qParcelasAfterInsert(DataSet: TDataSet);
@@ -454,8 +458,14 @@ begin
   inherited;
   if AViewInfo.GridRecord.Selected then
     ACanvas.Brush.Color := clActiveCaption;
+
   if(AViewInfo.GridRecord.Values[cxGrid1DBTableView1SITUACAO.Index] = 0) then
     ACanvas.Font.Color := clGreen;
+
+  if AViewInfo.Item.Index = cxGrid1DBTableView1PROVISAO.Index then
+    if(AViewInfo.GridRecord.Values[cxGrid1DBTableView1PROV.Index] = 1) then
+      ACanvas.Canvas.Brush.Color := clBlue;
+
 end;
 
 procedure TFCadTitulos2.edQuantKeyPress(Sender: TObject; var Key: Char);
