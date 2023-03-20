@@ -306,6 +306,9 @@ type
     qConsultaPROVISAO: TIntegerField;
     cxGrid1DBTableView1PROVISAO: TcxGridDBColumn;
     cxGrid1DBTableView1PROV: TcxGridDBColumn;
+    SpeedButton3: TSpeedButton;
+    MaskEdit1: TMaskEdit;
+    Label18: TLabel;
     procedure FormShow(Sender: TObject);
     procedure qCadastroAfterOpen(DataSet: TDataSet);
     procedure qParcelasAfterInsert(DataSet: TDataSet);
@@ -343,12 +346,14 @@ type
       AShift: TShiftState; var AHandled: Boolean);
     procedure BitBtn1Click(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
   private
     { Private declarations }
     vSQL_TITULO : String;
     vPesquisa : Boolean;
     procedure getTitulos(pTitulo:String='');
     procedure GravaRegistrosFilhos(var pGravouSucesso:Boolean); override;
+
   public
     { Public declarations }
     FPagarReceber : Integer;//0=pagar 1=receber
@@ -365,7 +370,8 @@ const
 implementation
 
 uses uFerramentas, uDetalheParcelas, uDMConexao, uClassAvisos,
-  uInformeDadosParcelasDet, uTransferirParcelasDet, uCadTitulos2Provisao;
+  uInformeDadosParcelasDet, uTransferirParcelasDet, uCadTitulos2Provisao,
+  uLimiteCreditoTitulos;
 
 {$R *.dfm}
 
@@ -429,6 +435,11 @@ begin
   qParcelasCentroCusto.Close;
   qParcelasCentroCusto.Open;
 
+  MaskEdit1.Text := FormatFloat('0.00',Retorna_Saldo_LimiteCartao(MonthOf(IncMonth(Now)),
+                                                                  YearOf(IncMonth(Now)),
+                                                                  qCadastroFIN_ID.AsInteger,
+                                                                  DadosLogin.Id
+                                                                  ));
 end;
 
 procedure TFCadTitulos2.qParcelasAfterInsert(DataSet: TDataSet);
@@ -912,5 +923,30 @@ begin
   FCadTitulos2Provisao.ShowModal;
   FCadTitulos2Provisao.Free;
 end;
+
+procedure TFCadTitulos2.SpeedButton3Click(Sender: TObject);
+begin
+  inherited;
+  try
+    FLimiteCreditoTitulos := TFLimiteCreditoTitulos.Create(nil);
+    FLimiteCreditoTitulos.FId := qCadastroFIN_ID.AsInteger;
+    FLimiteCreditoTitulos.ShowModal;
+    if (FLimiteCreditoTitulos.FValorLimite > 0) and
+       (FLimiteCreditoTitulos.FValorLimite <> qCadastroFIN_VALORLIMITE.AsFloat) then
+    begin
+      if (qCadastro.State in [dsInsert,dsEdit]) then
+      begin
+        qCadastroFIN_VALORLIMITE.AsFloat := FLimiteCreditoTitulos.FValorLimite;
+        qCadastro.Post;
+      end;
+    end;
+  Except
+    on E : Exception do
+    begin
+      ShowMessage('Erro. ' + E.Message);
+    end;
+  end;
+end;
+
 
 end.

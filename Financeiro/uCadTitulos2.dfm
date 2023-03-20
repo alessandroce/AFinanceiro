@@ -1,10 +1,12 @@
 inherited FCadTitulos2: TFCadTitulos2
-  Left = 209
+  Left = 173
+  Top = 87
   Caption = 'Cadastro Titulos'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgCadastro: TPageControl
+    ActivePage = tsCadastro
     inherited tsConsulta: TTabSheet
       inherited cxGrid1: TcxGrid
         inherited cxGrid1DBTableView1: TcxGridDBTableView
@@ -211,7 +213,7 @@ inherited FCadTitulos2: TFCadTitulos2
         Caption = 'PAR_FIN_ID'
       end
       object Label13: TLabel [8]
-        Left = 328
+        Left = 336
         Top = 85
         Width = 63
         Height = 13
@@ -219,7 +221,7 @@ inherited FCadTitulos2: TFCadTitulos2
         FocusControl = DBEdit3
       end
       object Label15: TLabel [9]
-        Left = 408
+        Left = 501
         Top = 85
         Width = 51
         Height = 13
@@ -227,7 +229,7 @@ inherited FCadTitulos2: TFCadTitulos2
         FocusControl = DBEdit4
       end
       object Label16: TLabel [10]
-        Left = 488
+        Left = 573
         Top = 85
         Width = 49
         Height = 13
@@ -235,11 +237,27 @@ inherited FCadTitulos2: TFCadTitulos2
         FocusControl = DBEdit5
       end
       object Label17: TLabel [11]
-        Left = 568
+        Left = 645
         Top = 85
         Width = 41
         Height = 13
         Caption = 'Provis'#227'o'
+        FocusControl = DBEdit6
+      end
+      object SpeedButton3: TSpeedButton [12]
+        Left = 404
+        Top = 100
+        Width = 20
+        Height = 22
+        Caption = '...'
+        OnClick = SpeedButton3Click
+      end
+      object Label18: TLabel [13]
+        Left = 430
+        Top = 85
+        Width = 57
+        Height = 13
+        Caption = 'Saldo Limite'
         FocusControl = DBEdit6
       end
       inherited Panel3: TPanel
@@ -1026,40 +1044,49 @@ inherited FCadTitulos2: TFCadTitulos2
         TabOrder = 15
       end
       object DBEdit3: TDBEdit
-        Left = 328
+        Left = 336
         Top = 101
-        Width = 75
+        Width = 66
         Height = 21
         DataField = 'FIN_VALORLIMITE'
         DataSource = dsCadastro
+        ReadOnly = True
         TabOrder = 16
       end
       object DBEdit4: TDBEdit
-        Left = 408
+        Left = 501
         Top = 101
-        Width = 75
+        Width = 66
         Height = 21
         DataField = 'FIN_VENCTODIA'
         DataSource = dsCadastro
         TabOrder = 17
       end
       object DBEdit5: TDBEdit
-        Left = 488
+        Left = 573
         Top = 101
-        Width = 75
+        Width = 66
         Height = 21
         DataField = 'FIN_MELHORDIA'
         DataSource = dsCadastro
         TabOrder = 18
       end
       object DBEdit6: TDBEdit
-        Left = 568
+        Left = 645
         Top = 101
-        Width = 75
+        Width = 66
         Height = 21
         DataField = 'FIN_VALORPROVISAO'
         DataSource = dsCadastro
         TabOrder = 19
+      end
+      object MaskEdit1: TMaskEdit
+        Left = 430
+        Top = 101
+        Width = 66
+        Height = 21
+        ReadOnly = True
+        TabOrder = 20
       end
     end
   end
@@ -1186,6 +1213,8 @@ inherited FCadTitulos2: TFCadTitulos2
     object qCadastroFIN_VALORLIMITE: TIBBCDField
       FieldName = 'FIN_VALORLIMITE'
       Origin = 'FINANCEIRO.FIN_VALORLIMITE'
+      DisplayFormat = '0.00'
+      EditFormat = '0.00'
       Precision = 18
       Size = 2
     end
@@ -2392,6 +2421,19 @@ inherited FCadTitulos2: TFCadTitulos2
     Datasets = <>
     Variables = <>
     Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
+      PaperSize = 9
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+    end
   end
   object qGetIdParcelasDetalhe: TIBQuery
     Database = DMConexao.IBConexao
