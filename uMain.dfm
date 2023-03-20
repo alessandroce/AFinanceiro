@@ -722,7 +722,7 @@ object FFinanceiro: TFFinanceiro
     PrintOptions.Printer = 'Padr'#227'o'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 42503.689077060200000000
-    ReportOptions.LastChange = 44983.809114189810000000
+    ReportOptions.LastChange = 45004.491425034720000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'var FDebito, FCredito : Extended;'
@@ -732,96 +732,15 @@ object FFinanceiro: TFFinanceiro
         '           '
       'const'
       '  SQL_RELATORIO ='
-      
-        #39' SELECT FIN_DESCRICAO,FIN_VALORLIMITE,VALOR_PARCELAS,          ' +
-        '              '#39'#13+'
-      
-        #39'        (FIN_VALORLIMITE - VALOR_PARCELAS) SALDO_LIMITE,       ' +
-        '              '#39'#13+'
-      
-        #39'        FIN_MELHORDIA, FIN_VENCTODIA                           ' +
-        '              '#39'#13+'
-      
-        #39'   FROM (select coalesce(                                      ' +
-        '              '#39'#13+'
-      
-        #39'                (select sum(case when(coalesce(parcelas.par_val' +
-        'or,0)=0) then '#39'#13+'
-      
-        #39'                               parcelas.par_valor_pago         ' +
-        '              '#39'#13+'
-      
-        #39'                             else                              ' +
-        '              '#39'#13+'
-      
-        #39'                               parcelas.par_valor              ' +
-        '              '#39'#13+'
-      
-        #39'                             end)                              ' +
-        '              '#39'#13+'
-      
-        #39'                    from parcelas                              ' +
-        '              '#39'#13+'
-      
-        #39'                   where parcelas.par_fin_id=financeiro.fin_id ' +
-        '              '#39'#13+'
-      
-        #39'                     and extract(month from parcelas.par_vencto' +
-        ') >= %s       '#39'#13+'
-      
-        #39'                     and extract(year from parcelas.par_vencto)' +
-        ' >= %s        '#39'#13+'
-      
-        #39'                  ) ,0) valor_parcelas,                        ' +
-        '              '#39'#13+'
-      
-        #39'                financeiro.FIN_DESCRICAO,                      ' +
-        '              '#39'#13+'
-      
-        #39'                (SELECT N_LIMITE FROM PR_RETORNA_LIMITE(finance' +
-        'iro.FIN_ID)) FIN_VALORLIMITE, '#39'#13+'
-      
-        #39'                financeiro.FIN_MELHORDIA,                      ' +
-        '              '#39'#13+'
-      
-        #39'                financeiro.FIN_VENCTODIA                       ' +
-        '              '#39'#13+'
-      
-        #39'           from financeiro                                     ' +
-        '              '#39'#13+'
-      
-        #39'          where 1=1                                            ' +
-        '              '#39'#13+'
-      
-        #39'            and financeiro.fin_inativo = '#39#39'N'#39#39'                 ' +
-        '              '#39'#13+'
-      
-        #39'            and financeiro.fin_debcred = '#39#39'D'#39#39'                 ' +
-        '              '#39'#13+'
-      
-        #39'            and exists (select usuario_visao.UVIS_USU_FILHO    ' +
-        '              '#39'#13+'
-      
-        #39'                          from usuario_visao                   ' +
-        '              '#39'#13+'
-      
-        #39'                         where usuario_visao.UVIS_USU_PAI = %s ' +
-        '              '#39'#13+'
-      
-        #39'                           and usuario_visao.UVIS_USU_FILHO =  ' +
-        '              '#39'#13+'
-      
-        #39'                           financeiro.fin_usu_id )             ' +
-        '              '#39'#13+'
-      
-        #39'          order by financeiro.fin_descricao)                   ' +
-        '              '#39'#13+'
-      
-        #39'  where FIN_VALORLIMITE>0                                      ' +
-        '              '#39';'
-      '  '
+      #39' SELECT FIN_DESCRICAO,   '#39'#13 +'
+      #39'        FIN_VALORLIMITE, '#39'#13 +'
+      #39'        VALOR_PARCELAS,  '#39'#13 +'
+      #39'        SALDO_LIMITE,    '#39'#13 +'
+      #39'        FIN_MELHORDIA,   '#39'#13 +'
+      #39'        FIN_VENCTODIA,   '#39'#13 +'
+      #39'        FIN_ID           '#39'#13 +'
+      #39'   FROM PR_RETORNA_LIMITE_CARTAO(%S ,%S ,%S ,%S ) '#39';'
       ''
-      '   '
       'procedure DialogPage1OnShow(Sender: TfrxComponent);'
       'begin'
       '  edAno.Text := IntToStr(YearOf(Now));'
@@ -846,9 +765,12 @@ object FFinanceiro: TFFinanceiro
       '          '
       '  IBXQuery1.Close;'
       '  IBXQuery1.SQL.Clear;                                    '
-      
-        '  IBXQuery1.SQL.Text := Format(SQL_RELATORIO,[IntToStr(cbMes.Ite' +
-        'mIndex+1),edAno.Text,IntToStr(i_usu)]);'
+      '  IBXQuery1.SQL.Text := Format(SQL_RELATORIO,['
+      '    IntToStr(cbMes.ItemIndex+1),'
+      '    edAno.Text,'
+      '    '#39'0'#39',          '
+      '    IntToStr(i_usu)'
+      '    ]);'
       '  //ShowMessage(IBXQuery1.SQL.Text);    '
       '  IBXQuery1.open;'
       

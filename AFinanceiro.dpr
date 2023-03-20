@@ -46,7 +46,8 @@ uses
   uCadLimiteCreditoTitulos in 'Financeiro\uCadLimiteCreditoTitulos.pas' {FCadLimiteCreditoTitulos},
   uTitulosAPagar in 'Financeiro\uTitulosAPagar.pas' {FTitulosAPagar},
   uCadUsuarioVisao in 'Cadastro\uCadUsuarioVisao.pas' {FCadUsuarioVisao},
-  uCadTitulos2Provisao in 'Financeiro\uCadTitulos2Provisao.pas' {FCadTitulos2Provisao};
+  uCadTitulos2Provisao in 'Financeiro\uCadTitulos2Provisao.pas' {FCadTitulos2Provisao},
+  uLimiteCreditoTitulos in 'Financeiro\uLimiteCreditoTitulos.pas' {FLimiteCreditoTitulos};
 
 {$R *.res}
 
@@ -59,8 +60,6 @@ begin
   Application.CreateForm(TFdesign, Fdesign);
   Application.CreateForm(TFimprel, Fimprel);
   Application.CreateForm(TFRelatorio, FRelatorio);
-  Application.CreateForm(TFTitulosAPagar, FTitulosAPagar);
-  Application.CreateForm(TFCadUsuarioVisao, FCadUsuarioVisao);
-  Application.CreateForm(TFCadTitulos2Provisao, FCadTitulos2Provisao);
+  Application.CreateForm(TFLimiteCreditoTitulos, FLimiteCreditoTitulos);
   Application.Run;
 end.
