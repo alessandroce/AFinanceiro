@@ -2,7 +2,8 @@ unit uFerramentas;
 
 interface
 
-uses Windows, Forms, Dialogs, SysUtils, frxClass, uClassServidorIni;
+uses Windows, Forms, Dialogs, SysUtils, frxClass, uClassServidorIni,
+     IBQuery, uDMConexao;
 
 type
   TRLogin = Record
@@ -32,6 +33,8 @@ var
   function mensagem(tipo: char; msg: string; barra: string): boolean;
   procedure NaoDesenvolvidoAinda;
   procedure getVariavelDesign(pCampo, pConteudo:String);
+
+  function Retorna_Saldo_LimiteCartao(AMes: Integer; AAno: Integer; AFinId: Integer; AUsu: Integer): Double;
 
 implementation
 
@@ -185,5 +188,20 @@ procedure getVariavelDesign(pCampo, pConteudo:String);
 begin
   Fdesign.frReport1.Variables[pCampo] := pConteudo;
 end;
+
+function Retorna_Saldo_LimiteCartao(AMes: Integer; AAno: Integer; AFinId: Integer; AUsu: Integer): Double;
+var qTemp : TIBQuery;
+begin
+  qTemp := TIBQuery.Create(nil);
+  qTemp.Database := DMConexao.IBConexao;
+  qTemp.SQL.Text := 'SELECT SALDO_LIMITE FROM PR_RETORNA_LIMITE_CARTAO(:MES,:ANO,:FIN_ID,:USU)';
+  qTemp.ParamByName('MES').AsInteger    := AMes;
+  qTemp.ParamByName('ANO').AsInteger    := AAno;
+  qTemp.ParamByName('FIN_ID').AsInteger := AFinId;
+  qTemp.ParamByName('USU').AsInteger    := AUsu;
+  qTemp.Open;
+  Result := qTemp.FieldByName('SALDO_LIMITE').AsFloat;
+end;
+
 
 end.
