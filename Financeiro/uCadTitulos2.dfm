@@ -1,8 +1,9 @@
 inherited FCadTitulos2: TFCadTitulos2
-  Left = 173
-  Top = 87
+  Left = 109
+  Top = 81
   Caption = 'Cadastro Titulos'
   OldCreateOrder = True
+  PopupMenu = PopupMenu1
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgCadastro: TPageControl
@@ -109,7 +110,7 @@ inherited FCadTitulos2: TFCadTitulos2
           Font.Style = []
           ParentFont = False
           TabOrder = 5
-          OnClick = BitBtn1Click
+          OnClick = RelatrioAnual1Click
           Glyph.Data = {
             E6040000424DE604000000000000360000002800000014000000140000000100
             180000000000B0040000120B0000120B00000000000000000000FFFFFFFFFFFF
@@ -2494,5 +2495,24 @@ inherited FCadTitulos2: TFCadTitulos2
     DataSet = qParcelasCentroCusto
     Left = 368
     Top = 304
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 232
+    Top = 192
+    object tulosapagar1: TMenuItem
+      Caption = 'T'#237'tulos a pagar'
+      OnClick = tulosapagar1Click
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object RelatrioAnual1: TMenuItem
+      Caption = 'Relat'#243'rio Anual'
+      OnClick = RelatrioAnual1Click
+    end
+    object tuloscomLimitesdeCreditos1: TMenuItem
+      Caption = 'T'#237'tulos com Limites de Creditos'
+      OnClick = tuloscomLimitesdeCreditos1Click
+    end
   end
 end

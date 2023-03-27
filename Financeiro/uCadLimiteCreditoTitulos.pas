@@ -12,15 +12,25 @@ uses
   cxGridTableView, cxGridDBTableView, cxGrid, ComCtrls;
 
 type
-  TFCadastro1 = class(TFCadastro)
+  TFCadLimiteCreditoTitulos = class(TFCadastro)
+    qConsultaLIM_ID: TIntegerField;
+    qConsultaLIM_FIN_ID: TIntegerField;
+    qConsultaLIM_VALOR: TIBBCDField;
+    qConsultaLIM_DATA: TDateField;
+    qConsultaLIM_DH_CA: TDateTimeField;
+    cxGrid1DBTableView1LIM_ID: TcxGridDBColumn;
+    cxGrid1DBTableView1LIM_FIN_ID: TcxGridDBColumn;
+    cxGrid1DBTableView1LIM_VALOR: TcxGridDBColumn;
+    cxGrid1DBTableView1LIM_DATA: TcxGridDBColumn;
   private
     { Private declarations }
   public
     { Public declarations }
+    FTitulo : Integer;
   end;
 
 var
-  FCadastro1: TFCadastro1;
+  FCadLimiteCreditoTitulos: TFCadLimiteCreditoTitulos;
 
 implementation
 

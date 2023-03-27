@@ -20,7 +20,7 @@ uses
   dxSkinOffice2007Silver, dxSkinOffice2010Black, dxSkinOffice2010Blue,
   dxSkinOffice2010Silver, dxSkinPumpkin, dxSkinSeven, dxSkinSharp,
   dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
-  dxSkinValentine, dxSkinXmas2008Blue, ActnList, frxClass;
+  dxSkinValentine, dxSkinXmas2008Blue, ActnList, frxClass, Menus;
 
 type
   TFCadTitulos2 = class(TFCadastro2)
@@ -309,6 +309,11 @@ type
     SpeedButton3: TSpeedButton;
     MaskEdit1: TMaskEdit;
     Label18: TLabel;
+    PopupMenu1: TPopupMenu;
+    RelatrioAnual1: TMenuItem;
+    tuloscomLimitesdeCreditos1: TMenuItem;
+    N2: TMenuItem;
+    tulosapagar1: TMenuItem;
     procedure FormShow(Sender: TObject);
     procedure qCadastroAfterOpen(DataSet: TDataSet);
     procedure qParcelasAfterInsert(DataSet: TDataSet);
@@ -344,9 +349,11 @@ type
       Sender: TcxCustomGridTableView;
       ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
       AShift: TShiftState; var AHandled: Boolean);
-    procedure BitBtn1Click(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
+    procedure RelatrioAnual1Click(Sender: TObject);
+    procedure tuloscomLimitesdeCreditos1Click(Sender: TObject);
+    procedure tulosapagar1Click(Sender: TObject);
   private
     { Private declarations }
     vSQL_TITULO : String;
@@ -371,7 +378,7 @@ implementation
 
 uses uFerramentas, uDetalheParcelas, uDMConexao, uClassAvisos,
   uInformeDadosParcelasDet, uTransferirParcelasDet, uCadTitulos2Provisao,
-  uLimiteCreditoTitulos;
+  uLimiteCreditoTitulos, uTitulosAPagar;
 
 {$R *.dfm}
 
@@ -900,17 +907,6 @@ begin
 end;
 
 
-procedure TFCadTitulos2.BitBtn1Click(Sender: TObject);
-begin
-  inherited;
-  if ChamaRelatorioDesign(frxReport1,'AFINANCEIRO','PagamentosPorCentroCustoAnual') then
-  begin
-    getVariavelDesign('USUARIO',IntToStr(DadosLogin.Id));
-    getVariavelDesign('NOMEUSUARIO',QuotedStr(DadosLogin.Nome));
-    ImprimirAlterarRelatorio(0,'PagamentosPorCentroCustoAnual','Pagamentos Por Centro de Custo - Anual');
-  end;
-end;
-
 procedure TFCadTitulos2.SpeedButton2Click(Sender: TObject);
 begin
   inherited;
@@ -948,5 +944,35 @@ begin
   end;
 end;
 
+
+procedure TFCadTitulos2.RelatrioAnual1Click(Sender: TObject);
+begin
+  inherited;
+  if ChamaRelatorioDesign(frxReport1,'AFINANCEIRO','PagamentosPorCentroCustoAnual') then
+  begin
+    getVariavelDesign('USUARIO',IntToStr(DadosLogin.Id));
+    getVariavelDesign('NOMEUSUARIO',QuotedStr(DadosLogin.Nome));
+    ImprimirAlterarRelatorio(0,'PagamentosPorCentroCustoAnual','Pagamentos Por Centro de Custo - Anual');
+  end;
+end;
+
+procedure TFCadTitulos2.tuloscomLimitesdeCreditos1Click(Sender: TObject);
+begin
+  inherited;
+  if ChamaRelatorioDesign(frxReport1,'AFINANCEIRO','LimiteCreditos') then
+  begin
+    getVariavelDesign('USUARIO',IntToStr(DadosLogin.Id));
+    getVariavelDesign('NOMEUSUARIO',QuotedStr(DadosLogin.Nome));
+    ImprimirAlterarRelatorio(0,'LimiteCreditos','Relatório de Limite Creditos');
+  end;
+end;
+
+procedure TFCadTitulos2.tulosapagar1Click(Sender: TObject);
+begin
+  inherited;
+  FTitulosAPagar := TFTitulosAPagar.Create(nil);
+  FTitulosAPagar.ShowModal;
+  FTitulosAPagar.free;
+end;
 
 end.
