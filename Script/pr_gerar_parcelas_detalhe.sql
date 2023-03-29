@@ -175,3 +175,463 @@ begin
   end
   --
 end
+
+
+-----------------------------------------------------------------------------
+
+--
+execute block (
+   p_qtde        dinteiro  = :p_qtde
+  ,p_valor       dvalor    = :p_valor
+  ,p_descricao   dtexto100 = :p_descricao
+  ,p_data_vencto ddata     = :p_data_vencto
+  ,p_data_doc    ddata     = :p_data_doc
+  ,p_fin_id      dinteiro  = :p_fin_id
+  ,p_cct_id      dinteiro  = :p_cct_id
+  ,p_observ      dtexto100 = :p_observ
+  ,p_provis      dtexto01  = :p_provis
+  ,p_agrupar     dbooleann = :p_agrupar
+)
+AS
+declare variable i dinteiro;
+declare variable qtde dinteiro;
+declare variable n_par_id dinteiro;
+declare variable n_par_valor dvalor;
+declare variable d_par_vencto ddata;
+declare variable n_det_id dinteiro;
+declare variable n_det_id_pai dinteiro;
+declare variable n_agrupar dinteiro;
+declare variable n_valor_acum dvalor;
+declare variable c_sql BLOB SUB_TYPE TEXT;
+--
+declare cr_gen_parcelas_detalhe cursor for(
+    select gen_id(gen_parcelas_detalhe,1)
+      from rdb$database
+);
+declare cr_gen_parcelas cursor for(
+    select gen_id(gen_parcelas,1)
+      from rdb$database
+);
+--
+begin
+  i = 1;
+  qtde = 5;
+  --
+  while (:i <= :qtde) do
+  begin
+    --
+    open  cr_gen_parcelas_detalhe;
+    fetch cr_gen_parcelas_detalhe
+    into  :n_det_id;
+    close cr_gen_parcelas_detalhe;
+    --
+    if (:i = 1) then
+    begin
+      d_par_vencto = :p_data_vencto;
+      n_det_id_pai = :n_det_id;
+    end
+    else
+      d_par_vencto = dateadd(month, 1, :d_par_vencto);
+    --
+    c_sql =
+    'select PARCELAS.PAR_ID, PARCELAS.PAR_VALOR ' ||
+    'from PARCELAS                              ' ||
+    'where PARCELAS.PAR_FIN_ID = ' || :p_fin_id   ||
+    '  and extract(month from PARCELAS.PAR_VENCTO) = extract(month from cast(''' || :d_par_vencto || ''' as date))' ||
+    '  and extract(year from PARCELAS.PAR_VENCTO)  = extract(year  from cast(''' || :d_par_vencto || ''' as date))';
+    --
+    execute statement c_sql
+    into :n_par_id, :n_par_valor;
+    --
+    if (coalesce(:n_par_id,0) > 0) then
+    begin
+      n_valor_acum = :n_par_valor;
+      --inserir parcelas_detalhe
+      insert into parcelas_detalhe(
+          DET_ID,
+          DET_ID_PAI,
+          DET_PAR_ID,
+          DET_DATA,
+          DET_DATA_DOC,
+          DET_DESCRICAO,
+          DET_VALOR,
+          DET_FLAG,
+          DET_NUMERO,
+          DET_QUANTIDADE,
+          DET_PROVISIONAR)
+      values(
+          :n_det_id,
+          :n_det_id_pai,
+          :n_par_id,
+          current_date,
+          :p_data_doc,
+          :p_descricao || ' ' || :i || '/' || :p_qtde,
+          :p_valor,
+          :p_cct_id,
+          :i,
+          :p_qtde,
+          :p_provis
+      );
+      --update parcelas
+      update parcelas set
+        par_valor       = :n_valor_acum,
+        par_provisionar = :p_provis
+      where parcelas.par_id = :n_par_id;
+      --
+    end
+    else
+    begin
+      --
+      open  cr_gen_parcelas;
+      fetch cr_gen_parcelas
+      into  :n_par_id;
+      close cr_gen_parcelas;
+      --
+      if (:p_agrupar = 'S') then
+        n_agrupar = :i;
+      else
+        n_agrupar = 1;
+      --
+      insert into parcelas(
+          PAR_ID,
+          PAR_FIN_ID,
+          PAR_NUMERO,
+          PAR_QUANTIDADE,
+          PAR_DATA,
+          PAR_FLAG,
+          PAR_OBSERVACAO,
+          PAR_VENCTO,
+          PAR_VALOR,
+          PAR_PAGO,
+          PAR_PROVISIONAR)
+      values(
+          :n_par_id,
+          :p_fin_id,
+          :n_agrupar,
+          :p_qtde,
+          :d_par_vencto,
+          :p_cct_id,
+          :p_observ,
+          :d_par_vencto,
+          :p_valor,
+          0,
+          :p_provis
+      );
+      --
+      insert into parcelas_detalhe(
+          DET_ID,
+          DET_ID_PAI,
+          DET_PAR_ID,
+          DET_DATA,
+          DET_DATA_DOC,
+          DET_DESCRICAO,
+          DET_VALOR,
+          DET_FLAG,
+          DET_NUMERO,
+          DET_QUANTIDADE,
+          DET_PROVISIONAR)
+      values(
+          :n_det_id,
+          :n_det_id_pai,
+          :n_par_id,
+          current_date,
+          :p_data_doc,
+          :p_descricao || ' ' || :i || '/' || :p_qtde,
+          :p_valor,
+          :p_cct_id,
+          :i,
+          :p_qtde,
+          :p_provis
+      );
+      --
+    end --else
+    --
+    i = :i +1;
+    --
+  end
+  --
+end;
+
+
+
+------------------------------------------------------------------
+
+
+--
+execute block (
+   p_qtde        dinteiro  = :p_qtde
+  ,p_valor       dvalor    = :p_valor
+  ,p_descricao   dtexto100 = :p_descricao
+  ,p_data_vencto ddata     = :p_data_vencto
+  ,p_data_doc    ddata     = :p_data_doc
+  ,p_fin_id      dinteiro  = :p_fin_id
+  ,p_cct_id      dinteiro  = :p_cct_id
+  ,p_observ      dtexto100 = :p_observ
+  ,p_provis      dtexto01  = :p_provis
+  ,p_agrupar     dbooleann = :p_agrupar
+)
+returns(
+  c_resultado BLOB SUB_TYPE TEXT
+)
+AS
+declare variable i dinteiro;
+declare variable qtde dinteiro;
+declare variable n_par_id dinteiro;
+declare variable n_par_valor dvalor;
+declare variable d_par_vencto ddata;
+declare variable n_det_id dinteiro;
+declare variable n_det_id_pai dinteiro;
+declare variable n_agrupar dinteiro;
+declare variable n_valor_acum dvalor;
+declare variable c_sql BLOB SUB_TYPE TEXT;
+--
+declare cr_existe_parcela cursor for (
+    select PARCELAS.PAR_ID, PARCELAS.PAR_VALOR
+    from PARCELAS
+    where PARCELAS.PAR_FIN_ID = :p_fin_id and
+          extract(month from PARCELAS.PAR_VENCTO) = extract(month from /*cast(*/:d_par_vencto /*as date)*/) and
+          extract(year from PARCELAS.PAR_VENCTO)  = extract(year  from /*cast(*/:d_par_vencto /*as date)*/)
+);
+--
+declare cr_gen_parcelas_detalhe cursor for(
+    select gen_id(gen_parcelas_detalhe,1)
+      from rdb$database
+);
+declare cr_gen_parcelas cursor for(
+    select gen_id(gen_parcelas,1)
+      from rdb$database
+);
+--
+begin
+  i = 1;
+  qtde = 5;
+  --
+  while (:i <= :qtde) do
+  begin
+    --
+    /*
+    open  cr_gen_parcelas_detalhe;
+    fetch cr_gen_parcelas_detalhe
+    into  :n_det_id;
+    close cr_gen_parcelas_detalhe;
+    --
+    */
+    n_det_id = 1;
+
+    --
+    if (:i = 1) then
+    begin
+      d_par_vencto = :p_data_vencto;
+      n_det_id_pai = :n_det_id;
+    end
+    else
+      d_par_vencto = dateadd(month, 1, :d_par_vencto);
+    --
+    c_resultado = '';
+    c_resultado =
+          '-- 00 --'           || ' | ' ||
+          ' ' || :d_par_vencto || ' | ' ||
+          ' ' || :n_det_id_pai;
+    suspend;
+
+    --
+    /*
+    open  cr_existe_parcela;
+    fetch cr_existe_parcela
+    into  :n_par_id, :n_par_valor;
+    close cr_existe_parcela;
+    */
+    c_sql =
+    'select PARCELAS.PAR_ID, PARCELAS.PAR_VALOR ' ||
+    'from PARCELAS                              ' ||
+    'where PARCELAS.PAR_FIN_ID = ' || :p_fin_id   ||
+    '  and extract(month from PARCELAS.PAR_VENCTO) = extract(month from cast(''' || :d_par_vencto || ''' as date))' ||
+    '  and extract(year from PARCELAS.PAR_VENCTO)  = extract(year  from cast(''' || :d_par_vencto || ''' as date))';
+
+        c_resultado = c_resultado || ascii_char(10) ||
+          '-- 99 --'       || ' | ' ||
+          c_sql;
+
+    execute statement c_sql
+    into :n_par_id, :n_par_valor;
+
+
+        c_resultado = c_resultado || ascii_char(10) ||
+          '-- 11 --'       || ' | ' ||
+          ' ' || coalesce(:n_par_id,0) || ' | ' ||
+          ' ' || coalesce(:n_par_valor,0)
+        ;
+
+
+
+    if (coalesce(:n_par_id,0) > 0) then
+    begin
+      n_valor_acum = :n_par_valor;
+      --inserir parcelas_detalhe
+      /*
+      insert into parcelas_detalhe(
+          DET_ID,
+          DET_ID_PAI,
+          DET_PAR_ID,
+          DET_DATA,
+          DET_DATA_DOC,
+          DET_DESCRICAO,
+          DET_VALOR,
+          DET_FLAG,
+          DET_NUMERO,
+          DET_QUANTIDADE,
+          DET_PROVISIONAR)
+      values(
+          :n_det_id,
+          :n_det_id_pai,
+          :n_par_id,
+          current_date,
+          :p_data_doc,
+          :p_descricao || ' ' || :i || '/' || :p_qtde,
+          :p_valor,
+          :p_cct_id,
+          :i,
+          :p_qtde,
+          :p_provis
+      );
+      --update parcelas
+      update parcelas set
+        par_valor       = :n_valor_acum,
+        par_provisionar = :p_provis
+      where parcelas.par_id = :n_par_id;
+      --
+      */
+
+    c_resultado = c_resultado || ascii_char(10) ||
+          '-- 01 --' || ' | ' ||
+          /*
+          ' ' || :n_det_id      || ' | ' ||
+          ' ' || :n_det_id_pai  || ' | ' ||
+          ' ' || :n_par_id      || ' | ' ||
+          */
+          ' ' || current_date   || ' | ' ||
+          ' ' || :p_data_doc    || ' | ' ||
+          ' ' || :p_descricao || ' ' || :i || '/' || :p_qtde || ' | ' ||
+          ' ' || :p_valor       || ' | ' ||
+          ' ' || :p_cct_id      || ' | ' ||
+          ' ' || :i             || ' | ' ||
+          ' ' || :p_qtde        || ' | ' ||
+          ' ' || :p_provis
+
+                  ;
+    suspend;
+
+    end
+    else
+    begin
+      --
+      /*
+      open  cr_gen_parcelas;
+      fetch cr_gen_parcelas
+      into  :n_par_id;
+      close cr_gen_parcelas;
+      */
+      --
+      if (:p_agrupar = 'S') then
+        n_agrupar = :i;
+      else
+        n_agrupar = 1;
+      --
+      /*
+      insert into parcelas(
+          PAR_ID,
+          PAR_FIN_ID,
+          PAR_NUMERO,
+          PAR_QUANTIDADE,
+          PAR_DATA,
+          PAR_FLAG,
+          PAR_OBSERVACAO,
+          PAR_VENCTO,
+          PAR_VALOR,
+          PAR_PAGO,
+          PAR_PROVISIONAR)
+      values(
+          :n_par_id,
+          :p_fin_id,
+          :n_agrupar,
+          :p_qtde,
+          :d_par_vencto,
+          :p_cct_id,
+          :p_observ,
+          :d_par_vencto,
+          :p_valor,
+          0,
+          :p_provis
+      );
+      --
+      insert into parcelas_detalhe(
+          DET_ID,
+          DET_ID_PAI,
+          DET_PAR_ID,
+          DET_DATA,
+          DET_DATA_DOC,
+          DET_DESCRICAO,
+          DET_VALOR,
+          DET_FLAG,
+          DET_NUMERO,
+          DET_QUANTIDADE,
+          DET_PROVISIONAR)
+      values(
+          :n_det_id,
+          :n_det_id_pai,
+          :n_par_id,
+          current_date,
+          :p_data_doc,
+          :p_descricao || ' ' || :i || '/' || :p_qtde,
+          :p_valor,
+          :p_cct_id,
+          :i,
+          :p_qtde,
+          :p_provis
+      );
+      */
+      --
+
+    c_resultado = c_resultado || ascii_char(10) ||
+          '-- 02 --' || ' | ' ||
+          /*
+          ' ' || :n_par_id      || ' | ' ||*/
+          ' ' || :p_fin_id      || ' | ' ||
+          ' ' || :n_agrupar     || ' | ' ||
+          ' ' || :p_qtde        || ' | ' ||
+          ' ' || :d_par_vencto  || ' | ' ||
+          ' ' || :p_cct_id      || ' | ' ||
+          ' ' || :p_observ      || ' | ' ||
+          ' ' || :d_par_vencto  || ' | ' ||
+          ' ' || :p_valor       || ' | ' ||
+          ' ' || 0              || ' | ' ||
+          ' ' || :p_provis
+          ;
+
+    c_resultado = c_resultado || ascii_char(10) ||
+          '-- 03 --' || ' | ' ||
+          /*
+          ' ' || :n_det_id      || ' | ' ||
+          ' ' || :n_det_id_pai  || ' | ' ||
+          ' ' || :n_par_id      || ' | ' ||
+          */
+          ' ' || current_date   || ' | ' ||
+          ' ' || :p_data_doc    || ' | ' ||
+          ' ' || :p_descricao || ' ' || :i || '/' || :p_qtde || ' | ' ||
+          ' ' || :p_valor       || ' | ' ||
+          ' ' || :p_cct_id      || ' | ' ||
+          ' ' || :i             || ' | ' ||
+          ' ' || :p_qtde        || ' | ' ||
+          ' ' || :p_provis
+
+                  ;
+    suspend;
+    end --else
+    --
+
+    --
+    i = :i +1;
+    --
+  end
+  --
+end;
